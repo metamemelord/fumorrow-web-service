@@ -10,7 +10,7 @@ registrationRouter.post('/api/registration', function (req, res) {
             var con = mysql.createConnection({
                 host: "localhost",
                 user: "root",
-                password: "",
+                password: "zKWWk7zKWWk7QNlFeISoU5QNlzKWWk7QNlFeISoU5FeISoU5",
                 database: "fumorrow"
             });
             con.connect(function (err) {
@@ -22,7 +22,7 @@ registrationRouter.post('/api/registration', function (req, res) {
                     return res.status(400).send("Please check the details entered");
                 else{
                     var password = bcrypt.hashSync(req.body.password, 15);
-                    var sql = `INSERT INTO catmans VALUES ("${req.body.fname}","${req.body.lname}","${req.body.uname}","${password}","0","0")`;
+                    var sql = `INSERT INTO category_managers VALUES ("${req.body.fname}","${req.body.lname}","${req.body.uname}","${password}","0","0")`;
                     con.query(sql, function (err, result) {
                         if (err) {
                             console.log("ERROR: ", err, "\n");

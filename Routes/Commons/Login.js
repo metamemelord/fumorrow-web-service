@@ -17,11 +17,11 @@ loginRouter.post('/api/login', function (req, res) {
             var con = mysql.createConnection({
                 host: "localhost",
                 user: "root",
-                password: "",
+                password: "zKWWk7zKWWk7QNlFeISoU5QNlzKWWk7QNlFeISoU5FeISoU5",
                 database: "fumorrow"
             });
                 con.connect();
-                con.query("select * from catmans where uname ='" + userDetails.uname + "';", function (err, userDataFromDB) {
+                con.query("select * from category_managers where uname ='" + userDetails.uname + "';", function (err, userDataFromDB) {
                     if (err) {
                         con.end();
                         console.log("Error: ",err,"\n");
