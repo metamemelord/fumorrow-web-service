@@ -1,6 +1,7 @@
 const express = require('express');
 const DAL = require('../../DAL/index');
 const movieDAO = DAL.MovieDAO;
+const movieDAOForRetrieval = DAL.MovieDAOForRetrieval;
 const movieMiscRouter = express.Router();
 
 movieMiscRouter.post('/api/movie/inc', function (req, res) {
@@ -31,7 +32,7 @@ movieMiscRouter.post('/api/movie/inc', function (req, res) {
 movieMiscRouter.post('/api/movies/partners', function (req, res) {
 
     try {
-        movieDAO.getAllReferrers(function (data) {
+        movieDAOForRetrieval.getAllReferrers(function (data) {
             if (data !== null) res.status(200).json(data);
             else res.status(204).send("No data");
         });
@@ -43,7 +44,7 @@ movieMiscRouter.post('/api/movies/partners', function (req, res) {
 
 movieMiscRouter.post('/api/movies/languages', function (req, res) {
     try {
-        movieDAO.getAllLanguages(function (data) {
+        movieDAOForRetrieval.getAllLanguages(function (data) {
             if (data !== null) res.status(200).json(data);
             else res.status(204).send("No data");
         });

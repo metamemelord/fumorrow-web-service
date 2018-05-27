@@ -24,6 +24,10 @@ var movieSchema = new mongoose.Schema({
         type:[String],
         required:true
     },
+    directedBy:{
+        type: String,
+        required:true
+    },
     genres:{
         type:[Number],
         required:true

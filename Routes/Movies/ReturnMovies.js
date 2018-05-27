@@ -1,29 +1,29 @@
 const express = require('express');
 const DAL = require('../../DAL/index');
-const movieDAO = DAL.MovieDAO;
+const movieDAOForRetrieval = DAL.MovieDAOForRetrieval;
 var returnMoviesRouter = express.Router();
 
 returnMoviesRouter.post('/api/movies', function (req, res) {
     try {
         if (req.body.begin === undefined && req.body.limit === undefined) {
             if (req.body.filter === undefined || req.body.filter.length === 0) {
-                movieDAO.getAll(function (data) {
+                movieDAOForRetrieval.getAll(function (data) {
                     res.status(200).json(data);
                 });
             } else {
                 var filter = req.body.filter;
-                movieDAO.getAllByFilter(filter, function (data) {
+                movieDAOForRetrieval.getAllByFilter(filter, function (data) {
                     res.status(200).json(data);
                 });
             }
         } else {
             if (req.body.filter === undefined || req.body.filter.length === 0) {
-                movieDAO.getInRange(req.body.begin, req.body.limit, function (data) {
+                movieDAOForRetrieval.getInRange(req.body.begin, req.body.limit, function (data) {
                     res.status(200).json(data);
                 });
             } else {
                 var filterWithRange = req.body.filter;
-                movieDAO.getInRangeByFilter(filterWithRange, req.body.begin, req.body.limit, function (data) {
+                movieDAOForRetrieval.getInRangeByFilter(filterWithRange, req.body.begin, req.body.limit, function (data) {
                     res.status(200).json(data);
                 });
             }
