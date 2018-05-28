@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-mongoose.connect("mongodb+srv://category-managers:zKWWk7QNlFeISoU5@practice-cluster-egmvj.mongodb.net/test?retryWrites=true");
+mongoose.connect("mongodb+srv://user-for-rw:3f76ajyizkHKFfif@cluster0-qwhao.mongodb.net/fumorrow-primary?retryWrites=true");
 
 // Connection to DB
 
