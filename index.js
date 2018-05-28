@@ -20,11 +20,9 @@ fumorrow.use(require('./Routes/Movies/index'));
 
 // Routes
 
-// fumorrow.use(require('./controllers/HomepageController'));
-// fumorrow.use(require('./controllers/AboutController'));
-// fumorrow.use(require('./controllers/MoviesController'));
-// fumorrow.use(require('./controllers/CarsController'));
-// fumorrow.use(require('./controllers/404'));
+fumorrow.get('*', function(req,res){
+    res.status(200).send("<div align='center'><h1>Hey! We are fumorrow!</h1></div>");
+})
 
 // Server
 
