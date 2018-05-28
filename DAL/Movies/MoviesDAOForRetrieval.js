@@ -5,12 +5,13 @@ mongoose.connect("mongodb+srv://category-managers:zKWWk7QNlFeISoU5@practice-clus
 
 let db = mongoose.connection;
 db.on('error', function (err) {
-	console.error("connection error;", err);
+	console.error("ERROR: ", err);
 });
 
 db.once('open', function () {
-	console.log("Connection successful!");
+	console.log("INFO: Connection to read-only user successful!");
 });
+
 
 const movieSchema = require('../../Models/MovieModel');
 let MovieDBService = mongoose.model('movie', movieSchema);

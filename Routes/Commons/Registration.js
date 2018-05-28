@@ -13,32 +13,33 @@ registrationRouter.post('/api/registration', function (req, res) {
                 password: "zKWWk7zKWWk7QNlFeISoU5QNlzKWWk7QNlFeISoU5FeISoU5",
                 database: "fumorrow"
             });
+            if(req.body.fname === undefined || req.body.lname === undefined || req.body.uname === undefined || req.body.password === undefined){
+                return res.status(400).send("Please check the details entered");
+            }
             con.connect(function (err) {
                 if (err) {
                     console.log(err);
-                    res.status(500).send("Server error");
+                    return res.status(500).send("Server error");
                 }
-                if(req.body.fname === undefined || req.body.lname === undefined || req.body.uname === undefined || req.body.password === undefined)
-                    return res.status(400).send("Please check the details entered");
                 else{
                     var password = bcrypt.hashSync(req.body.password, 15);
-                    var sql = `INSERT INTO category_managers VALUES ("${req.body.fname}","${req.body.lname}","${req.body.uname}","${password}","0","0")`;
-                    con.query(sql, function (err, result) {
+                    var sql = 'INSERT INTO category_managers VALUES (?,?,?,?,"0","0")';
+                    con.query(sql, [req.body.fname,req.body.lname,req.body.uname,password], function (err, result) {
                         if (err) {
                             console.log("ERROR: ", err, "\n");
                             con.rollback();
                             con.end();
                             if (err.code === "ER_DUP_ENTRY") {
-                                res.status(409).send("User with this username exists");
+                                return res.status(409).send("User with this username exists");
                             }
                             else {
-                                res.status(500).send("Server error");
+                                return res.status(500).send("Server error");
                             }
                         } else {
                             con.commit();
                             con.end();
                             console.log("INFO: CREATED A NEW USER: ", req.body.uname, "\n");
-                            res.status(201).send("User added successfully. Contact ADMIN for approval");
+                            return res.status(201).send("User added successfully. Contact ADMIN for approval");
                         }
                     });
                 }
@@ -47,7 +48,7 @@ registrationRouter.post('/api/registration', function (req, res) {
     }
     catch (error) {
         console.log(error);
-        res.status(500).send("Server error");
+        return res.status(500).send("Server error");
     }
 })
 

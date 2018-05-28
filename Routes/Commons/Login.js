@@ -11,7 +11,7 @@ loginRouter.post('/api/login', function (req, res) {
             uname: req.body.uname,
             password: req.body.password
         }
-        if(userDetails.uname === undefined || userDetails.uname.length === 0 || userDetails.password === undefined || userDetails.password.length === 0)
+        if(userDetails.uname === undefined || userDetails.uname.length === 0 || userDetails.uname.split(" ").length > 1 || userDetails.password === undefined || userDetails.password.length === 0)
             return res.status(400).send("Invalid credentials");
         else{
             var con = mysql.createConnection({
@@ -21,19 +21,19 @@ loginRouter.post('/api/login', function (req, res) {
                 database: "fumorrow"
             });
                 con.connect();
-                con.query("select * from category_managers where uname ='" + userDetails.uname + "';", function (err, userDataFromDB) {
+                con.query("select * from category_managers where uname =?",[userDetails.uname], function (err, userDataFromDB) {
                     if (err) {
                         con.end();
-                        console.log("Error: ",err,"\n");
-                        res.status(500).send("Internal server error!");
+                        console.log("ERROR: ",err,"\n");
+                        return res.status(500).send("Internal server error!");
                     }
                     if (userDataFromDB === undefined || userDataFromDB.length === 0) {
                         con.end();
-                        res.status(401).send("Invalid credentials");
+                        return res.status(401).send("Invalid credentials");
                     }
-                    else if(userDataFromDB[0].isAuthenticated === 0){
+                    else if(userDataFromDB[0].isApproved === 0){
                         con.end();
-                        res.status(401).send("Not approved by admin");
+                        return res.status(401).send("Not approved by admin");
                     }
                     else {
                         if (bcrypt.compareSync(userDetails.password,userDataFromDB[0].password_digest)) {
@@ -47,11 +47,11 @@ loginRouter.post('/api/login', function (req, res) {
                             }, function (err, token) {
                                 if (err) {
                                     setTimeout(function () {
-                                        console.log(err);
-                                        res.status(500).send("Server error");
+                                        console.log("ERROR: ",err);
+                                        return res.status(500).send("Server error");
                                     }, 5000);
                                 } else {
-                                    res.status(200).json({
+                                    return res.status(200).json({
                                         success: true,
                                         token: token
                                     });
@@ -60,7 +60,7 @@ loginRouter.post('/api/login', function (req, res) {
                         }
                         else {
                             con.end();
-                            res.status(401).send("Invalid credentials");
+                            return res.status(401).send("Invalid credentials");
                         }
                     }
                 });
@@ -68,8 +68,8 @@ loginRouter.post('/api/login', function (req, res) {
             
         }
     catch (error) {
-        console.log("Error: ", error,"\n");
-        res.status(500).send("Server error");
+        console.log("ERROR: ", error,"\n");
+        return res.status(500).send("Server error");
     }
 });
 

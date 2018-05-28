@@ -11,18 +11,7 @@ var fumorrow = express();
 // fumorrow.use(express.static(path.join(__dirname,'res')));
 
 fumorrow.use( bodyParser.json() ); 
-fumorrow.set('env', 'development');
-fumorrow.set('views', path.join(__dirname, 'views'));
-fumorrow.set('view engine', 'ejs');
-
-//
-
-// fumorrow.get('*', function(req, res) {  
-//     console.log("aaya!")
-//     res.redirect('https://' + req.headers.host + req.url);
-//     // Or, if you don't want to automatically detect the domain name from the request header, you can hard code it:
-//     // res.redirect('https://example.com' + req.url);
-// })
+fumorrow.set('env', 'production');
 
 // API Routes
 
@@ -41,10 +30,10 @@ fumorrow.use(require('./Routes/Movies/index'));
 
 fumorrow.listen(3000, function(err){
         if(err){
-            console.log("Error occurred while starting the server: "+err);
+            console.log("ERROR: "+err);
         }
         else{
-            console.log("Server started on port number 3000");
+            console.log("INFO: Server started on port number 3000");
         }
     }
 );
