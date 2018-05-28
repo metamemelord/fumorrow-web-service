@@ -1,20 +1,19 @@
 var mongoose = require('mongoose');
-mongoose.connect("mongodb+srv://public-user:KWeGVa6Z4Eoo01Vm@cluster0-qwhao.mongodb.net/fumorrow-primary?retryWrites=true");
+var connectionForRetrieval = mongoose.createConnection("mongodb+srv://public-user:KWeGVa6Z4Eoo01Vm@cluster0-qwhao.mongodb.net/fumorrow-primary?retryWrites=true");
 
 // Connection to DB
 
-let db = mongoose.connection;
-db.on('error', function (err) {
+connectionForRetrieval.on('error', function (err) {
 	console.error("ERROR: ", err);
 });
 
-db.once('open', function () {
+connectionForRetrieval.once('open', function () {
 	console.log("INFO: Connection to read-only user successful!");
 });
 
 
 const movieSchema = require('../../Models/MovieModel');
-let MovieDBService = mongoose.model('movie', movieSchema);
+let MovieDBService = connectionForRetrieval.model('movie', movieSchema);
 
 
 function returnAll(callback) {
