@@ -21,7 +21,7 @@ fumorrow.use(require('./Routes/Movies/index'));
 // Routes
 
 fumorrow.get('*', function(req,res){
-    res.status(200).send("<div align='center'><h1>Hey! We are fumorrow!</h1></div>");
+    res.status(200).send("<html><head><meta name='robots' content='noindex'></head><body><div align='center'><h1>Hey! We are fumorrow!</h1></div></body></html>");
 })
 
 // Server
