@@ -31,6 +31,7 @@ function addToDB(object, callback) {
 				title: object.title,
 				date: object.date,
 				artists: object.artists,
+				director: object.director,
 				language: object.language,
 				genres: object.genres,
 				runtime: object.runtime,
