@@ -19,7 +19,7 @@ deleteMovieRouter.post('/api/movie/delete', helpers.tokenVerifier, function (req
                     try {
                         var id = req.body._id;
                         if(id === undefined || id.length === 0){
-                            return res.status.send("Invalid ID");
+                            return res.status(304).send("Invalid ID");
                         }
                         movieDAO.removeById(id, function (status) {
                             if (status === 200) {
