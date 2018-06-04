@@ -1,17 +1,18 @@
 const express = require('express');
 const DAL = require('../../DAL/index');
+const movieRequestVerifier = require('../Movies/AddToMovieRequestVerifier');
 const movieDAO = DAL.MovieDAO;
 const addMovieRouter = express.Router();
 const jwt = require('jsonwebtoken');
 const helpers = require("../../Misc/HelperFunctions");
 const md5 = require('md5');
 
-addMovieRouter.post('/api/movie/add', helpers.tokenVerifier, function (req, res) {
+addMovieRouter.post('/api/movie/add', helpers.tokenVerifier, movieRequestVerifier.verify ,function (req, res) {
     try{
         jwt.verify(req.token, process.env.key, function (err, authData) {
             if (err) {
                 console.log(err);
-                res.status(401).send("Invalid token");
+                return res.status(401).send("Invalid token");
             } else {
                 if (!authData['privilages'].includes('movies')) {
                     return res.status(403).send("Insufficient privilages");
@@ -49,11 +50,11 @@ addMovieRouter.post('/api/movie/add', helpers.tokenVerifier, function (req, res)
                     movieObject.hasPassed = helpers.checkDate(movieObject.date);
                     movieDAO.addMovie(movieObject, function (status) {
                         if (status === 201) {
-                            res.status(201).send("Success");
+                            return res.status(201).send("Success");
                         } else if (status === 409) {
-                            res.status(409).send("Entry already exists")
+                            return res.status(409).send("Entry already exists")
                         } else {
-                            res.status(status).send("Internal server error");
+                            return res.status(status).send("Internal server error");
                         }
                     })
                 }
@@ -61,7 +62,7 @@ addMovieRouter.post('/api/movie/add', helpers.tokenVerifier, function (req, res)
         });
     } catch(error){
         console.log("ERROR", error);
-        res.status(500).send("Server error");
+        return res.status(500).send("Server error");
     }
 });
 

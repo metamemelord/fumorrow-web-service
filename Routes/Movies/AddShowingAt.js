@@ -11,7 +11,7 @@ addShowingAtRouter.post('/api/movie/showingat', helpers.tokenVerifier, function 
         jwt.verify(req.token, process.env.key, function (err, authData) {
             if (err) {
                 console.log(err);
-                res.status(401).send("Invalid token");
+                return res.status(401).send("Invalid token");
             } else {
                 if (!authData['privilages'].includes('movies')) {
                     return res.status(403).send("Insufficient privilages");
@@ -19,20 +19,20 @@ addShowingAtRouter.post('/api/movie/showingat', helpers.tokenVerifier, function 
                     var id = req.body.id;
                     var theaters = req.body.theaters;
                     if (req.body.id === undefined || id.length === 0) {
-                        res.status(400).send("Please provide a valid ID");
+                        return (400).send("Please provide a valid ID");
                     }
                     if (theaters.length === 0 || theaters === undefined){
-                        res.status(400).send("Invalid request");
+                        return res.status(400).send("Invalid request");
                     }
                     movieDAO.addShowingAt(id, theaters,function(responseCode){
                         if(responseCode === 200){
-                            res.status(200).send("Success");
+                            return res.status(200).send("Success");
                         }
                         else if(responseCode === 404){
-                            res.status(404).send("Entry doesn't exist in database");
+                            return res.status(404).send("Entry doesn't exist in database");
                         }
                         else{
-                            res.status(500).send("Internal server error");
+                            return res.status(500).send("Internal server error");
                         }
                     });
                 }
@@ -41,7 +41,7 @@ addShowingAtRouter.post('/api/movie/showingat', helpers.tokenVerifier, function 
     }
     catch(error){
         console.log("ERROR: ", error);
-        res.status(500).send("Internal server error");
+        return res.status(500).send("Internal server error");
     }
 });
 
