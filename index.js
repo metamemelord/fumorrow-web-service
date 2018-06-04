@@ -21,8 +21,17 @@ fumorrow.use(require('./Routes/Movies/index'));
 // Routes
 
 fumorrow.get('*', function(req,res){
-    res.status(200).send("<html><head><meta name='robots' content='noindex'></head><body><div align='center'><h1>Hey! We are fumorrow!</h1></div></body></html>");
-})
+    try{
+        res.writeHead(301,
+            {Location: 'http://www.fumorrow.com'}
+        );
+    }
+    catch(error){
+        console.log("ERROR: ", error);
+    } finally{
+    res.end();
+    }
+});
 
 // Server
 
@@ -31,6 +40,9 @@ fumorrow.listen(3000, function(err){
             console.log("ERROR: "+err);
         }
         else{
+            console.log(new Date().toLocaleString('en-US', {
+                timeZone: 'Asia/Calcutta'
+            }));
             console.log("INFO: Server started on port number 3000");
         }
     }
