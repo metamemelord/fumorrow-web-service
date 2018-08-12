@@ -1,14 +1,24 @@
 var mongoose = require('mongoose');
-var connection = mongoose.createConnection("mongodb+srv://user-for-rw:3f76ajyizkHKFfif@cluster0-qwhao.mongodb.net/fumorrow-primary?retryWrites=true");
-// Connection to DB
+const logger = require('../../Loggers/index').Logger;
+const filename = require('path').basename(__filename);
 
-connection.on('error', function (err) {
-	console.error("ERROR: ", err);
-});
+var connection = null;
+try{
+	connection = mongoose.createConnection(process.env.DATABASE_CONNECTION_STRING_FOR_WRITING, { useNewUrlParser: true });
+	// Connection to DB
 
-connection.once('open', function () {
-	console.log("INFO: Connection to RW user successful!");
-});
+	connection.on('error', function (error) {
+		logger.error(filename + ": " + error);
+	});
+
+	connection.once('open', function () {
+		logger.info(filename + " - Connection to RW user successful!");
+	});
+} catch(error){
+	logger.error(filename + ": " + error);
+}
+
+require('assert').notEqual(connection, null);
 
 // Importing movie schema service
 
@@ -17,165 +27,164 @@ let MovieDBService = connection.model('movie', movieSchema);
 
 // Service methods
 
-function addToDB(object, callback) {
+function addMovie(object, callback) {
 	try{
 		object._id = mongoose.Types.ObjectId(object._id);
-		MovieDBService.findOne({ $or: [{ "_id": object._id }, { "uid": object.uid }] }, function (err, data) {
+		MovieDBService.findOne({ $or: [{ "_id": object._id }, { "uid": object.uid }] }, function (error, data) {
 			if (data) {
-				callback(409)
+				callback(409,"Entry already exists", null);
+			} else if(error) {
+				logger.error(filename + ": " + error);
+				callback(500, "Internal server error", null);
 			} else {
-				var movieToAdd = new MovieDBService({
-					_id: object._id,
-					uid: object.uid,
-					title: object.title,
-					date: object.date,
-					artists: object.artists,
-					director: object.director,
-					language: object.language,
-					genres: object.genres,
-					runtime: object.runtime,
-					description: object.description,
-					imageProvider: object.imageProvider,
-					imageUrl: object.imageUrl,
-					referrerName: object.referrerName,
-					redirectUrl: object.redirectUrl,
-					hasPassed: object.hasPassed,
-					isSponsored: object.isSponsored,
-					clickCounter: 0
-				})
-				movieToAdd.save(object, function (err) {
-					if (err) {
-						callback(500);
-						console.log("ERROR: ",err);
-					} else callback(201);
+				var movieToAdd = new MovieDBService(object);
+				movieToAdd.save(object, function (error) {
+					if (error) {
+						logger.error(filename + ": " + error);
+						callback(500, "Error while saving the movie", null);
+					} else callback(201, "Success", {
+						"id":object._id,
+						"name": object.title
+					});
 				});
 			}
 		});
 	} catch(error){
-		console.log("ERROR: ",err);
-		callback(500);
+		logger.error(filename + ": " + error);
+		callback(500, "Internal server error", null);
 	}
 }
 
-function deleteById(id, callback) {
+function removeById(id, callback) {
 	try {
 		MovieDBService.findOneAndRemove({
 			_id: id
-		}, function (err, data) {
-			if (err) {
-				console.log("ERROR: ",err);
-				callback(503);
+		}, function (error, data) {
+			if (error) {
+				logger.error(filename + ": " + error);
+				callback(500, "Internal server error", null);
 			} else if (data === null) {
-				callback(404);
+				callback(404, "Entry does not exist", null);
 			} else {
-				callback(200);
+				callback(200, "Success", {
+					"name":data.title
+				});
 			}
 		})
 	}
 	catch (error) {
-		console.log("ERROR :", error);
-		callback(500);
+		logger.error(filename + ": " + error);
+		callback(500, "Internal server error", null);
 	}
 }
 
-function incCount(id, callback) {
+function incrementCounterById(id, callback) {
 	MovieDBService.findByIdAndUpdate(id, {
 		$inc: {
 			'clickCounter': 1
 		}
-	}, function (err, data) {
-		if (err instanceof mongoose.CastError) {
-			callback(412);
-		} else if (err) {
-			console.log("ERROR :", err);
-			callback(500);
+	}, function (error, data) {
+		if (error instanceof mongoose.CastError) {
+			callback(412,"Invalid ID",null);
+		} else if (error) {
+			logger.error(filename + ": " + error);
+			callback(500,"Internal error",null);
 		} else if (data === null) {
-			callback(404);
+			callback(404,"Content not found on the server",null);
 		} else {
-			callback(200);
+			callback(200,"Increment successful",null);
 		}
 	});
 }
 
-function updateApproval(id, callback) {
+function approveById(id, callback) {
 	MovieDBService.findByIdAndUpdate(id, {
-		'isApproved': true,
-		'isChecked': true
-	}, function (err, data) {
-		if (err instanceof mongoose.CastError) {
-			callback(412);
-		} else if (err) {
-			console.log("ERROR :", err);
-			callback(500);
+		'is_approved': true,
+		'recheck_needed': false
+	}, function (error, data) {
+		if (error instanceof mongoose.CastError) {
+			callback(412,"Invalid ID",null);
+		} else if (error) {
+			logger.error(filename + ": " + error);
+			callback(500,"Internal error",null);
 		} else if (data === null) {
-			callback(404);
+			callback(404,"Content not found on the server",null);
 		} else {
-			callback(200);
+			callback(200,"Approved",{
+				"name": data.title
+			});
 		}
 	});
 }
 
-function updateCheckingStatus(id, callback) {
+function markForRecheckById(id, callback) {
 	MovieDBService.findByIdAndUpdate(id, {
-		'isChecked': true
-	}, function (err, data) {
-		if (err instanceof mongoose.CastError) {
-			callback(412);
-		} else if (err) {
-			console.log("ERROR :", err);
-			callback(500);
+		'recheck_needed': true
+	}, function (error, data) {
+		if (error instanceof mongoose.CastError) {
+			callback(412,"Invalid ID",null);
+		} else if (error) {
+			logger.error(filename + ": " + error);
+			callback(500,"Internal error",null);
 		} else if (data === null) {
-			callback(404);
+			callback(404,"Content not found on the server",null);
 		} else {
-			callback(200);
+			callback(200,"Checked",{
+				"name":data.title
+			});
 		}
 	});
 }
 
-function addTheater(id, theaters, callback) {
+function addShowingAt(id, showing_at, callback) {
 	MovieDBService.findByIdAndUpdate(id, {
 		$push: {
-			'showingAt': theaters
+			'showing_at': showing_at
 		}
 	},
-		function (err, data) {
-			if (err) {
-				console.log("ERROR :", err);
-				callback(500);
-			}
-			else if (data === null) {
-				callback(404);
-			}
-			else {
-				callback(200);
+		function (error, data) {
+			if (error instanceof mongoose.CastError) {
+				callback(412,"Invalid ID",null);
+			} else if (error) {
+				logger.error(filename + ": " + error);
+				callback(500,"Internal error",null);
+			} else if (data === null) {
+				callback(404,"Content not found on the server",null);
+			} else {
+				callback(200,"Added theaters",{
+					"name":data.title,
+					"showing_at":showing_at
+				});
 			}
 		}
 	);
 }
 
-function markPassed(id, callback) {
+function markReleasedById(id, callback) {
 	MovieDBService.findByIdAndUpdate(id, {
-		'hasPassed': true
-	}, function (err, data) {
-		if (err instanceof mongoose.CastError) {
-			callback(412);
-		} else if (err) {
-			console.log("ERROR :", err);
-			callback(500);
+		'is_released': true
+	}, function (error, data) {
+		if (error instanceof mongoose.CastError) {
+			callback(412,"Invalid ID",null);
+		} else if (error) {
+			logger.error(filename + ": " + error);
+			callback(500,"Internal error",null);
 		} else if (data === null) {
-			callback(404);
+			callback(404,"Content not found on the server",null);
 		} else {
-			callback(200);
+			callback(200,"Marked passed",{
+				"name": data.title
+			});
 		}
 	});
 }
 
 module.exports = {
-	addMovie: addToDB,
-	removeById: deleteById,
-	addShowingAt: addTheater,
-	incrementCounterById: incCount,
-	approveById: updateApproval,
-	markCheckedById: updateCheckingStatus,
-	markedPassedById: markPassed
+	addMovie: addMovie,
+	removeById: removeById,
+	incrementCounterById: incrementCounterById,
+	approveById: approveById,
+	markForRecheckById: markForRecheckById,
+	addShowingAt: addShowingAt,
+	markReleasedById: markReleasedById
 };

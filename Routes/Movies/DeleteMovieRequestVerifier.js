@@ -1,10 +1,29 @@
-module.exports = {
-    verify: (req,res,next) => {
-        if(req.body.id === undefined || req.body.id.length === 0){
-            return res.status(400).send("Bad Request");
-        }
-        else{
-            next();
+const logger = require('../../Loggers/index').Logger;
+const filename = require('path').basename(__filename);
+const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+
+module.exports = (req,res,next) => {
+        try{
+            if(isEmpty(req.body._id)){
+                return res.status(400).json({
+                    "status":{
+                        "code":400,
+                        "message":"Bad request"
+                    },
+                    "data":null
+                });
+            }
+            else{
+                next();
+            }
+        } catch(error){
+            logger.error(filename + ": " + error);
+            return res.status(500).json({
+                "status":{
+                    "code":500,
+                    "message":"Internal server error"
+                },
+                "data":null
+            });
         }
     }
-}

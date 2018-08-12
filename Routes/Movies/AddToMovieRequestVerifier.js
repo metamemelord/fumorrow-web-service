@@ -1,10 +1,34 @@
-module.exports = {
-    verify: (req,res,next) => {
-        if(req.body.name === undefined || req.body.day === undefined || req.body.month === undefined || req.body.year === undefined || req.body.artists === undefined || req.body.director === undefined || req.body.language === undefined || req.body.genres === undefined || req.body.description === undefined || req.body.imageProvider === undefined || req.body.imageUrl === undefined || req.body.referrerName === undefined || req.body.redirectUrl === undefined){
-            return res.status(400).send("Bad Request");
+const logger = require('../../Loggers/index').Logger;
+const filename = require('path').basename(__filename);
+const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+
+module.exports = (req,res,next) => {
+        try{
+            if(isEmpty(req.body.title) || isEmpty(req.body.day) || isEmpty(req.body.month) || 
+                isEmpty(req.body.year) || isEmpty(req.body.artists) || isEmpty(req.body.language) || 
+                isEmpty(req.body.directors) || isEmpty(req.body.genres) || isEmpty(req.body.description) ||
+                isEmpty(req.body.image_provider) || isEmpty(req.body.image_url) || isEmpty(req.body.referrer_name) ||
+                isEmpty(req.body.redirect_url)){
+                return res.status(400).json({
+                    "status":{
+                        "code":400,
+                        "message":"Bad request"
+                    },
+                    "data":null
+                });
+            }
+            else{
+                next();
+            }
         }
-        else{
-            next();
+        catch(error){
+            logger.error(filename + ": " + error);
+            return res.status(500).json({
+                "status":{
+                    "code":500,
+                    "message":"Internal server error"
+                },
+                "data":null
+            });
         }
     }
-}

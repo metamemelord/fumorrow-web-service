@@ -1,17 +1,27 @@
-var express = require('express');
-var path = require('path');
-var bodyParser = require('body-parser');
-var environment = require('dotenv/config');
-//var secure = require('express-force-https');
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+const environment = require('dotenv/config');
+const logger = require('./Loggers/index').Logger;
+const filename = require('path').basename(__filename);
+
 var fumorrow = express();
 
-
-//fumorrow.use(secure);
-// fumorrow.use(express.static(path.join(__dirname,'bower_components')));
-// fumorrow.use(express.static(path.join(__dirname,'res')));
-
 fumorrow.use( bodyParser.json() ); 
-fumorrow.set('env', 'production');
+fumorrow.set('env', process.env.ENVIRONMENT);
+fumorrow.use((error, req, res, next) => {
+    if(error){
+        logger.warn("Malformed JSON");
+        return res.status(error.status).json({
+            "status":{
+                "code":error.status,
+                "message":"Bad request"
+            },
+            "data":null
+        });
+    }
+    return next();
+});
 
 // API Routes
 
@@ -20,6 +30,8 @@ fumorrow.use(require('./Routes/Movies/index'));
 
 // Routes
 
+//Redirecting all  the GET requests to the main website.
+
 fumorrow.get('*', function(req,res){
     try{
         res.writeHead(301,
@@ -27,7 +39,7 @@ fumorrow.get('*', function(req,res){
         );
     }
     catch(error){
-        console.log("ERROR: ", error);
+        logger.error(filename + ": " + error);
     } finally{
     res.end();
     }
@@ -35,15 +47,12 @@ fumorrow.get('*', function(req,res){
 
 // Server
 
-fumorrow.listen(3000, function(err){
-        if(err){
-            console.log("ERROR: "+err);
+fumorrow.listen(3000, function(error){
+        if(error){
+            logger.fatal(filename + ": " + error);
         }
         else{
-            console.log(new Date().toLocaleString('en-US', {
-                timeZone: 'Asia/Calcutta'
-            }));
-            console.log("INFO: Server started on port number 3000");
+            logger.info("Server started");
         }
     }
 );

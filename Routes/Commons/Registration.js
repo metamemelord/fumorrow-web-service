@@ -1,55 +1,62 @@
-const bcrypt = require('bcrypt');
 const express = require('express');
-const mysql = require('mysql');
-
+const DAL = require('./../../DAL/index');
+const registrationDAO = DAL.RegistrationDAO;
+const logger = require('../../Loggers/index').Logger;
+const filename = require('path').basename(__filename);
+const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
 const registrationRouter = express.Router();
 
 registrationRouter.post('/api/registration', function (req, res) {
     try {
-        setTimeout(function () {
-            var con = mysql.createConnection({
-                host: "localhost",
-                user: "root",
-                password: "zKWWk7zKWWk7QNlFeISoU5QNlzKWWk7QNlFeISoU5FeISoU5",
-                database: "fumorrow"
+        if(!(parseInt(process.env.REGISTRATION_SERVICE_ACTIVE))){
+            return res.status(503).json({
+                "status":{
+                    "code":503,
+                    "message":"Registration service has been disabled. Please contact the admin."
+                },
+                "data":null
             });
-            if(req.body.fname === undefined || req.body.lname === undefined || req.body.uname === undefined || req.body.password === undefined){
-                return res.status(400).send("Please check the details entered");
-            }
-            con.connect(function (err) {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).send("Server error");
-                }
-                else{
-                    var password = bcrypt.hashSync(req.body.password, 15);
-                    var sql = 'INSERT INTO category_managers VALUES (?,?,?,?,"0","0")';
-                    con.query(sql, [req.body.fname,req.body.lname,req.body.uname,password], function (err, result) {
-                        if (err) {
-                            console.log("ERROR: ", err, "\n");
-                            con.rollback();
-                            con.end();
-                            if (err.code === "ER_DUP_ENTRY") {
-                                return res.status(409).send("User with this username exists");
-                            }
-                            else {
-                                return res.status(500).send("Server error");
-                            }
-                        } else {
-                            con.commit();
-                            con.end();
-                            console.log("INFO: CREATED A NEW USER: ", req.body.uname, "\n");
-                            return res.status(201).send("User added successfully. Contact ADMIN for approval");
-                        }
-                    });
-                }
+        }
+        if(isEmpty(req.body.name) || isEmpty(req.body.username) || isEmpty(req.body.email) || isEmpty(req.body.password)){
+            return res.status(400).json({
+                "status":{
+                    "code":400,
+                    "message":"Please check the details"
+                },
+                "data":null
             });
-        }, 2000);
+        } else if (req.body.username.split(" ").length > 1)
+            return res.status(400).json({
+                "status":{
+                    "code":400,
+                    "message":"Username cannot contain spaces"
+                },
+                "data":null
+            });
+        else{
+            var userDetails = req.body;
+            userDetails.name = userDetails.name.toLowerCase();
+            userDetails.username = userDetails.username.toLowerCase();
+            registrationDAO.performRegistration(userDetails, (status, message, data) => {
+                return res.status(status).json({
+                    "status":{
+                        "code":status,
+                        "message":message
+                    },
+                    "data":data
+                });
+            });
+        }
     }
     catch (error) {
-        console.log(error);
-        return res.status(500).send("Server error");
+        logger.error(filename + ": " + error);
+        return res.status(500).json({
+            "status":{
+                "code":500,
+                "message":"Internal server error"
+            },
+            "data":null
+        });
     }
-})
-
+});
 module.exports = registrationRouter;

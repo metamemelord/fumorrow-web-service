@@ -1,2 +1,3 @@
 create database fumorrow;
-create table catmans(fname varchar(255) not null, lname varchar(255) not null, uname varchar(255), password_digest varchar(255) not null, privilages INTEGER not null, isApproved TINYINT(1) not null, primary key(uname));
+use fumorrow;
+create table category_managers(name varchar(255) not null, username varchar(255), email varchar(255) not null, password_digest varchar(255) not null, privilages INTEGER not null, isApproved TINYINT(1) not null, primary key(username));

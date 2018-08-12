@@ -1,4 +1,6 @@
 const express = require('express');
+const logger = require('../../Loggers/index').Logger;
+const filename = require('path').basename(__filename);
 const movieIndexRouter = express.Router();
 
 // Getting routes
@@ -24,7 +26,7 @@ movieIndexRouter.use(miscRoutes);
 //         });
 
 //     } catch (error) {
-//         console.log(error);
+//         logger.error(filename + ": " + error);
 //         res.status(304).send("Unmodified");
 //     }
 // });
@@ -44,7 +46,7 @@ movieIndexRouter.use(miscRoutes);
 //         })
 
 //     } catch (error) {
-//         console.log(error);
+//         logger.error(filename + ": " + error);
 //         res.status(304).send("Unmodified");
 //     }
 // });
@@ -62,7 +64,7 @@ movieIndexRouter.use(miscRoutes);
 //         })
 
 //     } catch (error) {
-//         console.log(error);
+//         logger.error(filename + ": " + error);
 //         res.status(304).send("Unmodified");
 //                     res.status(500).send("Internal error");
 //                 } else {
@@ -74,7 +76,7 @@ movieIndexRouter.use(miscRoutes);
 //             res.status(400).send("Provide an ID before proceeding");
 //         }
 //     } catch (error) {
-//         console.log(error);
+//         logger.error(filename + ": " + error);
 //         res.status(304).send("Unmodified");
 //     }
 // });
@@ -98,7 +100,7 @@ movieIndexRouter.use(miscRoutes);
 //             res.status(400).send("Provide an ID before proceeding");
 //         }
 //     } catch (error) {
-//         console.log(error);
+//         logger.error(filename + ": " + error);
 //         res.status(304).send("Unmodified");
 //     }
 // });

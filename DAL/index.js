@@ -1,5 +1,14 @@
 const MovieDAO = require('./Movies/MovieDAO');
-const MovieDAOForRetrieval = require('./Movies/MoviesDAOForRetrieval');
+const MovieDAOForRetrieval = require('./Movies/MovieDAOForRetrieval');
 
-module.exports.MovieDAO = MovieDAO;
-module.exports.MovieDAOForRetrieval = MovieDAOForRetrieval;
+// Common routes
+
+const LoginDAO = require('./Commons/LoginDAO');
+const RegistrationDAO = require('./Commons/RegistrationDAO');
+
+module.exports = {
+    MovieDAO: MovieDAO,
+    MovieDAOForRetrieval: MovieDAOForRetrieval,
+    LoginDAO: LoginDAO,
+    RegistrationDAO: RegistrationDAO
+}

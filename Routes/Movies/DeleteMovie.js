@@ -5,31 +5,52 @@ const movieDAO = DAL.MovieDAO;
 const deleteMovieRouter = express.Router();
 const jwt = require('jsonwebtoken');
 const helpers = require("../../Misc/HelperFunctions");
+const tokenVerifier = require('./../../Misc/TokenVerifier');
+const logger = require('../../Loggers/index').Logger;
+const filename = require('path').basename(__filename);
 
-
-deleteMovieRouter.post('/api/movie/delete', helpers.tokenVerifier, movieRequestVerifier.verify, function (req, res) {
+deleteMovieRouter.post('/api/movie/delete', tokenVerifier, movieRequestVerifier, function (req, res) {
     try{
-        jwt.verify(req.token, process.env.key, function (err, authData) {
-            if (err) {
-                console.log("ERROR: ",err);
-                return res.status(401).send("Invalid token");
+        jwt.verify(req.token, process.env.key, function (error, authData) {
+            if (error) {
+                if(error['name'] == 'TokenExpiredError') return res.status(401).json({
+                    "status":{
+                        "code":401,
+                        "message":"Token expired"
+                    },
+                    "data":null
+                });
+                logger.error(filename + ": Attempt to login with invalid token");
+                return res.status(400).json({
+                    "status":{
+                        "code":400,
+                        "message":"Invalid token"
+                    },
+                    "data":null
+                });
             } else {
                 if (!authData['privilages'].includes('movies')) {
-                    return res.status(403).send("Insufficient privilages");
+                    return res.status(403).json({
+                        "status":{
+                            "code":403,
+                            "message":"Insufficient privilages"
+                        },
+                        "data":null
+                    });
                 } else {
                     try {
-                        var id = req.body.id;
-                        movieDAO.removeById(id, function (status) {
-                            if (status === 200) {
-                                return res.status(200).send(id + " deleted successfully!");
-                            } else if (status === 404) {
-                                return res.status(404).send("Invalid ID");
-                            } else {
-                                return res.status(500).send("Internal server error");
-                            }
-                        })
+                        var id = req.body._id;
+                        movieDAO.removeById(id, function (status, message, data) {
+                            return res.status(status).json({
+                                "status":{
+                                    "code":status,
+                                    "message":message
+                                },
+                                "data":data
+                            });
+                        });
                     } catch (error) {
-                        console.log("ERROR: ",error);
+                        logger.error(filename + ": " + error);
                         return res.sendStatus(304);
                     }
                 }
@@ -37,8 +58,14 @@ deleteMovieRouter.post('/api/movie/delete', helpers.tokenVerifier, movieRequestV
         })
     }
     catch(error){
-        console.log("ERROR: ",error);
-        return res.status(500).send("Internal server error")
+        logger.error(filename + ": " + error);
+        return res.status(500).json({
+            "status":{
+                "code":500,
+                "message":"Internal server error"
+            },
+            "data":null
+        });
     }
 });
 

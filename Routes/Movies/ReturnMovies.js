@@ -1,36 +1,69 @@
 const express = require('express');
 const DAL = require('../../DAL/index');
 const movieDAOForRetrieval = DAL.MovieDAOForRetrieval;
+const logger = require('../../Loggers/index').Logger;
+const filename = require('path').basename(__filename);
+const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
 var returnMoviesRouter = express.Router();
 
 returnMoviesRouter.post('/api/movies', function (req, res) {
     try {
-        if (req.body.begin === undefined && req.body.limit === undefined) {
-            if (req.body.filter === undefined || req.body.filter.length === 0) {
-                movieDAOForRetrieval.getAll(function (data) {
-                    return res.status(200).json(data);
+        if (isEmpty(req.body.begin) || isEmpty(req.body.limit)) {
+            if (isEmpty(req.body.filter)) {
+                movieDAOForRetrieval.getAll(function (status, message, data) {
+                    return res.status(status).json({
+                        "status":{
+                            "code":status,
+                            "message":message
+                        },
+                        "data":data
+                    });
                 });
             } else {
                 var filter = req.body.filter;
-                movieDAOForRetrieval.getAllByFilter(filter, function (data) {
-                    return res.status(200).json(data);
+                movieDAOForRetrieval.getAllByFilter(filter, function (status, message, data) {
+                    return res.status(status).json({
+                        "status":{
+                            "code":status,
+                            "message":message
+                        },
+                        "data":data
+                    });
                 });
             }
         } else {
-            if (req.body.filter === undefined || req.body.filter.length === 0) {
-                movieDAOForRetrieval.getInRange(req.body.begin, req.body.limit, function (data) {
-                    return res.status(200).json(data);
+            if (isEmpty(req.body.filter)) {
+                movieDAOForRetrieval.getInRange(req.body.begin, req.body.limit, function (status, message, data) {
+                    return res.status(status).json({
+                        "status":{
+                            "code":status,
+                            "message":message
+                        },
+                        "data":data
+                    });
                 });
             } else {
                 var filterWithRange = req.body.filter;
-                movieDAOForRetrieval.getInRangeByFilter(filterWithRange, req.body.begin, req.body.limit, function (data) {
-                    return res.status(200).json(data);
+                movieDAOForRetrieval.getInRangeByFilter(filterWithRange, req.body.begin, req.body.limit, function (status, message, data) {
+                    return res.status(status).json({
+                        "status":{
+                            "code":status,
+                            "message":message
+                        },
+                        "data":data
+                    });
                 });
             }
         }
     } catch (error) {
-        console.log(error);
-        return res.status(500).send("Internal server error");
+        logger.error(filename + ": " + error);
+        return res.status(500).json({
+            "status":{
+                "code":500,
+                "message":"Internal server error"
+            },
+            "data":null
+        });
     }
 });
 

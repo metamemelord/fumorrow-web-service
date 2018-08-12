@@ -1,75 +1,55 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const mysql = require('mysql');
-const helpers = require('../../Misc/HelperFunctions');
+const DAL = require('./../../DAL/index');
+const loginDAO = DAL.LoginDAO;
+const logger = require('../../Loggers/index').Logger;
+const filename = require('path').basename(__filename);
+const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+
 var loginRouter = express.Router();
 
 loginRouter.post('/api/login', function (req, res) {
     try{
+        if(!(parseInt(process.env.LOGIN_SERVICE_ACTIVE))){
+            return res.status(503).json({
+                "status":{
+                    "code":503,
+                    "message":"Login service has been disabled. Please contact the admin."
+                },
+                "data":null
+            });
+        }
         var userDetails = {
-            uname: req.body.uname,
+            username: req.body.username.toLowerCase(),
             password: req.body.password
         }
-        if(userDetails.uname === undefined || userDetails.uname.length === 0 || userDetails.uname.split(" ").length > 1 || userDetails.password === undefined || userDetails.password.length === 0)
-            return res.status(400).send("Invalid credentials");
-        else{
-            var con = mysql.createConnection({
-                host: "localhost",
-                user: "root",
-                password: "zKWWk7zKWWk7QNlFeISoU5QNlzKWWk7QNlFeISoU5FeISoU5",
-                database: "fumorrow"
+        if(isEmpty(userDetails.username) || userDetails.username.split(" ").length > 1 || isEmpty(userDetails.password))
+            return res.status(400).json({
+                "status":{
+                    "code":400,
+                    "message":"Invalid credentials"
+                },
+                "data":null
             });
-                con.connect();
-                con.query("select * from category_managers where uname =?",[userDetails.uname], function (err, userDataFromDB) {
-                    if (err) {
-                        con.end();
-                        console.log("ERROR: ",err,"\n");
-                        return res.status(500).send("Internal server error!");
-                    }
-                    if (userDataFromDB === undefined || userDataFromDB.length === 0) {
-                        con.end();
-                        return res.status(401).send("Invalid credentials");
-                    }
-                    else if(userDataFromDB[0].isApproved === 0){
-                        con.end();
-                        return res.status(401).send("Not approved by admin");
-                    }
-                    else {
-                        if (bcrypt.compareSync(userDetails.password,userDataFromDB[0].password_digest)) {
-                            var userObject = {
-                                uname: userDataFromDB[0].uname,
-                                privilages: helpers.resolvePrivilages(userDataFromDB[0].privilages)
-                            }
-                            con.end();
-                            jwt.sign(userObject, process.env.key, {
-                                expiresIn: 3600
-                            }, function (err, token) {
-                                if (err) {
-                                    setTimeout(function () {
-                                        console.log("ERROR: ",err);
-                                        return res.status(500).send("Server error");
-                                    }, 5000);
-                                } else {
-                                    return res.status(200).json({
-                                        success: true,
-                                        token: token
-                                    });
-                                }
-                            });
-                        }
-                        else {
-                            con.end();
-                            return res.status(401).send("Invalid credentials");
-                        }
-                    }
-                });
-            }
-            
+        else{
+            loginDAO.performLogin(userDetails, (status, message, data) => {
+                return res.status(status).json({
+                    "status":{
+                        "code":status,
+                        "message":message
+                    },
+                    "data":data
+                });                    
+            });
         }
-    catch (error) {
-        console.log("ERROR: ", error,"\n");
-        return res.status(500).send("Server error");
+    } catch (error) {
+        logger.error(filename + ": " + error);
+        return res.status(500).json({
+            "status":{
+                "code":500,
+                "message":"Internal server error"
+            },
+            "data":null
+        });
     }
 });
 
