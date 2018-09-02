@@ -44,7 +44,7 @@ addMovieRouter.post('/api/movie/add', tokenVerifier, movieRequestVerifier,functi
                     var movieData = req.body;
                     if (isEmpty(movieData.hour)) movieData.hour = 0;
                     if (isEmpty(movieData.minute)) movieData.minute = 0;
-                    let movieObject = {
+                    var movieObject = {
                         _id: movieData.day.toString() + movieData.month.toString() + movieData.year.toString(),
                         title: movieData.title,
                         release_date: new Date(movieData.year, movieData.month, movieData.day, movieData.hour, movieData.minute).toLocaleString('en-US', {
@@ -88,7 +88,7 @@ addMovieRouter.post('/api/movie/add', tokenVerifier, movieRequestVerifier,functi
                             },
                             "data":data
                         });
-                    })
+                    });
                 }
             }
         });

@@ -41,7 +41,7 @@ function performRegistration(userDetails, callback) {
                             var fullName = userDetails.name.split(' ')
                             .map(w => w[0].toUpperCase() + w.substr(1).toLowerCase())
                             .join(' ');
-                            logger.info(filename + " - Created a new user: ", fullName, "\n");
+                            logger.info(filename + " - Created a new user: ", fullName);
                             return callback(201, "User added successfully. Contact ADMIN for approval.", {
                                 "username": userDetails.username,
                                 "name": fullName

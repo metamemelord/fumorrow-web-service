@@ -6,7 +6,7 @@ const filename = require('path').basename(__filename);
 const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
 const registrationRouter = express.Router();
 
-registrationRouter.post('/api/registration', function (req, res) {
+registrationRouter.post('/api/admin/registration', function (req, res) {
     try {
         if(!(parseInt(process.env.REGISTRATION_SERVICE_ACTIVE))){
             return res.status(503).json({

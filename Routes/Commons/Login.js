@@ -7,7 +7,7 @@ const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
 
 var loginRouter = express.Router();
 
-loginRouter.post('/api/login', function (req, res) {
+loginRouter.post('/api/admin/login', function (req, res) {
     try{
         if(!(parseInt(process.env.LOGIN_SERVICE_ACTIVE))){
             return res.status(503).json({
