@@ -5,12 +5,13 @@ const helpers = require('./../../Misc/HelperFunctions');
 const logger = require('../../Loggers/index').Logger;
 const filename = require('path').basename(__filename);
 const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
-const dbDetails = {
-    host: "localhost",
-    user: "root",
-    password: "zKWWk7zKWWk7QNlFeISoU5QNlzKWWk7QNlFeISoU5FeISoU5",
-    database: "fumorrow"
-};
+
+const dbDetails = { 
+    host: process.env.MYSQL_HOST, 
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DB_NAME
+}
 
 function addCelebrity(celebrityDetails, callback) {
     try {

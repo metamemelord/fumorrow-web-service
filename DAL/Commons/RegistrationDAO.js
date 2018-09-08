@@ -4,15 +4,17 @@ const mysql = require('mysql');
 const logger = require('../../Loggers/index').Logger;
 const filename = require('path').basename(__filename);
 
+const dbDetails = { 
+    host: process.env.MYSQL_HOST, 
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DB_NAME
+}
+
 function performRegistration(userDetails, callback) {
     try {
         setTimeout(function () {
-            var con = mysql.createConnection({
-                host: "localhost",
-                user: "root",
-                password: "zKWWk7zKWWk7QNlFeISoU5QNlzKWWk7QNlFeISoU5FeISoU5",
-                database: "fumorrow"
-            });
+            var con = mysql.createConnection(dbDetails);
             con.connect(function (error) {
                 if (error) {
                     logger.error(filename + ": " + error);

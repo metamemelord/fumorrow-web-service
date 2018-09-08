@@ -5,14 +5,16 @@ const helpers = require('./../../Misc/HelperFunctions');
 const logger = require('../../Loggers/index').Logger;
 const filename = require('path').basename(__filename);
 
+const dbDetails = { 
+    host: process.env.MYSQL_HOST, 
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DB_NAME
+}
+
 function performLogin(userDetails, callback) {
     try {
-        var con = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "zKWWk7zKWWk7QNlFeISoU5QNlzKWWk7QNlFeISoU5FeISoU5",
-            database: "fumorrow"
-        });
+        var con = mysql.createConnection(dbDetails);
         con.connect();
         con.query("select * from category_managers where username =?", [userDetails.username], function (error, userDataFromDB) {
             if (error) {
