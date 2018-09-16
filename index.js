@@ -1,58 +1,61 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const environment = require('dotenv/config');
-const logger = require('./Loggers/index').Logger;
+require('dotenv').config();
+const logger = require('./js/Loggers/index').LoggerFactory.getLogger('Web-Service');
 const filename = require('path').basename(__filename);
 
 var fumorrow = express();
 
-fumorrow.use( bodyParser.json() ); 
+fumorrow.use(bodyParser.json());
 fumorrow.set('env', process.env.ENVIRONMENT);
+
+/**
+ * Initial filter to check issues in the request
+ */
 fumorrow.use((error, req, res, next) => {
-    if(error){
+    if (error) {
         logger.warn("Malformed JSON");
         return res.status(error.status).json({
-            "status":{
-                "code":error.status,
-                "message":"Bad request"
+            "status": {
+                "code": error.status,
+                "message": "Bad request"
             },
-            "data":null
+            "data": null
         });
     }
     return next();
 });
 
-// API Routes
-
-fumorrow.use(require('./Routes/Commons/index'));
-fumorrow.use(require('./Routes/Movies/index'));
+/**
+ *  API Routes
+ */
+fumorrow.use(require('./js/Routes/Commons/index'));
+fumorrow.use(require('./js/Routes/Movies/index'));
+fumorrow.use(require('./js/Routes/404'));
 
 // Routes
 
 //Redirecting all  the GET requests to the main website.
 
-fumorrow.get('*', function(req,res){
-    try{
-        res.writeHead(301,
-            {Location: 'http://www.fumorrow.com'}
-        );
-    }
-    catch(error){
+fumorrow.get('*', function (req, res) {
+    try {
+        res.writeHead(301, {
+            Location: 'http://www.fumorrow.com'
+        });
+    } catch (error) {
         logger.error(filename + ": " + error);
-    } finally{
-    res.end();
+    } finally {
+        res.end();
     }
 });
 
 // Server
 
-fumorrow.listen(3000, function(error){
-        if(error){
-            logger.fatal(filename + ": " + error);
-        }
-        else{
-            logger.info("Server started");
-        }
+fumorrow.listen(3000, (error) => {
+    if (error) {
+        logger.fatal(filename + ": " + error);
+    } else {
+        logger.info("Server started");
     }
-);
+});
