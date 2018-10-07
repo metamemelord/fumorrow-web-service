@@ -18,11 +18,19 @@ loginRouter.post('/api/admin/login', function (req, res) {
                 "data": null
             });
         }
+        if (isEmpty(req.body.username) || isEmpty(req.body.password))
+            return res.status(400).json({
+                "status": {
+                    "code": 400,
+                    "message": "Invalid credentials"
+                },
+                "data": null
+            });
         var userDetails = {
             username: req.body.username.toLowerCase(),
             password: req.body.password
         }
-        if (isEmpty(userDetails.username) || userDetails.username.split(" ").length > 1 || isEmpty(userDetails.password))
+        if (userDetails.username.split(" ").length > 1 || isEmpty(userDetails.password))
             return res.status(400).json({
                 "status": {
                     "code": 400,

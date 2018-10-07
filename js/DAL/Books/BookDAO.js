@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
-const logger = require('../../Loggers/index').Logger;
 const filename = require('path').basename(__filename);
+const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
 var connection = null;
 try{
@@ -8,11 +8,11 @@ try{
 	// Connection to DB
 
 	connection.on('error', function (error) {
-		logger.error(filename + ": " + error);
+		logger.error(error);
 	});
 
 	connection.once('open', function () {
-		logger.info(filename + " - Connection to RW user successful!");
+		logger.info("Connection to RW user successful!");
 	});
 } catch(error){
 	logger.error(filename + ": " + error);

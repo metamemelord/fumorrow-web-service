@@ -32,6 +32,7 @@ fumorrow.use((error, req, res, next) => {
  */
 fumorrow.use(require('./js/Routes/Commons/index'));
 fumorrow.use(require('./js/Routes/Movies/index'));
+fumorrow.use(require('./js/Routes/Books/index'));
 fumorrow.use(require('./js/Routes/404'));
 
 // Routes

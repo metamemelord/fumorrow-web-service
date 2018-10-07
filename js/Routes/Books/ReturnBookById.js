@@ -1,10 +1,10 @@
 const express = require('express');
-const DAL = require('../../DAL/index');
+const DAL = require('../../DAL');
 const bookDAOForRetrieval = DAL.BookDAOForRetrieval;
 const bookByIdRouter = express.Router();
 const filename = require('path').basename(__filename);
-const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isNotEmpty = require('./../../Misc/HelperFunctions').isNotEmpty;
+const logger = require('../../Loggers').LoggerFactory.getLogger(filename);
+const isNotEmpty = require('../../Misc/HelperFunctions').isNotEmpty;
 
 bookByIdRouter.post('/api/book/:id', function (req, res) {
     try {

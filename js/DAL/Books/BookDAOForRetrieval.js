@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
-const logger = require('../../Loggers/index').Logger;
 const filename = require('path').basename(__filename);
+const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
 var connectionForRetrieval = null;
 try {
@@ -9,26 +9,25 @@ try {
 	// Connection to DB
 
 	connectionForRetrieval.on('error', function (error) {
-		logger.error(filename + ": " + error);
+		logger.error(error);
 	});
 
 	connectionForRetrieval.once('open', function () {
-		logger.info(filename + " - Connection to read-only user successful!");
+		logger.info("Connection to read-only user successful!");
 	});
 } catch (error) {
-	logger.error(filename + ": " + error);
+	logger.error(error);
 }
 
 require('assert').notEqual(connectionForRetrieval, null);
 
-const bookSchema = require('../../Models/BookModel');
-let BookDBService = connectionForRetrieval.model('movie', bookSchema);
+const bookSchema = require('../../Models/BooksModel');
+let BookDBService = connectionForRetrieval.model('book', bookSchema);
 
 
 function returnAll(callback) {
 	BookDBService.find({}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
-			logger.error(filename + ": " + error);
 			callback(500, "Internal server error", null);
 		}
 		callback(200, "Success", data);
@@ -57,7 +56,7 @@ function returnAllByFilter(filter, callback) {
 function returnInRangeByFilter(filter, begin, limit, callback) {
 	BookDBService.find({ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
-			logger.error(filename + ": " + error);
+			logger.error(error);
 			callback(500, "Internal server error", null);
 		}
 		callback(200, "Success", data);
@@ -67,8 +66,12 @@ function returnInRangeByFilter(filter, begin, limit, callback) {
 function returnById(id, callback) {
 	BookDBService.findById(id, function (error, data) {
 		if (error) {
-			logger.error(filename + ": " + error);
-			callback(500, "Internal server error", null);
+			if(error.name === "CastError") {
+				callback(400, "Invalid ID", null);
+			} else {
+				logger.error(error);
+				callback(500, "Internal server error", null);
+			}
 		} else if (!data) {
 			callback(404, "Data not found on server", null);
 		} else {
