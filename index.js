@@ -32,6 +32,7 @@ fumorrow.use((error, req, res, next) => {
  */
 fumorrow.use(require('./js/Routes/Commons/index'));
 fumorrow.use(require('./js/Routes/Movies/index'));
+fumorrow.use(require('./js/Routes/Books/index'));
 fumorrow.use(require('./js/Routes/404'));
 
 // Routes
@@ -44,7 +45,7 @@ fumorrow.get('*', function (req, res) {
             Location: 'http://www.fumorrow.com'
         });
     } catch (error) {
-        logger.error(filename + ": " + error);
+        logger.error(error);
     } finally {
         res.end();
     }
@@ -54,7 +55,7 @@ fumorrow.get('*', function (req, res) {
 
 fumorrow.listen(3000, (error) => {
     if (error) {
-        logger.fatal(filename + ": " + error);
+        logger.fatal(error);
     } else {
         logger.info("Server started");
     }

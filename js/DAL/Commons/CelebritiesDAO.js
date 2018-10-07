@@ -21,12 +21,11 @@ function addCelebrity(celebrityDetails, callback) {
                 logger.error(error);
                 return callback(500, "Could not connect to database", null);
             }
-            var sql = "insert into category_celebrities (first_name, middle_name, last_name, profession, dob, gender, image_link, is_approved) values (?, ?, ?, ?, ?, ?, ?, ?);";
-            var celebrityVariables = [celebrityDetails.first_name, celebrityDetails.middle_name, celebrityDetails.last_name, celebrityDetails.profession, celebrityDetails.dob, celebrityDetails.gender, celebrityDetails.image_link, 0];
+            var sql = "insert into category_celebrities (first_name, middle_name, last_name, profession, description, dob, gender, image_link, is_approved) values (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            var celebrityVariables = [celebrityDetails.first_name, celebrityDetails.middle_name, celebrityDetails.last_name, celebrityDetails.profession, celebrityDetails.description, celebrityDetails.dob, celebrityDetails.gender, celebrityDetails.image_link, 0];
             con.query(sql, celebrityVariables, function (error, celebrityDataFromDb) {
                 if (error) {
                     if (error.code === "ER_DUP_ENTRY") {
-                        logger.warn(error);
                         con.rollback();
                         con.end();
                         return callback(409, "Celebrity exists in database", celebrityDetails);
@@ -43,7 +42,8 @@ function addCelebrity(celebrityDetails, callback) {
                         + (celebrityDetails.last_name == "" ? "" : celebrityDetails.last_name);
                     logger.info("Created a new celebrity: ", fullName);
                     return callback(201, "Celebrity created", {
-                        "name": fullName
+                        "id": celebrityDataFromDb.insertId,
+                        "name": fullName,
                     });
                 }
             });
@@ -94,7 +94,7 @@ function getCelebrityById(pid, callback) {
                 logger.error(error);
                 return callback(500, "Could not connect to database", null);
             }
-            var sql = "select * from category_celebrities where pid=?";
+            var sql = "select pid, first_name, middle_name, last_name, profession,dob,description, gender, image_link from category_celebrities where pid=? and is_approved=1";
             con.query(sql, pid, function (error, celebrityDataFromDb) {
                 con.end();
                 if (error) {
@@ -121,7 +121,7 @@ function getAllCelebrities(callback) {
                 logger.error(error);
                 return callback(500, "Could not connect to database", null);
             }
-            var sql = "select * from category_celebrities";
+            var sql = "select pid, first_name, middle_name, last_name, profession,dob,description, gender, image_link from category_celebrities where is_approved=1";
             con.query(sql, function (error, celebrities) {
                 con.end();
                 if (error) {

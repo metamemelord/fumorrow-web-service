@@ -48,7 +48,9 @@ addCelebrityRoute.post('/api/admin/celebrity/add', tokenVerifier, tokenAuthCheck
                         last_name: req.body.last_name,
                         dob: req.body.dob,
                         gender: req.body.gender,
-                        profession: req.body.profession
+                        profession: req.body.profession,
+                        description: req.body.description,
+                        image_link: req.body.image_link
                     };
                     for(var field in celebrityDetails){
                         if(typeof celebrityDetails[field] === "string"){
