@@ -56,7 +56,7 @@ returnBooksRouter.post('/api/books', function (req, res) {
             }
         }
     } catch (error) {
-        logger.error(filename + ": " + error);
+        logger.error(error);
         return res.status(500).json({
             "status":{
                 "code":500,

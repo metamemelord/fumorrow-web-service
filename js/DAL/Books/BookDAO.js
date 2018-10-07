@@ -15,7 +15,7 @@ try{
 		logger.info("Connection to RW user successful!");
 	});
 } catch(error){
-	logger.error(filename + ": " + error);
+	logger.error(error);
 }
 
 require('assert').notEqual(connection, null);
@@ -34,13 +34,13 @@ function addBook(object, callback) {
 			if (data) {
 				callback(409,"Entry already exists", null);
 			} else if(error) {
-				logger.error(filename + ": " + error);
+				logger.error(error);
 				callback(500, "Internal server error", null);
 			} else {
 				var bookToAdd = new BookDBService(object);
 				bookToAdd.save(object, function (error) {
 					if (error) {
-						logger.error(filename + ": " + error);
+						logger.error(error);
 						callback(500, "Error while saving the book", null);
 					} else callback(201, "Success", {
 						"id":object._id,
@@ -50,7 +50,7 @@ function addBook(object, callback) {
 			}
 		});
 	} catch(error){
-		logger.error(filename + ": " + error);
+		logger.error(error);
 		callback(500, "Internal server error", null);
 	}
 }
@@ -61,25 +61,25 @@ function removeById(id, callback) {
 			_id: id
 		}, function (error, data) {
 			if (error) {
-				logger.error(filename + ": " + error);
+				logger.error(error);
 				callback(500, "Internal server error", null);
 			} else if (data === null) {
 				callback(404, "Entry does not exist", null);
 			} else {
 				callback(200, "Success", {
-					"name":data.title
+					"name":data.book_name
 				});
 			}
 		})
 	}
 	catch (error) {
-		logger.error(filename + ": " + error);
+		logger.error(error);
 		callback(500, "Internal server error", null);
 	}
 }
 
 function incrementCounterById(id, callback) {
-	BookDBService.findByIdAndUpdate(id, {
+	BookDBService.findOneAndUpdate({_id:id}, {
 		$inc: {
 			'clickCounter': 1
 		}
@@ -87,7 +87,7 @@ function incrementCounterById(id, callback) {
 		if (error instanceof mongoose.CastError) {
 			callback(412,"Invalid ID",null);
 		} else if (error) {
-			logger.error(filename + ": " + error);
+			logger.error(error);
 			callback(500,"Internal error",null);
 		} else if (data === null) {
 			callback(404,"Content not found on the server",null);
@@ -98,14 +98,14 @@ function incrementCounterById(id, callback) {
 }
 
 function approveById(id, callback) {
-	BookDBService.findByIdAndUpdate(id, {
+	BookDBService.findOneAndUpdate({_id:id}, {
 		'is_approved': true,
 		'recheck_needed': false
 	}, function (error, data) {
 		if (error instanceof mongoose.CastError) {
 			callback(412,"Invalid ID",null);
 		} else if (error) {
-			logger.error(filename + ": " + error);
+			logger.error(error);
 			callback(500,"Internal error",null);
 		} else if (data === null) {
 			callback(404,"Content not found on the server",null);
@@ -118,13 +118,13 @@ function approveById(id, callback) {
 }
 
 function markForRecheckById(id, callback) {
-	BookDBService.findByIdAndUpdate(id, {
+	BookDBService.findOneAndUpdate({_id:id}, {
 		'recheck_needed': true
 	}, function (error, data) {
 		if (error instanceof mongoose.CastError) {
 			callback(412,"Invalid ID",null);
 		} else if (error) {
-			logger.error(filename + ": " + error);
+			logger.error(error);
 			callback(500,"Internal error",null);
 		} else if (data === null) {
 			callback(404,"Content not found on the server",null);
@@ -136,57 +136,10 @@ function markForRecheckById(id, callback) {
 	});
 }
 
-/*
-function addShowingAt(id, showing_at, callback) {
-	MovieDBService.findByIdAndUpdate(id, {
-		$push: {
-			'showing_at': showing_at
-		}
-	},
-		function (error, data) {
-			if (error instanceof mongoose.CastError) {
-				callback(412,"Invalid ID",null);
-			} else if (error) {
-				logger.error(filename + ": " + error);
-				callback(500,"Internal error",null);
-			} else if (data === null) {
-				callback(404,"Content not found on the server",null);
-			} else {
-				callback(200,"Added theaters",{
-					"name":data.title,
-					"showing_at":showing_at
-				});
-			}
-		}
-	);
-}
-
-function markReleasedById(id, callback) {
-	MovieDBService.findByIdAndUpdate(id, {
-		'is_released': true
-	}, function (error, data) {
-		if (error instanceof mongoose.CastError) {
-			callback(412,"Invalid ID",null);
-		} else if (error) {
-			logger.error(filename + ": " + error);
-			callback(500,"Internal error",null);
-		} else if (data === null) {
-			callback(404,"Content not found on the server",null);
-		} else {
-			callback(200,"Marked passed",{
-				"name": data.title
-			});
-		}
-	});
-}
-*/
-
 module.exports = {
 	addBook: addBook,
 	removeById: removeById,
 	incrementCounterById: incrementCounterById,
 	approveById: approveById,
-	markForRecheckById: markForRecheckById,
-	//addShowingAt: addShowingAt,
-	//markReleasedById: markReleasedById
+	markForRecheckById: markForRecheckById
 };

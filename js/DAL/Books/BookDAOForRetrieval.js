@@ -37,7 +37,7 @@ function returnAll(callback) {
 function returnInRange(begin, limit, callback) {
 	BookDBService.find({}).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
-			logger.error(filename + ": " + error);
+			logger.error(error);
 			callback(500, "Internal server error", null);
 		}
 		callback(200, "Success", data);
@@ -47,7 +47,7 @@ function returnInRange(begin, limit, callback) {
 function returnAllByFilter(filter, callback) {
 	BookDBService.find({ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] }).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
-			logger.error(filename + ": " + error);
+			logger.error(error);
 			callback(500, "Internal server error", null);
 		}
 		callback(200, "Success", data);
@@ -64,7 +64,7 @@ function returnInRangeByFilter(filter, begin, limit, callback) {
 }
 
 function returnById(id, callback) {
-	BookDBService.findById(id, function (error, data) {
+	BookDBService.findOne({_id:id}, function (error, data) {
 		if (error) {
 			if(error.name === "CastError") {
 				callback(400, "Invalid ID", null);
@@ -85,7 +85,7 @@ function returnAllForRechecking(callback) {
 		$and: [{ "recheck_needed": true }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
-			logger.error(filename + ": " + error);
+			logger.error(error);
 			callback(500, "Internal server error", null);
 		}
 		callback(200, "Success", data);
@@ -97,7 +97,7 @@ function returnAllUnchecked(callback) {
 		$or: [ {"recheck_needed": false}, {"is_approved": false}] 
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
-			logger.error(filename + ": " + error);
+			logger.error(error);
 			callback(500, "Internal server error", null);
 		}
 		callback(200, "Success", data);
@@ -118,7 +118,7 @@ function returnAllReferrers(callback) {
 		}
 	], function (error, data) {
 		if (error) {
-			logger.error(filename + ": " + error);
+			logger.error(error);
 			callback(500, "Internal server error", null);
 		} else {
 			callback(200, "Success", data);
@@ -129,7 +129,7 @@ function returnAllReferrers(callback) {
 function returnAllLanguages(callback) {
 	BookDBService.distinct("language", function (error, data) {
 		if (error) {
-			logger.error(filename + ": " + error);
+			logger.error(error);
 			callback(500, "Internal server error", null);
 		} else {
 			callback(200, "Success", data);

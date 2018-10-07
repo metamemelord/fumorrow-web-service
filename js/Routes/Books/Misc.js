@@ -31,7 +31,7 @@ bookMiscRouter.post('/api/book/inc', function (req, res) {
             });
         }
     } catch (error) {
-        logger.error(filename + ": " + error);
+        logger.error(error);
         return res.sendStatus(304);
     }
 });
@@ -48,7 +48,7 @@ bookMiscRouter.post('/api/books/partners', function (req, res) {
             });
         });
     } catch (error) {
-        logger.error(filename + ": " + error);
+        logger.error(error);
         return res.status(500).json({
             "status":{
                 "code":500,
@@ -71,7 +71,7 @@ bookMiscRouter.post('/api/books/languages', function (req, res) {
             });
         });
     } catch (error) {
-        logger.error(filename + ": " + error);
+        logger.error(error);
         return res.status(500).json({
             "status":{
                 "code":500,

@@ -45,7 +45,7 @@ fumorrow.get('*', function (req, res) {
             Location: 'http://www.fumorrow.com'
         });
     } catch (error) {
-        logger.error(filename + ": " + error);
+        logger.error(error);
     } finally {
         res.end();
     }
@@ -55,7 +55,7 @@ fumorrow.get('*', function (req, res) {
 
 fumorrow.listen(3000, (error) => {
     if (error) {
-        logger.fatal(filename + ": " + error);
+        logger.fatal(error);
     } else {
         logger.info("Server started");
     }

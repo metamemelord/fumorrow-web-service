@@ -88,8 +88,7 @@ var bookSchema = new mongoose.Schema({
     ecombook_url: {
         type: String,
         required: false
-    },
-
+    }, 
     referrer_name: {
         type: String,
         lowercase: true,
@@ -154,7 +153,7 @@ var bookSchema = new mongoose.Schema({
     is_approved: {
         type: Boolean,
         default: false
-    },
+    }
 });
 
 module.exports = bookSchema;

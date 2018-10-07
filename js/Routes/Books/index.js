@@ -8,7 +8,6 @@ const bookIndexRouter = express.Router();
 const returnBooks = require('./ReturnBooks');
 const addBook = require('./AddBook');
 const deleteBook = require('./DeleteBook');
-//const showingAt = require('./AddShowingAt');
 const miscRoutes = require('./Misc');
 const returnBookById = require('./ReturnBookById');
 
@@ -17,7 +16,6 @@ const returnBookById = require('./ReturnBookById');
 bookIndexRouter.use(returnBooks);
 bookIndexRouter.use(addBook);
 bookIndexRouter.use(deleteBook);
-//movieIndexRouter.use(showingAt);
 bookIndexRouter.use(miscRoutes);
 bookIndexRouter.use(returnBookById);
 
@@ -29,7 +27,7 @@ bookIndexRouter.use(returnBookById);
 //         });
 
 //     } catch (error) {
-//         logger.error(filename + ": " + error);
+//         logger.error(error);
 //         res.status(304).send("Unmodified");
 //     }
 // });
@@ -49,7 +47,7 @@ bookIndexRouter.use(returnBookById);
 //         })
 
 //     } catch (error) {
-//         logger.error(filename + ": " + error);
+//         logger.error(error);
 //         res.status(304).send("Unmodified");
 //     }
 // });
@@ -67,7 +65,7 @@ bookIndexRouter.use(returnBookById);
 //         })
 
 //     } catch (error) {
-//         logger.error(filename + ": " + error);
+//         logger.error(error);
 //         res.status(304).send("Unmodified");
 //                     res.status(500).send("Internal error");
 //                 } else {
@@ -79,7 +77,7 @@ bookIndexRouter.use(returnBookById);
 //             res.status(400).send("Provide an ID before proceeding");
 //         }
 //     } catch (error) {
-//         logger.error(filename + ": " + error);
+//         logger.error(error);
 //         res.status(304).send("Unmodified");
 //     }
 // });
@@ -103,7 +101,7 @@ bookIndexRouter.use(returnBookById);
 //             res.status(400).send("Provide an ID before proceeding");
 //         }
 //     } catch (error) {
-//         logger.error(filename + ": " + error);
+//         logger.error(error);
 //         res.status(304).send("Unmodified");
 //     }
 // });

@@ -1,7 +1,7 @@
 const express = require('express');
 const DAL = require('../../DAL/index');
 const bookRequestVerifier = require('../Books/DeleteBookRequestVerifier');
-const bookDAO = DAL.bookDAO;
+const bookDAO = DAL.BookDAO;
 const deleteBookRouter = express.Router();
 const jwt = require('jsonwebtoken');
 const helpers = require("../../Misc/HelperFunctions");
@@ -52,7 +52,7 @@ deleteBookRouter.post('/api/book/delete', tokenVerifier, tokenAuthCheck, bookReq
                             });
                         });
                     } catch (error) {
-                        logger.error(filename + ": " + error);
+                        logger.error(error);
                         return res.sendStatus(304);
                     }
                 }
@@ -60,7 +60,7 @@ deleteBookRouter.post('/api/book/delete', tokenVerifier, tokenAuthCheck, bookReq
         })
     }
     catch(error){
-        logger.error(filename + ": " + error);
+        logger.error(error);
         return res.status(500).json({
             "status":{
                 "code":500,
