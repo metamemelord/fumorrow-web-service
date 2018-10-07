@@ -1,6 +1,6 @@
 const express = require('express');
 const DAL = require('../../DAL/index');
-const bookDAOForRetrieval = DAL.bookDAOForRetrieval;
+const bookDAOForRetrieval = DAL.BookDAOForRetrieval;
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
