@@ -1,5 +1,12 @@
+<<<<<<< Updated upstream
 .env
 node_modules/
 Passwords.txt
 Logs/
 external_utilities/
+=======
+.env
+node_modules/
+Passwords.txt
+Logs/
+>>>>>>> Stashed changes
