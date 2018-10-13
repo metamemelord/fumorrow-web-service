@@ -60,7 +60,12 @@ function returnAllByFilter(filter, callback) {
 	});
 }
 function returnInRangeByFilter(filter, begin, limit, callback) {
-	BikeDBService.find({ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	BikeDBService.find({
+		$and: [
+			{ "colors": { "$in": filter } },
+			{ "is_approved": true }
+		]
+	}).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
