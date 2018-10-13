@@ -138,9 +138,68 @@ function getAllCelebrities(callback) {
     }
 }
 
+function getAllUnapprovedCelebrities(callback) {
+    try {
+        var con = mysql.createConnection(dbDetails);
+        con.connect(function (error) {
+            if (error) {
+                logger.error(error);
+                return callback(500, "Could not connect to database", null);
+            }
+            var sql = "select pid, first_name, middle_name, last_name, profession,dob,description, gender, image_link from celebrities where is_approved=0";
+            con.query(sql, function (error, celebrities) {
+                con.end();
+                if (error) {
+                    logger.error(error);
+                    return callback(500, "Internal server error", null);
+                } else {
+                    return callback(200, "Success", celebrities);
+                }
+            });
+        });
+    } catch (error) {
+        logger.error(error);
+        return callback(500, "Internal server error", null)
+    }
+}
+
+function approveCelebrityById(pid, callback) {
+    try {
+        var con = mysql.createConnection(dbDetails);
+        con.connect(function (error) {
+            if (error) {
+                logger.error(error);
+                return callback(500, "Could not connect to database", null);
+            }
+            var sql = "update celebrities set is_approved=1 where pid=?";
+            con.query(sql, pid, function (error, queryResult) {
+                con.end();
+                if (error) {
+                    logger.error(error);
+                    return callback(500, "Internal server error", null);
+                } else {
+                    if(queryResult.affectedRows == 0) {
+                        return callback(404, "Celebrity does not exist", null); 
+                    }
+                    else {
+                            return callback(200, "Success", {
+                            "pid":pid
+                        });
+                    }
+                }
+            });
+        });
+    } catch (error) {
+        logger.error(error);
+        return callback(500, "Internal server error", null)
+    }
+}
+
 module.exports = {
     addCelebrity: addCelebrity,
     deleteCelebrity: deleteCelebrity,
     getCelebrityById: getCelebrityById,
-    getAllCelebrities: getAllCelebrities
+    getAllCelebrities: getAllCelebrities,
+    getAllUnapprovedCelebrities:getAllUnapprovedCelebrities,
+    approveCelebrityById:approveCelebrityById
 }

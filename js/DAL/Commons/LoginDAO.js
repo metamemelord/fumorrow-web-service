@@ -24,7 +24,7 @@ function performLogin(userDetails, callback) {
             }
             if (userDataFromDB === undefined || userDataFromDB.length === 0) {
                 con.end();
-                return callback(401, "Invalid credentials", null);
+                return callback(401, "User does not exist", null);
             }
             else if (userDataFromDB[0].isApproved === 0) {
                 con.end();

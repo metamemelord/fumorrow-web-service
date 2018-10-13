@@ -8,9 +8,9 @@ const filename = require('path').basename(__filename);
 const logger = require('../../../Loggers/index').LoggerFactory.getLogger(filename);
 const isEmpty = require('./../../../Misc/HelperFunctions').isEmpty;
 
-var addCelebrityRoute = express.Router();
+var returnUnapprovedCelebritiesRoute = express.Router();
 
-addCelebrityRoute.post('/api/admin/celebrity/add', tokenVerifier, tokenAuthCheck, require('./AddCelebrityRequestVerifier'), function (req, res) {
+returnUnapprovedCelebritiesRoute.post('/api/admin/celebrities/unapproved', tokenVerifier, tokenAuthCheck, function (req, res) {
     try{
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
@@ -23,6 +23,7 @@ addCelebrityRoute.post('/api/admin/celebrity/add', tokenVerifier, tokenAuthCheck
                         "data":null
                     });
                 }
+                logger.fatal(authData);
                 logger.error("Attempt to login with invalid token");
                 return res.status(400).json({
                     "status":{
@@ -41,23 +42,7 @@ addCelebrityRoute.post('/api/admin/celebrity/add', tokenVerifier, tokenAuthCheck
                         "data":null
                     });
                 } else {
-                    var celebrityDetails = {
-                        first_name: req.body.first_name,
-                        middle_name: req.body.middle_name,
-                        last_name: req.body.last_name,
-                        dob: req.body.dob,
-                        gender: req.body.gender,
-                        profession: req.body.profession,
-                        description: req.body.description,
-                        image_link: req.body.image_link
-                    };
-                    for(var field in celebrityDetails){
-                        if(typeof celebrityDetails[field] === "string"){
-                            celebrityDetails[field] = celebrityDetails[field].toLowerCase();
-                            celebrityDetails[field] = celebrityDetails[field].trim();
-                        }
-                    }
-                    celebritiesDAO.addCelebrity(celebrityDetails, function(status, message, data){
+                    celebritiesDAO.getAllUnapprovedCelebrities(function(status, message, data){
                         return res.status(status).json({
                             "status":{
                                 "code":status,
@@ -81,4 +66,4 @@ addCelebrityRoute.post('/api/admin/celebrity/add', tokenVerifier, tokenAuthCheck
     }
 });
 
-module.exports = addCelebrityRoute;
+module.exports = returnUnapprovedCelebritiesRoute;
