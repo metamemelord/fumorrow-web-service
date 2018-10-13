@@ -73,12 +73,8 @@ var bikeSchema = new mongoose.Schema({
         type: Number,
         required: false
     },
-    videos: {
+    related_videos: {
         type: Array,
-        required: false
-    },
-    video_credits: {
-        type: String,
         required: false
     },
     related_bikes: {
@@ -116,7 +112,7 @@ var bikeSchema = new mongoose.Schema({
         default: false
     },
     is_sponsored_banner: {
-        type: String,
+        type: Boolean,
         default: false
     },
     is_released: {

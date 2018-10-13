@@ -12,22 +12,22 @@ returnBikesRouter.post('/api/bikes', function (req, res) {
             if (isEmpty(req.body.filter)) {
                 bikeDAOForRetrieval.getAll(function (status, message, data) {
                     return res.status(status).json({
-                        "status":{
-                            "code":status,
-                            "message":message
+                        "status": {
+                            "code": status,
+                            "message": message
                         },
-                        "data":data
+                        "data": data
                     });
                 });
             } else {
                 var filter = req.body.filter;
                 bikeDAOForRetrieval.getAllByFilter(filter, function (status, message, data) {
                     return res.status(status).json({
-                        "status":{
-                            "code":status,
-                            "message":message
+                        "status": {
+                            "code": status,
+                            "message": message
                         },
-                        "data":data
+                        "data": data
                     });
                 });
             }
@@ -35,22 +35,22 @@ returnBikesRouter.post('/api/bikes', function (req, res) {
             if (isEmpty(req.body.filter)) {
                 bikeDAOForRetrieval.getInRange(req.body.begin, req.body.limit, function (status, message, data) {
                     return res.status(status).json({
-                        "status":{
-                            "code":status,
-                            "message":message
+                        "status": {
+                            "code": status,
+                            "message": message
                         },
-                        "data":data
+                        "data": data
                     });
                 });
             } else {
                 var filterWithRange = req.body.filter;
                 bikeDAOForRetrieval.getInRangeByFilter(filterWithRange, req.body.begin, req.body.limit, function (status, message, data) {
                     return res.status(status).json({
-                        "status":{
-                            "code":status,
-                            "message":message
+                        "status": {
+                            "code": status,
+                            "message": message
                         },
-                        "data":data
+                        "data": data
                     });
                 });
             }
@@ -58,11 +58,11 @@ returnBikesRouter.post('/api/bikes', function (req, res) {
     } catch (error) {
         logger.error(error);
         return res.status(500).json({
-            "status":{
-                "code":500,
-                "message":"Internal server error"
+            "status": {
+                "code": 500,
+                "message": "Internal server error"
             },
-            "data":null
+            "data": null
         });
     }
 });

@@ -45,7 +45,7 @@ addBikeRouter.post('/api/bike/add', tokenVerifier, tokenAuthCheck, bikeRequestVe
                     var bikeData = req.body;
                     if (isEmpty(bikeData.hour)) bikeData.hour = 0;
                     if (isEmpty(bikeData.minute)) bikeData.minute = 0;
-                    if (isEmpty(bikeData.day)) bikeData.day = 0;                    
+                    if (isEmpty(bikeData.day)) bikeData.day = 0;
                     var bikeObject = {
                         _id: bikeData.day.toString() + bikeData.month.toString() + bikeData.year.toString(),
                         bike_name: bikeData.bike_name,
@@ -66,8 +66,7 @@ addBikeRouter.post('/api/bike/add', tokenVerifier, tokenAuthCheck, bikeRequestVe
                         ABS: bikeData.ABS,
                         wheel_type: bikeData.wheel_type,
                         top_speed: bikeData.top_speed,
-                        videos: bikeData.videos,
-                        video_credits: bikeData.video_credits,
+                        related_videos: bikeData.related_videos,
                         related_bikes: bikeData.related_bikes,
                         description: bikeData.description,
                         key_features: bikeData.key_features,
@@ -78,13 +77,13 @@ addBikeRouter.post('/api/bike/add', tokenVerifier, tokenAuthCheck, bikeRequestVe
                         is_sponsored: bikeData.is_sponsored,
                         is_released: false,
                         is_live: bikeData.is_live,
-                        related_videos: bikeData.related_videos,
                         external_ratings: bikeData.external_ratings,
-                        is_partner_sponsored: false
+                        is_partner_sponsored: bikeData.is_partner_sponsored,
+                        is_sponsored_banner: bikeData.is_sponsored_banner
                     }
                     length = 12 - bikeObject._id.length;
                     bikeObject._id += helpers.generateNewId(length);
-                    var uniqueId = bikeObject.bike_name + bikeObject.release_date.toString() + bikeData.referrerName;
+                    var uniqueId = bikeObject.bike_name + bikeObject.release_date.toString() + bikeData.brand_name;
                     uniqueId = uniqueId.replace(/\s/g, '');
                     bikeObject.uid = md5(uniqueId);
                     bikeObject.is_released = helpers.checkDate(bikeObject.release_date);

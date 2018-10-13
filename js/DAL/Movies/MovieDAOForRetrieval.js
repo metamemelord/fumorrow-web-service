@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+mongoose.set('useFindAndModify', false);
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
@@ -68,7 +69,7 @@ function returnById(id, callback) {
 	MovieDBService.findOne({ _id: id }, function (error, data) {
 		if (error) {
 			logger.error(error);
-			if(error.name === "CastError") {
+			if (error.name === "CastError") {
 				callback(400, "Invalid ID", null);
 			} else {
 				callback(500, "Internal server error", null);

@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+mongoose.set('useFindAndModify', false);
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
@@ -45,16 +46,17 @@ function returnInRange(begin, limit, callback) {
 }
 
 function returnAllByFilter(filter, callback) {
-	BikeDBService.find({ $and: [
-							{
-								$or: [
-									{ "language": { "$in": filter } }, 
-									{ "genres": { "$in": filter } }
-								]
-							},
-							{ "is_approved": true }
-						]
-						}).sort({ "_id": 1 }).exec(function (error, data) {
+	BikeDBService.find({
+		$and: [
+			{
+				$or: [
+					{ "language": { "$in": filter } },
+					{ "genres": { "$in": filter } }
+				]
+			},
+			{ "is_approved": true }
+		]
+	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -73,9 +75,9 @@ function returnInRangeByFilter(filter, begin, limit, callback) {
 }
 
 function returnById(id, callback) {
-	BikeDBService.findOne({_id:id}, function (error, data) {
+	BikeDBService.findOne({ _id: id }, function (error, data) {
 		if (error) {
-			if(error.name === "CastError") {
+			if (error.name === "CastError") {
 				callback(400, "Invalid ID", null);
 			} else {
 				logger.error(error);
@@ -102,8 +104,8 @@ function returnAllForRechecking(callback) {
 }
 
 function returnAllUnchecked(callback) {
-	BikeDBService.find({ 
-		$and: [ {"recheck_needed": false}, {"is_approved": false}] 
+	BikeDBService.find({
+		$and: [{ "recheck_needed": false }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
@@ -112,7 +114,6 @@ function returnAllUnchecked(callback) {
 		callback(200, "Success", data);
 	});
 }
-
 
 function returnAllReferrers(callback) {
 	BikeDBService.aggregate([
@@ -135,17 +136,6 @@ function returnAllReferrers(callback) {
 	});
 }
 
-function returnAllLanguages(callback) {
-	BikeDBService.distinct("language", function (error, data) {
-		if (error) {
-			logger.error(error);
-			callback(500, "Internal server error", null);
-		} else {
-			callback(200, "Success", data);
-		}
-	});
-}
-
 module.exports = {
 	getAll: returnAll,
 	getById: returnById,
@@ -155,5 +145,4 @@ module.exports = {
 	getAllForRechecking: returnAllForRechecking,
 	getAllUnchecked: returnAllUnchecked,
 	getAllReferrers: returnAllReferrers,
-	getAllLanguages: returnAllLanguages
 };

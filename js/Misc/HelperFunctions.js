@@ -13,7 +13,7 @@ function checkDate(date) {
 }
 
 function resolvePrivilages(privilageBitMask) {
-    const availablePrivilages = ['movies', 'cars', 'books','bikes'];
+    const availablePrivilages = ['movies', 'books', 'bikes', 'cars'];
     var grantedPrivilages = new Array();
     var i = 0;
     while (privilageBitMask > 0) {
@@ -21,7 +21,7 @@ function resolvePrivilages(privilageBitMask) {
             grantedPrivilages.push(availablePrivilages[i]);
         }
         i++;
-        if(i == availablePrivilages.length){
+        if (i == availablePrivilages.length) {
             break;
         }
         privilageBitMask = Math.floor(privilageBitMask / 2);
@@ -48,7 +48,7 @@ function isEmpty(variable) {
     return count == 0;
 }
 
-function isNotEmpty(variable){
+function isNotEmpty(variable) {
     return !isEmpty(variable);
 }
 
