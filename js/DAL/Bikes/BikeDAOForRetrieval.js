@@ -48,12 +48,7 @@ function returnInRange(begin, limit, callback) {
 function returnAllByFilter(filter, callback) {
 	BikeDBService.find({
 		$and: [
-			{
-				$or: [
-					{ "language": { "$in": filter } },
-					{ "genres": { "$in": filter } }
-				]
-			},
+			{ "colors": { "$in": filter } },
 			{ "is_approved": true }
 		]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
