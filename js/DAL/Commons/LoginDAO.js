@@ -38,7 +38,7 @@ function performLogin(userDetails, callback) {
                     }
                     con.end();
                     jwt.sign(userObject, process.env.key, {
-                        expiresIn: 3600
+                        expiresIn: 36000
                     }, function (error, token) {
                         if (error) {
                             setTimeout(function () {
