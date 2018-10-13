@@ -37,8 +37,9 @@ function performLogin(userDetails, callback) {
                         privilages: helpers.resolvePrivilages(userDataFromDB[0].privilages)
                     }
                     con.end();
+                    var lease_time = parseInt(process.env.TOKEN_LEASE_TIME);
                     jwt.sign(userObject, process.env.key, {
-                        expiresIn: 36000
+                        expiresIn: lease_time
                     }, function (error, token) {
                         if (error) {
                             setTimeout(function () {
@@ -47,7 +48,8 @@ function performLogin(userDetails, callback) {
                             }, 5000);
                         } else {
                             return callback(200, "Success", {
-                                "token": token
+                                "token": token,
+                                "lease_time": lease_time
                             });
                         }
                     });
