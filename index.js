@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 const logger = require('./js/Loggers/index').LoggerFactory.getLogger('Web-Service');
 const filename = require('path').basename(__filename);
+const packageJson = require('./package.json');
 
 var fumorrow = express();
 
@@ -57,6 +58,7 @@ fumorrow.listen(3000, (error) => {
     if (error) {
         logger.fatal(error);
     } else {
+        logger.info("Fumorrow webservice v" + packageJson.version);
         logger.info("Server started");
     }
 });
