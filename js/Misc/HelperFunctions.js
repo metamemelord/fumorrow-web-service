@@ -13,7 +13,7 @@ function checkDate(date) {
 }
 
 function resolvePrivilages(privilageBitMask) {
-    const availablePrivilages = ['movies', 'cars', 'books'];
+    const availablePrivilages = ['movies', 'cars', 'books','bikes'];
     var grantedPrivilages = new Array();
     var i = 0;
     while (privilageBitMask > 0) {
