@@ -21,6 +21,9 @@ function resolvePrivilages(privilageBitMask) {
             grantedPrivilages.push(availablePrivilages[i]);
         }
         i++;
+        if(i == availablePrivilages.length){
+            break;
+        }
         privilageBitMask = Math.floor(privilageBitMask / 2);
     }
     return grantedPrivilages;
