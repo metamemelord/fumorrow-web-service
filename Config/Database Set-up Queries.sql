@@ -1,0 +1,4 @@
+create database fumorrow;
+use fumorrow;
+create table category_managers(name varchar(255) not null, username varchar(255), email varchar(255) not null, password_digest varchar(255) not null, privilages INTEGER(15) not null, isApproved TINYINT(1) not null, primary key(username));
+create table celebrities (pid integer(100) auto_increment, first_name varchar(50) not null, middle_name varchar(50), last_name varchar(50), profession varchar(50) not null, dob date not null, description varchar(3000), gender char not null, image_link varchar(255), is_approved integer(2) not null, primary key (pid), unique key `uid` (first_name, middle_name, last_name, profession, gender, dob));
