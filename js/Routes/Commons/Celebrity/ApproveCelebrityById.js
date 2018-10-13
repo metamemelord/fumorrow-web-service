@@ -43,7 +43,7 @@ approveCelebrityRouter.post('/api/admin/celebrity/approve', tokenVerifier, token
                 } else {
                     var pid = req.body.pid;
                     if(isEmpty(pid)) {
-                        return res.status(500).json({
+                        return res.status(400).json({
                             "status":{
                                 "code":400,
                                 "message":"Please provide person ID"
