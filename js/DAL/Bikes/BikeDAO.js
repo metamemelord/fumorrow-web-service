@@ -83,12 +83,7 @@ function modifyBike(object, callback) {
 	try {
 		object.recheck_needed = false;
 		object.is_approved = false;
-		BikeDBService.findOneAndUpdate({
-			$or: [
-				{ "_id": object._id },
-				{ "uid": object.uid }
-			]
-		},
+		BikeDBService.findOneAndUpdate({ "_id": object._id },
 			object,
 			{ overwrite: true },
 			function (error) {

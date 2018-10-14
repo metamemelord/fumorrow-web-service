@@ -1,6 +1,6 @@
 const express = require('express');
 const DAL = require('../../DAL/index');
-const bikeIdVerifier = require('./BikeIdVerifier');
+const bikeIdVerifier = require('../RouteUtils').requestIdVerifier;
 const bikeDAO = DAL.BikeDAO;
 const MarkBikeForRecheckRouter = express.Router();
 const jwt = require('jsonwebtoken');

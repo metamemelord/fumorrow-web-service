@@ -1,6 +1,6 @@
 const express = require('express');
 const DAL = require('../../DAL/index');
-const bikeIdVerifier = require('./BikeIdVerifier');
+const bikeIdVerifier = require('../RouteUtils').requestIdVerifier;
 const bikeDAO = DAL.BikeDAO;
 const ApproveBikeRouter = express.Router();
 const jwt = require('jsonwebtoken');
@@ -41,6 +41,9 @@ ApproveBikeRouter.post('/api/bike/approve', tokenVerifier, tokenAuthCheck, bikeI
                     try {
                         var id = req.body._id;
                         bikeDAO.approveById(id, function (status, message, data) {
+                            if (status === 200) {
+                                logger.warn(authData.username + " approved " + id);
+                            }
                             return res.status(status).json({
                                 "status": {
                                     "code": status,

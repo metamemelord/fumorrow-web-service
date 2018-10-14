@@ -1,6 +1,6 @@
 const express = require('express');
 const DAL = require('../../DAL/index');
-const bikeIdVerifier = require('./BikeIdVerifier');
+const bikeIdVerifier = require('../RouteUtils').requestIdVerifier;
 const bikeRequestVerifier = require('../Bikes/AddToBikeRequestVerifier');
 const bikeDAO = DAL.BikeDAO;
 const jwt = require('jsonwebtoken');
@@ -88,6 +88,11 @@ modifyBikeRouter.post('/api/bike/modify',
                             external_ratings: bikeData.external_ratings,
                             is_partner_sponsored: false
                         }
+                        length = 12 - bikeObject._id.length;
+                        bikeObject._id += helpers.generateNewId(length);
+                        var uniqueId = bikeObject.bike_name + bikeObject.release_date.toString() + bikeData.brand_name;
+                        uniqueId = uniqueId.replace(/\s/g, '');
+                        bikeObject.uid = md5(uniqueId);
                         bikeObject.is_released = helpers.checkDate(bikeObject.release_date);
                         bikeDAO.modifyBike(bikeObject, function (status, message, data) {
                             return res.status(status).json({

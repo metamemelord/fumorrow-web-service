@@ -75,7 +75,9 @@ function returnInRangeByFilter(filter, begin, limit, callback) {
 }
 
 function returnById(id, callback) {
-	BikeDBService.findOne({ _id: id }, function (error, data) {
+	BikeDBService.findOne({
+		$and: [{ "_id": id }, { "is_approved": true }]
+	}, function (error, data) {
 		if (error) {
 			if (error.name === "CastError") {
 				callback(400, "Invalid ID", null);

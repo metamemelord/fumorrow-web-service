@@ -1,8 +1,8 @@
 const filename = require('path').basename(__filename);
-const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+const logger = require('../Loggers/index').LoggerFactory.getLogger(filename);
+const isEmpty = require('../Misc/HelperFunctions').isEmpty;
 
-module.exports = (req, res, next) => {
+const requestIdVerifier = (req, res, next) => {
     try {
         if (isEmpty(req.body._id)) {
             return res.status(400).json({
@@ -26,4 +26,8 @@ module.exports = (req, res, next) => {
             "data": null
         });
     }
+}
+
+module.exports = {
+    requestIdVerifier: requestIdVerifier
 }
