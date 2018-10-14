@@ -1,6 +1,5 @@
 const express = require('express');
 const filename = require('path').basename(__filename);
-const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 const bikeIndexRouter = express.Router();
 
 // Getting routes

@@ -79,6 +79,30 @@ function removeById(id, callback) {
 	}
 }
 
+function modifyBook(object, callback) {
+	try {
+		object.recheck_needed = false;
+		object.is_approved = false;
+		BookDBService.findOneAndUpdate({ "_id": object._id },
+			object,
+			{ overwrite: true },
+			function (error) {
+				if (error) {
+					logger.error(error);
+					callback(500, "Internal server error", null);
+				} else {
+					callback(200, "Successfully modified", {
+						"_id": object._id,
+						"book_name": object.book_name
+					});
+				}
+			});
+	} catch (error) {
+		logger.error(error);
+		callback(500, "Internal server error", null);
+	}
+}
+
 function incrementCounterById(id, callback) {
 	BookDBService.findOneAndUpdate({ _id: id }, {
 		$inc: {
@@ -111,8 +135,9 @@ function approveById(id, callback) {
 		} else if (data === null) {
 			callback(404, "Content not found on the server", null);
 		} else {
-			callback(200, "Approved", {
-				"name": data.title
+			callback(200, "Approved",  {
+				"_id": data._id,
+				"book_name": data.book_name
 			});
 		}
 	});
@@ -131,7 +156,8 @@ function markForRecheckById(id, callback) {
 			callback(404, "Content not found on the server", null);
 		} else {
 			callback(200, "Checked", {
-				"name": data.title
+				"_id": data._id,
+				"book_name": data.book_name
 			});
 		}
 	});
@@ -140,6 +166,7 @@ function markForRecheckById(id, callback) {
 module.exports = {
 	addBook: addBook,
 	removeById: removeById,
+	modifyBook: modifyBook,
 	incrementCounterById: incrementCounterById,
 	approveById: approveById,
 	markForRecheckById: markForRecheckById

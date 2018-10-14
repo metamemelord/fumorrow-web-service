@@ -1,6 +1,6 @@
 const express = require('express');
 const DAL = require('../../DAL');
-const bikeDAOForRetrieval = DAL.bikeDAOForRetrieval;
+const bikeDAOForRetrieval = DAL.BikeDAOForRetrieval;
 const bikeByIdRouter = express.Router();
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers').LoggerFactory.getLogger(filename);

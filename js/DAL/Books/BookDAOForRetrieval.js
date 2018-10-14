@@ -27,7 +27,7 @@ let BookDBService = connectionForRetrieval.model('book', bookSchema);
 
 
 function returnAll(callback) {
-	BookDBService.find({}).sort({ "_id": 1 }).exec(function (error, data) {
+	BookDBService.find({ "is_approved": true }).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			callback(500, "Internal server error", null);
 		}
@@ -36,7 +36,7 @@ function returnAll(callback) {
 }
 
 function returnInRange(begin, limit, callback) {
-	BookDBService.find({}).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	BookDBService.find({ "is_approved": true }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -46,7 +46,12 @@ function returnInRange(begin, limit, callback) {
 }
 
 function returnAllByFilter(filter, callback) {
-	BookDBService.find({ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] }).sort({ "_id": 1 }).exec(function (error, data) {
+	BookDBService.find({
+		$and: [
+			{ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] },
+			{ "is_approved": true }
+		]
+	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -55,7 +60,12 @@ function returnAllByFilter(filter, callback) {
 	});
 }
 function returnInRangeByFilter(filter, begin, limit, callback) {
-	BookDBService.find({ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	BookDBService.find({
+		$and: [
+			{ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] },
+			{ "is_approved": true }
+		]
+	}).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -65,9 +75,11 @@ function returnInRangeByFilter(filter, begin, limit, callback) {
 }
 
 function returnById(id, callback) {
-	BookDBService.findOne({_id:id}, function (error, data) {
+	BookDBService.findOne({
+		$and: [{ "_id": id }, { "is_approved": true }]
+	}, function (error, data) {
 		if (error) {
-			if(error.name === "CastError") {
+			if (error.name === "CastError") {
 				callback(400, "Invalid ID", null);
 			} else {
 				logger.error(error);
@@ -94,8 +106,8 @@ function returnAllForRechecking(callback) {
 }
 
 function returnAllUnchecked(callback) {
-	BookDBService.find({ 
-		$or: [ {"recheck_needed": false}, {"is_approved": false}] 
+	BookDBService.find({
+		$and: [{ "recheck_needed": false }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
