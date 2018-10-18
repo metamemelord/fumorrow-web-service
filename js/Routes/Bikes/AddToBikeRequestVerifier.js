@@ -1,14 +1,15 @@
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
 
 module.exports = (req, res, next) => {
     try {
-        if (isEmpty(req.body._id)) {
+        if (isEmpty(req.body.bike_name) || isEmpty(req.body.brand_name) || isEmpty(req.body.month) ||
+            isEmpty(req.body.year) || isEmpty(req.body.description) || isEmpty(req.body.referrer_name)) {
             return res.status(400).json({
                 "status": {
                     "code": 400,
-                    "message": "ID cannot be empty"
+                    "message": "Mandatory fields cannot be left blank"
                 },
                 "data": null
             });
@@ -16,7 +17,8 @@ module.exports = (req, res, next) => {
         else {
             next();
         }
-    } catch (error) {
+    }
+    catch (error) {
         logger.error(error);
         return res.status(500).json({
             "status": {

@@ -3,7 +3,7 @@ const DAL = require('./../../DAL/index');
 const registrationDAO = DAL.RegistrationDAO;
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
 const registrationRouter = express.Router();
 
 registrationRouter.post('/api/admin/registration', function (req, res) {

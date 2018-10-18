@@ -1,15 +1,15 @@
 const express = require('express');
 const DAL = require('../../DAL/index');
-const movieIdVerifier = require('../RouteUtils').requestIdVerifier;
-const movieDAO = DAL.MovieDAO;
-const deleteMovieRouter = express.Router();
+const bikeRequestVerifier = require('../RouteUtils').requestIdVerifier;
+const bikeDAO = DAL.BikeDAO;
+const deleteBikeRouter = express.Router();
 const jwt = require('jsonwebtoken');
 const tokenVerifier = require('./../../Utils/Token/TokenVerifier');
 const tokenAuthCheck = require('./../../Utils/Token/TokenAuthCheck');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
-deleteMovieRouter.post('/api/movie/delete', tokenVerifier, tokenAuthCheck, movieIdVerifier, function (req, res) {
+deleteBikeRouter.post('/api/bike/delete', tokenVerifier, tokenAuthCheck, bikeRequestVerifier, function (req, res) {
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
@@ -29,7 +29,7 @@ deleteMovieRouter.post('/api/movie/delete', tokenVerifier, tokenAuthCheck, movie
                     "data": null
                 });
             } else {
-                if (!authData['privilages'].includes('movies')) {
+                if (!authData['privilages'].includes('bikes')) {
                     return res.status(403).json({
                         "status": {
                             "code": 403,
@@ -40,7 +40,7 @@ deleteMovieRouter.post('/api/movie/delete', tokenVerifier, tokenAuthCheck, movie
                 } else {
                     try {
                         var id = req.body._id;
-                        movieDAO.removeById(id, function (status, message, data) {
+                        bikeDAO.removeById(id, function (status, message, data) {
                             return res.status(status).json({
                                 "status": {
                                     "code": status,
@@ -62,11 +62,11 @@ deleteMovieRouter.post('/api/movie/delete', tokenVerifier, tokenAuthCheck, movie
         return res.status(500).json({
             "status": {
                 "code": 500,
-                "message": "Internal srver error"
+                "message": "Internal server error"
             },
             "data": null
         });
     }
 });
 
-module.exports = deleteMovieRouter;
+module.exports = deleteBikeRouter;

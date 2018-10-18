@@ -4,7 +4,7 @@ const bookDAOForRetrieval = DAL.BookDAOForRetrieval;
 const bookByIdRouter = express.Router();
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers').LoggerFactory.getLogger(filename);
-const isNotEmpty = require('../../Misc/HelperFunctions').isNotEmpty;
+const isNotEmpty = require('../../Utils/HelperFunctions').isNotEmpty;
 
 bookByIdRouter.post('/api/book/:id', function (req, res) {
     try {
@@ -12,21 +12,21 @@ bookByIdRouter.post('/api/book/:id', function (req, res) {
             var id = isNotEmpty(req.params.id) ? req.params.id : req.body._id;
             bookDAOForRetrieval.getById(id, function (status, message, data) {
                 return res.status(status).json({
-                    "status":{
-                        "code":status,
-                        "message":message
+                    "status": {
+                        "code": status,
+                        "message": message
                     },
-                    "data":data
+                    "data": data
                 });
             });
         }
         else {
             return res.status(400).json({
-                "status":{
-                    "code":400,
-                    "message":"Provide an ID before proceeding"
+                "status": {
+                    "code": 400,
+                    "message": "Provide an ID before proceeding"
                 },
-                "data":null
+                "data": null
             });
         }
     } catch (error) {

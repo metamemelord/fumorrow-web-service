@@ -1,3 +1,6 @@
+const filename = require('path').basename(__filename);
+const logger = require('../Loggers/index').LoggerFactory.getLogger(filename);
+
 function generateNewId(length) {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -13,7 +16,13 @@ function checkDate(date) {
 }
 
 function resolvePrivilages(privilageBitMask) {
-    const availablePrivilages = ['movies', 'cars', 'books'];
+    var availablePrivilages = [];
+    try {
+        availablePrivilages = process.env.AVAILABLE_PRIVILAGES.split(',');
+    } catch (error) {
+        logger.error("Could not find available privilages in environment");
+        return availablePrivilages;
+    }
     var grantedPrivilages = new Array();
     var i = 0;
     while (privilageBitMask > 0) {
@@ -21,7 +30,7 @@ function resolvePrivilages(privilageBitMask) {
             grantedPrivilages.push(availablePrivilages[i]);
         }
         i++;
-        if(i == availablePrivilages.length){
+        if (i == availablePrivilages.length) {
             break;
         }
         privilageBitMask = Math.floor(privilageBitMask / 2);
@@ -48,7 +57,7 @@ function isEmpty(variable) {
     return count == 0;
 }
 
-function isNotEmpty(variable){
+function isNotEmpty(variable) {
     return !isEmpty(variable);
 }
 

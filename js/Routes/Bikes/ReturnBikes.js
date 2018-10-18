@@ -1,16 +1,16 @@
 const express = require('express');
 const DAL = require('../../DAL/index');
-const movieDAOForRetrieval = DAL.MovieDAOForRetrieval;
+const bikeDAOForRetrieval = DAL.BikeDAOForRetrieval;
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
-var returnMoviesRouter = express.Router();
+var returnBikesRouter = express.Router();
 
-returnMoviesRouter.post('/api/movies', function (req, res) {
+returnBikesRouter.post('/api/bikes', function (req, res) {
     try {
         if (isEmpty(req.body.begin) || isEmpty(req.body.limit)) {
             if (isEmpty(req.body.filter)) {
-                movieDAOForRetrieval.getAll(function (status, message, data) {
+                bikeDAOForRetrieval.getAll(function (status, message, data) {
                     return res.status(status).json({
                         "status": {
                             "code": status,
@@ -21,7 +21,7 @@ returnMoviesRouter.post('/api/movies', function (req, res) {
                 });
             } else {
                 var filter = req.body.filter;
-                movieDAOForRetrieval.getAllByFilter(filter, function (status, message, data) {
+                bikeDAOForRetrieval.getAllByFilter(filter, function (status, message, data) {
                     return res.status(status).json({
                         "status": {
                             "code": status,
@@ -33,7 +33,7 @@ returnMoviesRouter.post('/api/movies', function (req, res) {
             }
         } else {
             if (isEmpty(req.body.filter)) {
-                movieDAOForRetrieval.getInRange(req.body.begin, req.body.limit, function (status, message, data) {
+                bikeDAOForRetrieval.getInRange(req.body.begin, req.body.limit, function (status, message, data) {
                     return res.status(status).json({
                         "status": {
                             "code": status,
@@ -44,7 +44,7 @@ returnMoviesRouter.post('/api/movies', function (req, res) {
                 });
             } else {
                 var filterWithRange = req.body.filter;
-                movieDAOForRetrieval.getInRangeByFilter(filterWithRange, req.body.begin, req.body.limit, function (status, message, data) {
+                bikeDAOForRetrieval.getInRangeByFilter(filterWithRange, req.body.begin, req.body.limit, function (status, message, data) {
                     return res.status(status).json({
                         "status": {
                             "code": status,
@@ -67,4 +67,4 @@ returnMoviesRouter.post('/api/movies', function (req, res) {
     }
 });
 
-module.exports = returnMoviesRouter;
+module.exports = returnBikesRouter;

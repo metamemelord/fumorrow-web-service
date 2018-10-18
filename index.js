@@ -20,7 +20,7 @@ fumorrow.use((error, req, res, next) => {
         return res.status(error.status).json({
             "status": {
                 "code": error.status,
-                "message": "Bad request"
+                "message": "Malformed JSON"
             },
             "data": null
         });
@@ -34,6 +34,7 @@ fumorrow.use((error, req, res, next) => {
 fumorrow.use(require('./js/Routes/Commons/index'));
 fumorrow.use(require('./js/Routes/Movies/index'));
 fumorrow.use(require('./js/Routes/Books/index'));
+fumorrow.use(require('./js/Routes/Bikes/index'));
 fumorrow.use(require('./js/Routes/404'));
 
 // Routes

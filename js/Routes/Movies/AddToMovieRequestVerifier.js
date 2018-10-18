@@ -1,6 +1,6 @@
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
 
 module.exports = (req, res, next) => {
     try {
@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
             return res.status(400).json({
                 "status": {
                     "code": 400,
-                    "message": "Bad request"
+                    "message": "Mandatory fields cannot be left blank"
                 },
                 "data": null
             });

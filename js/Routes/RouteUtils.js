@@ -1,14 +1,14 @@
 const filename = require('path').basename(__filename);
-const logger = require('../../../Loggers/index').LoggerFactory.getLogger(filename);;
-const isEmpty = require('./../../../Utils/HelperFunctions').isEmpty;
+const logger = require('../Loggers/index').LoggerFactory.getLogger(filename);
+const isEmpty = require('../Utils/HelperFunctions').isEmpty;
 
-module.exports = (req, res, next) => {
+const requestIdVerifier = (req, res, next) => {
     try {
-        if (isEmpty(req.body.first_name) || isEmpty(req.body.dob) || isEmpty(req.body.profession) || isEmpty(req.body.gender)) {
+        if (isEmpty(req.body._id)) {
             return res.status(400).json({
                 "status": {
                     "code": 400,
-                    "message": "Mandatory fields cannot be left blank"
+                    "message": "ID cannot be empty"
                 },
                 "data": null
             });
@@ -16,8 +16,7 @@ module.exports = (req, res, next) => {
         else {
             next();
         }
-    }
-    catch (error) {
+    } catch (error) {
         logger.error(error);
         return res.status(500).json({
             "status": {
@@ -27,4 +26,8 @@ module.exports = (req, res, next) => {
             "data": null
         });
     }
+}
+
+module.exports = {
+    requestIdVerifier: requestIdVerifier
 }
