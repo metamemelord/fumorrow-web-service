@@ -4,7 +4,7 @@ const movieDAOForRetrieval = DAL.MovieDAOForRetrieval;
 const movieByIdRouter = express.Router();
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isNotEmpty = require('./../../Misc/HelperFunctions').isNotEmpty;
+const isNotEmpty = require('./../../Utils/HelperFunctions').isNotEmpty;
 
 movieByIdRouter.post('/api/movie/:id', function (req, res) {
     try {

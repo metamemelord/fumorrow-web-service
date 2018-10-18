@@ -3,7 +3,7 @@ const DAL = require('../../DAL/index');
 const bikeDAOForRetrieval = DAL.BikeDAOForRetrieval;
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
 var returnBikesRouter = express.Router();
 
 returnBikesRouter.post('/api/bikes', function (req, res) {

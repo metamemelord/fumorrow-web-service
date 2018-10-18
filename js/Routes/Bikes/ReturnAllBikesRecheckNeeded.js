@@ -3,8 +3,8 @@ const DAL = require('../../DAL/index');
 const bikeDAOForRetrieval = DAL.BikeDAOForRetrieval;
 const recheckNeededBikeRouter = express.Router();
 const jwt = require('jsonwebtoken');
-const tokenVerifier = require('./../../Misc/Token/TokenVerifier');
-const tokenAuthCheck = require('./../../Misc/Token/TokenAuthCheck');
+const tokenVerifier = require('./../../Utils/Token/TokenVerifier');
+const tokenAuthCheck = require('./../../Utils/Token/TokenAuthCheck');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 

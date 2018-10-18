@@ -3,13 +3,13 @@ const DAL = require('../../DAL/index');
 const bookRequestVerifier = require('../Books/AddToBookRequestVerifier');
 const bookDAO = DAL.BookDAO;
 const jwt = require('jsonwebtoken');
-const helpers = require("../../Misc/HelperFunctions");
-const tokenVerifier = require('./../../Misc/Token/TokenVerifier');
-const tokenAuthCheck = require('./../../Misc/Token/TokenAuthCheck');
+const helpers = require("../../Utils/HelperFunctions");
+const tokenVerifier = require('./../../Utils/Token/TokenVerifier');
+const tokenAuthCheck = require('./../../Utils/Token/TokenAuthCheck');
 const md5 = require('md5');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
 
 const addBookRouter = express.Router();
 
