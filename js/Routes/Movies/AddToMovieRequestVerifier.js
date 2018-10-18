@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
             return res.status(400).json({
                 "status": {
                     "code": 400,
-                    "message": "Bad request"
+                    "message": "Mandatory fields cannot be left blank"
                 },
                 "data": null
             });

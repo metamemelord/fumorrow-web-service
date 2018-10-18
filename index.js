@@ -20,7 +20,7 @@ fumorrow.use((error, req, res, next) => {
         return res.status(error.status).json({
             "status": {
                 "code": error.status,
-                "message": "Bad request"
+                "message": "Malformed JSON"
             },
             "data": null
         });

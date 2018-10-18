@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+mongoose.set('useFindAndModify', false);
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
@@ -67,12 +68,37 @@ function removeById(id, callback) {
 				callback(404, "Entry does not exist", null);
 			} else {
 				callback(200, "Success", {
+					"_id": data._id,
 					"name": data.title
 				});
 			}
 		})
 	}
 	catch (error) {
+		logger.error(error);
+		callback(500, "Internal server error", null);
+	}
+}
+
+function modifyMovie(object, callback) {
+	try {
+		object.recheck_needed = false;
+		object.is_approved = false;
+		MovieDBService.findOneAndUpdate({ "_id": object._id },
+			object,
+			{ overwrite: true },
+			function (error) {
+				if (error) {
+					logger.error(error);
+					callback(500, "Internal server error", null);
+				} else {
+					callback(200, "Successfully modified", {
+						"_id": object._id,
+						"name": object.title
+					});
+				}
+			});
+	} catch (error) {
 		logger.error(error);
 		callback(500, "Internal server error", null);
 	}
@@ -111,6 +137,7 @@ function approveById(id, callback) {
 			callback(404, "Content not found on the server", null);
 		} else {
 			callback(200, "Approved", {
+				"_id": data._id,
 				"name": data.title
 			});
 		}
@@ -119,7 +146,8 @@ function approveById(id, callback) {
 
 function markForRecheckById(id, callback) {
 	MovieDBService.findOneAndUpdate({ _id: id }, {
-		'recheck_needed': true
+		'recheck_needed': true,
+		'is_approved': false
 	}, function (error, data) {
 		if (error instanceof mongoose.CastError) {
 			callback(412, "Invalid ID", null);
@@ -130,6 +158,7 @@ function markForRecheckById(id, callback) {
 			callback(404, "Content not found on the server", null);
 		} else {
 			callback(200, "Checked", {
+				"_id": id,
 				"name": data.title
 			});
 		}
@@ -173,6 +202,7 @@ function markReleasedById(id, callback) {
 			callback(404, "Content not found on the server", null);
 		} else {
 			callback(200, "Marked passed", {
+				"_id": id,
 				"name": data.title
 			});
 		}
@@ -182,6 +212,7 @@ function markReleasedById(id, callback) {
 module.exports = {
 	addMovie: addMovie,
 	removeById: removeById,
+	modifyMovie: modifyMovie,
 	incrementCounterById: incrementCounterById,
 	approveById: approveById,
 	markForRecheckById: markForRecheckById,

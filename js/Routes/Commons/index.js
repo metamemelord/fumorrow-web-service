@@ -1,5 +1,6 @@
 const express = require('express');
 const commonsRouter = express.Router();
+
 const loginRouter = require('./Login');
 const registrationRouter = require('./Registration');
 const celebrityRouter = require('./Celebrity/index');
