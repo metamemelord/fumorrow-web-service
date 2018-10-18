@@ -1,5 +1,4 @@
 const express = require('express');
-const filename = require('path').basename(__filename);
 const bikeIndexRouter = express.Router();
 
 // Getting routes

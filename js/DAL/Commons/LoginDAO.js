@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const mysql = require('mysql');
 const helpers = require('./../../Utils/HelperFunctions');
+const isEmpty = helpers.isEmpty;
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
@@ -37,6 +38,9 @@ function performLogin(userDetails, callback) {
                         privilages: helpers.resolvePrivilages(userDataFromDB[0].privilages)
                     }
                     con.end();
+                    if (isEmpty(userObject.privilages)) {
+                        return callback(500, "Internal server error", null);
+                    }
                     var lease_time = parseInt(process.env.TOKEN_LEASE_TIME);
                     jwt.sign(userObject, process.env.key, {
                         expiresIn: lease_time

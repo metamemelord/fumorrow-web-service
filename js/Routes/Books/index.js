@@ -1,5 +1,4 @@
 const express = require('express');
-const filename = require('path').basename(__filename);
 const bookIndexRouter = express.Router();
 
 // Getting routes
@@ -10,7 +9,7 @@ const deleteBook = require('./DeleteBook');
 const miscRoutes = require('./Misc');
 const returnBookById = require('./ReturnBookById');
 const returnAllUnchecked = require('./ReturnAllUncheckedBooks');
-const returnAllRecheckNeeded = require('./');
+const returnAllRecheckNeeded = require('./ReturnAllBookRecheckNeeded');
 const markForRecheckById = require('./MarkBookForRecheckById');
 const approveById = require('./ApproveBookById');
 const modifyBook = require('./ModifyBook');
