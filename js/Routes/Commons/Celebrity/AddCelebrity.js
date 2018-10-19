@@ -45,7 +45,7 @@ addCelebrityRoute.post('/api/admin/celebrity/add', tokenVerifier, tokenAuthCheck
                         first_name: req.body.first_name,
                         middle_name: req.body.middle_name,
                         last_name: req.body.last_name,
-                        dob: req.body.dob,
+                        dob: new Date(req.body.dob),
                         gender: req.body.gender,
                         profession: req.body.profession,
                         description: req.body.description,

@@ -1,10 +1,8 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const mysql = require('mysql');
 const helpers = require('./../../Utils/HelperFunctions');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
+const isEmpty = helpers.isEmpty;
 
 const dbDetails = {
     host: process.env.MYSQL_HOST,
@@ -52,7 +50,7 @@ function addCelebrity(celebrityDetails, callback) {
         logger.error(error);
         return callback(500, "Internal server error", null)
     }
-};
+}
 
 function deleteCelebrity(pid, callback) {
     try {
@@ -84,7 +82,7 @@ function deleteCelebrity(pid, callback) {
         logger.error(error);
         return callback(500, "Internal server error", null);
     }
-};
+}
 
 function getCelebrityById(pid, callback) {
     try {
@@ -103,7 +101,7 @@ function getCelebrityById(pid, callback) {
                 } if (isEmpty(celebrityDataFromDb)) {
                     return callback(404, "Celebrity not found", null);
                 } else {
-                    return callback(200, "Success", celebrityDataFromDb);
+                    return callback(200, "Success", celebrityDataFromDb[0]);
                 }
             });
         });
@@ -111,7 +109,7 @@ function getCelebrityById(pid, callback) {
         logger.error(error);
         return callback(500, "Internal server error", null)
     }
-};
+}
 
 function getAllCelebrities(callback) {
     try {
@@ -178,12 +176,12 @@ function approveCelebrityById(pid, callback) {
                     logger.error(error);
                     return callback(500, "Internal server error", null);
                 } else {
-                    if(queryResult.affectedRows == 0) {
-                        return callback(404, "Celebrity does not exist", null); 
+                    if (queryResult.affectedRows == 0) {
+                        return callback(404, "Celebrity does not exist", null);
                     }
                     else {
-                            return callback(200, "Success", {
-                            "pid":pid
+                        return callback(200, "Success", {
+                            "pid": pid
                         });
                     }
                 }
@@ -195,11 +193,49 @@ function approveCelebrityById(pid, callback) {
     }
 }
 
+function updateCelebrity(celebrityDetails, callback) {
+    try {
+        var con = mysql.createConnection(dbDetails);
+        con.connect(function (error) {
+            if (error) {
+                logger.error(error);
+                return callback(500, "Could not connect to database", null);
+            }
+            var sql = "update celebrities set first_name=?, middle_name=?, last_name=?, profession=?," +
+                "description=?, dob=?, gender=?, image_link=?, is_approved=? where pid=?;";
+            var celebrityVariables = [celebrityDetails.first_name, celebrityDetails.middle_name,
+            celebrityDetails.last_name, celebrityDetails.profession,
+            celebrityDetails.description, celebrityDetails.dob, celebrityDetails.gender,
+            celebrityDetails.image_link, 0, celebrityDetails.pid];
+            con.query(sql, celebrityVariables, function (error, queryResult) {
+                con.end();
+                if (error) {
+                    logger.error(error);
+                    return callback(500, "Internal server error", null);
+                } else {
+                    if (queryResult.affectedRows == 0) {
+                        return callback(404, "Celebrity does not exist", null);
+                    }
+                    else {
+                        return callback(200, "Success", {
+                            "pid": celebrityDetails.pid
+                        });
+                    }
+                }
+            });
+        });
+    } catch (error) {
+        logger.error(error);
+        return callback(500, "Internal server error", null)
+    }
+};
+
 module.exports = {
     addCelebrity: addCelebrity,
     deleteCelebrity: deleteCelebrity,
+    updateCelebrity: updateCelebrity,
     getCelebrityById: getCelebrityById,
     getAllCelebrities: getAllCelebrities,
-    getAllUnapprovedCelebrities:getAllUnapprovedCelebrities,
-    approveCelebrityById:approveCelebrityById
+    getAllUnapprovedCelebrities: getAllUnapprovedCelebrities,
+    approveCelebrityById: approveCelebrityById
 }
