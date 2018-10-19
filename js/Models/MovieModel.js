@@ -28,6 +28,10 @@ var movieSchema = new mongoose.Schema({
         type: Array,
         required: true
     },
+    producers: {
+        type: Array,
+        default: []
+    },
     genres: {
         type: Array,
         required: true
