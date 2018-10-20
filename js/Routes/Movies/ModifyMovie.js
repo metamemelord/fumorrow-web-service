@@ -12,23 +12,25 @@ const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 const isEmpty = require('../../Utils/HelperFunctions').isEmpty;
 
-const modifyBikeRouter = express.Router();
+const modifyMovieRouter = express.Router();
 
-modifyBikeRouter.post('/api/movie/modify',
+modifyMovieRouter.post('/api/movie/modify',
     tokenVerifier,
     tokenAuthCheck,
     movieIdVerifier,
+    movieRequestVerifier,
     function (req, res) {
         try {
             jwt.verify(req.token, process.env.key, function (error, authData) {
                 if (error) {
-                    if (error['name'] == 'TokenExpiredError') return res.status(401).json({
-                        "status": {
-                            "code": 401,
-                            "message": "Token expired"
-                        },
-                        "data": null
-                    });
+                    if (error['name'] == 'TokenExpiredError')
+                        return res.status(401).json({
+                            "status": {
+                                "code": 401,
+                                "message": "Token expired"
+                            },
+                            "data": null
+                        });
                     logger.error("Attempt to login with invalid token");
                     return res.status(400).json({
                         "status": {
@@ -108,4 +110,4 @@ modifyBikeRouter.post('/api/movie/modify',
         }
     });
 
-module.exports = modifyBikeRouter;
+module.exports = modifyMovieRouter;

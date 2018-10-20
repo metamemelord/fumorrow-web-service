@@ -2,7 +2,6 @@ const mysql = require('mysql');
 const helpers = require('./../../Utils/HelperFunctions');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = helpers.isEmpty;
 
 const dbDetails = {
     host: process.env.MYSQL_HOST,
@@ -35,9 +34,7 @@ function addCelebrity(celebrityDetails, callback) {
                 } else {
                     con.commit();
                     con.end();
-                    var fullName = celebrityDetails.first_name + " "
-                        + (celebrityDetails.middle_name == "" ? "" : celebrityDetails.middle_name + " ")
-                        + (celebrityDetails.last_name == "" ? "" : celebrityDetails.last_name);
+                    var fullName = composeFullName(celebrityDetails.first_name, celebrityDetails.middle_name, celebrityDetails.last_name);
                     logger.info("Created a new celebrity: ", fullName);
                     return callback(201, "Celebrity created", {
                         "id": celebrityDataFromDb.insertId,
@@ -98,7 +95,7 @@ function getCelebrityById(pid, callback) {
                 if (error) {
                     logger.error(error);
                     return callback(500, "Internal server error", null);
-                } if (isEmpty(celebrityDataFromDb)) {
+                } if (helpers.isEmpty(celebrityDataFromDb)) {
                     return callback(404, "Celebrity not found", null);
                 } else {
                     return callback(200, "Success", celebrityDataFromDb[0]);
@@ -230,6 +227,57 @@ function updateCelebrity(celebrityDetails, callback) {
     }
 };
 
+function searchCelebrityByNameTokens(nameTokens, callback) {
+    try {
+        var con = mysql.createConnection(dbDetails);
+        con.connect(function (error) {
+            if (error) {
+                logger.error(error);
+                return callback(500, "Could not connect to database", null);
+            }
+            var checkFirstEntry = 1;
+            var sql = "select pid, first_name, middle_name, last_name, profession, dob, image_link from celebrities where (";
+            nameTokens.forEach(function (token) {
+                if(!checkFirstEntry) {
+                    sql += "or "
+                }
+                sql += `first_name like '%${token}%'`;
+                sql += ` or middle_name like '%${token}%'`;
+                sql += ` or last_name like '%${token}%'`
+                checkFirstEntry = 0;
+            });
+            sql += ') and is_approved=1;'
+            con.query(sql, function (error, data) {
+                con.end();
+                if (error) {
+                    logger.error(error);
+                    return callback(500, "Internal server error", null);
+                } else {
+                    var searchResults = [];
+                    data.forEach(function(person) {
+                        searchResults.push({
+                            "pid": person.pid,
+                            "name" : composeFullName(person.first_name, person.middle_name, person.last_name),
+                            "dob": person.dob,
+                            "image_link": person.image_link,
+                        });
+                    });
+                    return callback(200, "OK", searchResults);
+                }
+            });
+        });
+    } catch (error) {
+        logger.error(error);
+        return callback(500, "Internal server error", null)
+    }
+}
+
+function composeFullName(first_name, middle_name, last_name) {
+    return helpers.toTitleCase(first_name) + " "
+    + (middle_name == "" ? "" : helpers.toTitleCase(middle_name) + " ")
+    + (last_name == "" ? "" : helpers.toTitleCase(last_name));
+}
+
 module.exports = {
     addCelebrity: addCelebrity,
     deleteCelebrity: deleteCelebrity,
@@ -237,5 +285,6 @@ module.exports = {
     getCelebrityById: getCelebrityById,
     getAllCelebrities: getAllCelebrities,
     getAllUnapprovedCelebrities: getAllUnapprovedCelebrities,
-    approveCelebrityById: approveCelebrityById
+    approveCelebrityById: approveCelebrityById,
+    searchCelebrityByNameTokens: searchCelebrityByNameTokens
 }

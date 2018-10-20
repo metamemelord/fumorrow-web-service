@@ -13,13 +13,14 @@ ApproveBikeRouter.post('/api/bike/approve', tokenVerifier, tokenAuthCheck, bikeI
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
-                if (error['name'] == 'TokenExpiredError') return res.status(401).json({
-                    "status": {
-                        "code": 401,
-                        "message": "Token expired"
-                    },
-                    "data": null
-                });
+                if (error['name'] == 'TokenExpiredError')
+                    return res.status(401).json({
+                        "status": {
+                            "code": 401,
+                            "message": "Token expired"
+                        },
+                        "data": null
+                    });
                 logger.error("Attempt to login with invalid token");
                 return res.status(400).json({
                     "status": {

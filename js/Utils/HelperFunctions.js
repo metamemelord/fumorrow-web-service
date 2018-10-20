@@ -61,10 +61,17 @@ function isNotEmpty(variable) {
     return !isEmpty(variable);
 }
 
+function toTitleCase(string) {
+    return string.split(' ')
+        .map(s => s.slice(0, 1).toUpperCase() + s.slice(1).toLowerCase())
+        .join(' ');
+}
+
 module.exports = {
     generateNewId: generateNewId,
     checkDate: checkDate,
     resolvePrivilages: resolvePrivilages,
     isEmpty: isEmpty,
-    isNotEmpty: isNotEmpty
+    isNotEmpty: isNotEmpty,
+    toTitleCase: toTitleCase
 }
