@@ -68,7 +68,7 @@ function removeById(id, callback) {
 				callback(404, "Entry does not exist", null);
 			} else {
 				callback(200, "Success", {
-					"_id": data._id,
+					"_id": id,
 					"name": data.title
 				});
 			}
@@ -105,22 +105,25 @@ function modifyMovie(object, callback) {
 }
 
 function incrementCounterById(id, callback) {
-	MovieDBService.findOneAndUpdate({ _id: id }, {
-		$inc: {
-			'click_counter': 1
+	MovieDBService.findOneAndUpdate({
+		$and: [{ "_id": id }, { "is_approved": true }]
+	}, {
+			$inc: {
+				'click_counter': 1
+			}
 		}
-	}, function (error, data) {
-		if (error instanceof mongoose.CastError) {
-			callback(412, "Invalid ID", null);
-		} else if (error) {
-			logger.error(error);
-			callback(500, "Internal error", null);
-		} else if (data === null) {
-			callback(404, "Content not found on the server", null);
-		} else {
-			callback(200, "Increment successful", null);
-		}
-	});
+		, function (error, data) {
+			if (error instanceof mongoose.CastError) {
+				callback(412, "Invalid ID", null);
+			} else if (error) {
+				logger.error(error);
+				callback(500, "Internal error", null);
+			} else if (data === null) {
+				callback(404, "Content not found on the server", null);
+			} else {
+				callback(200, "Increment successful", null);
+			}
+		});
 }
 
 function approveById(id, callback) {
@@ -137,7 +140,7 @@ function approveById(id, callback) {
 			callback(404, "Content not found on the server", null);
 		} else {
 			callback(200, "Approved", {
-				"_id": data._id,
+				"_id": id,
 				"name": data.title
 			});
 		}
@@ -181,6 +184,7 @@ function addShowingAt(id, showing_at, callback) {
 				callback(404, "Content not found on the server", null);
 			} else {
 				callback(200, "Added theaters", {
+					"_id": id,
 					"name": data.title,
 					"showing_at": showing_at
 				});
