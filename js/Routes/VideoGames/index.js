@@ -1,33 +1,32 @@
 const express = require('express');
 const filename = require('path').basename(__filename);
-const bookIndexRouter = express.Router();
+const videoGameIndexRouter = express.Router();
 
 // Getting routes
 
-const returnBooks = require('./ReturnBooks');
-const addBook = require('./AddBook');
-const deleteBook = require('./DeleteBook');
+const returnVideoGames = require('./ReturnVideoGames');
+const addVideoGame = require('./AddVideoGame');
+const deleteVideoGame = require('./DeleteVideoGame');
+const modifyVideoGame = require('./ModifyVideoGame');
 const miscRoutes = require('./Misc');
-const returnBookById = require('./ReturnBookById');
-const returnAllUnchecked = require('./ReturnAllUncheckedBooks');
-const returnAllRecheckNeeded = require('./ReturnAllBookRecheckNeeded');
-const markForRecheckById = require('./MarkBookForRecheckById');
-const approveById = require('./ApproveBookById');
-const modifyBook = require('./ModifyBook');
+const returnAllUnchecked = require('./ReturnAllUncheckedVideoGames');
+const returnAllRecheckNeeded = require('./ReturnAllVideoGamesRecheckNeeded');
+const approveById = require('./ApproveVideoGameById');
+const markForRecheckById = require('./MarkVideoGameForRecheckById');
+const returnVideoGameById = require('./ReturnVideoGameById');
 
 // CRUD OPERATIONS
 
-bookIndexRouter.use(returnBooks);
-bookIndexRouter.use(addBook);
-bookIndexRouter.use(deleteBook);
-bookIndexRouter.use(modifyBook);
-bookIndexRouter.use(miscRoutes);
-bookIndexRouter.use(returnAllUnchecked);
-bookIndexRouter.use(returnAllRecheckNeeded);
-bookIndexRouter.use(approveById);
-bookIndexRouter.use(markForRecheckById);
-bookIndexRouter.use(returnBookById);
-
+videoGameIndexRouter.use(returnVideoGames);
+videoGameIndexRouter.use(addVideoGame);
+videoGameIndexRouter.use(deleteVideoGame);
+videoGameIndexRouter.use(modifyVideoGame);
+videoGameIndexRouter.use(miscRoutes);
+videoGameIndexRouter.use(returnAllUnchecked);
+videoGameIndexRouter.use(returnAllRecheckNeeded);
+videoGameIndexRouter.use(approveById);
+videoGameIndexRouter.use(markForRecheckById);
+videoGameIndexRouter.use(returnVideoGameById);
 
 // mainAPIRouter.post('/api/movie/test', function (req, res) {
 //     try {
@@ -116,4 +115,4 @@ bookIndexRouter.use(returnBookById);
 // });
 
 
-module.exports = bookIndexRouter;
+module.exports = videoGameIndexRouter;

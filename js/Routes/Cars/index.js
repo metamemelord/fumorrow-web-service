@@ -1,32 +1,32 @@
 const express = require('express');
 const filename = require('path').basename(__filename);
-const bookIndexRouter = express.Router();
+const carIndexRouter = express.Router();
 
 // Getting routes
 
-const returnBooks = require('./ReturnBooks');
-const addBook = require('./AddBook');
-const deleteBook = require('./DeleteBook');
+const returnCars = require('./ReturnCars');
+const addCar = require('./AddCar');
+const deleteCar = require('./DeleteCar');
 const miscRoutes = require('./Misc');
-const returnBookById = require('./ReturnBookById');
-const returnAllUnchecked = require('./ReturnAllUncheckedBooks');
-const returnAllRecheckNeeded = require('./ReturnAllBookRecheckNeeded');
-const markForRecheckById = require('./MarkBookForRecheckById');
-const approveById = require('./ApproveBookById');
-const modifyBook = require('./ModifyBook');
+const returnCarById = require('./ReturnCarById');
+const returnAllUnchecked = require('./ReturnAllUncheckedCars');
+const returnAllRecheckNeeded = require('./ReturnAllCarsRecheckNeeded');
+const markForRecheckById = require('./MarkCarForRecheckById');
+const approveById = require('./ApproveCarById');
+const modifyCar = require('./ModifyCar');
 
 // CRUD OPERATIONS
 
-bookIndexRouter.use(returnBooks);
-bookIndexRouter.use(addBook);
-bookIndexRouter.use(deleteBook);
-bookIndexRouter.use(modifyBook);
-bookIndexRouter.use(miscRoutes);
-bookIndexRouter.use(returnAllUnchecked);
-bookIndexRouter.use(returnAllRecheckNeeded);
-bookIndexRouter.use(approveById);
-bookIndexRouter.use(markForRecheckById);
-bookIndexRouter.use(returnBookById);
+carIndexRouter.use(returnCars);
+carIndexRouter.use(addCar);
+carIndexRouter.use(deleteCar);
+carIndexRouter.use(modifyCar);
+carIndexRouter.use(miscRoutes);
+carIndexRouter.use(returnAllUnchecked);
+carIndexRouter.use(returnAllRecheckNeeded);
+carIndexRouter.use(approveById);
+carIndexRouter.use(markForRecheckById);
+carIndexRouter.use(returnCarById);
 
 
 // mainAPIRouter.post('/api/movie/test', function (req, res) {
@@ -116,4 +116,4 @@ bookIndexRouter.use(returnBookById);
 // });
 
 
-module.exports = bookIndexRouter;
+module.exports = carIndexRouter;

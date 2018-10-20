@@ -29,7 +29,7 @@ var carSchema = new mongoose.Schema({
         type: Array,
         required: false
     },
-    released_date: {
+    release_date: {
         type: Date,
         required: true
     },
