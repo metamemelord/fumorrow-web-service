@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 

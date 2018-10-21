@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const helpers = require('./../../Utils/HelperFunctions');
 const isEmpty = helpers.isEmpty;
 const filename = require('path').basename(__filename);
