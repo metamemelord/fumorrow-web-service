@@ -1,34 +1,36 @@
 const express = require('express');
 const DAL = require('../../DAL/index');
 const movieIdVerifier = require('../RouteUtils').requestIdVerifier;
-const movieRequestVerifier = require('../Bikes/AddToBikeRequestVerifier');
+const movieRequestVerifier = require('./AddToMovieRequestVerifier');
 const movieDAO = DAL.MovieDAO;
 const md5 = require('md5');
 const jwt = require('jsonwebtoken');
-const helpers = require("../../Misc/HelperFunctions");
-const tokenVerifier = require('../../Misc/Token/TokenVerifier');
-const tokenAuthCheck = require('../../Misc/Token/TokenAuthCheck');
+const helpers = require("../../Utils/HelperFunctions");
+const tokenVerifier = require('../../Utils/Token/TokenVerifier');
+const tokenAuthCheck = require('../../Utils/Token/TokenAuthCheck');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('../../Misc/HelperFunctions').isEmpty;
+const isEmpty = require('../../Utils/HelperFunctions').isEmpty;
 
-const modifyBikeRouter = express.Router();
+const modifyMovieRouter = express.Router();
 
-modifyBikeRouter.post('/api/movie/modify',
+modifyMovieRouter.post('/api/movie/modify',
     tokenVerifier,
     tokenAuthCheck,
     movieIdVerifier,
+    movieRequestVerifier,
     function (req, res) {
         try {
             jwt.verify(req.token, process.env.key, function (error, authData) {
                 if (error) {
-                    if (error['name'] == 'TokenExpiredError') return res.status(401).json({
-                        "status": {
-                            "code": 401,
-                            "message": "Token expired"
-                        },
-                        "data": null
-                    });
+                    if (error['name'] == 'TokenExpiredError')
+                        return res.status(401).json({
+                            "status": {
+                                "code": 401,
+                                "message": "Token expired"
+                            },
+                            "data": null
+                        });
                     logger.error("Attempt to login with invalid token");
                     return res.status(400).json({
                         "status": {
@@ -57,27 +59,21 @@ modifyBikeRouter.post('/api/movie/modify',
                                 timeZone: 'Asia/Calcutta'
                             }),
                             uid: "",
-                            artists: movieData.artists,
-                            directors: movieData.directors,
+                            cast: movieData.cast,
+                            crew: movieData.crew,
                             language: movieData.language,
                             genres: movieData.genres,
                             runtime: movieData.runtime,
-                            description: movieData.description,
-                            image_provider: movieData.image_provider,
-                            image_url: movieData.image_url,
-                            referrer_name: movieData.referrer_name,
-                            redirect_url: movieData.redirect_url,
+                            images: movieData.images,
+                            videos: movieData.videos,
+                            texts: movieData.texts,
+                            partners: movieData.partners,
                             is_sponsored: movieData.is_sponsored,
                             is_released: false,
                             is_live: movieData.is_live,
                             mpaa_rating: movieData.mpaa_rating,
                             budget: movieData.budget,
-                            trivia: movieData.trivia,
-                            trailers: movieData.trailers,
-                            teasers: movieData.teasers,
-                            related_videos: movieData.related_videos,
                             external_ratings: movieData.external_ratings,
-                            is_partner_sponsored: false
                         }
                         var uniqueId = movieObject.title + movieObject.release_date.toString() + movieData.referrerName;
                         uniqueId = uniqueId.replace(/\s/g, '');
@@ -108,4 +104,4 @@ modifyBikeRouter.post('/api/movie/modify',
         }
     });
 
-module.exports = modifyBikeRouter;
+module.exports = modifyMovieRouter;

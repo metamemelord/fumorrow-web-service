@@ -3,13 +3,13 @@ const DAL = require('../../DAL/index');
 const bikeRequestVerifier = require('../Bikes/AddToBikeRequestVerifier');
 const bikeDAO = DAL.BikeDAO;
 const jwt = require('jsonwebtoken');
-const helpers = require("../../Misc/HelperFunctions");
-const tokenVerifier = require('./../../Misc/Token/TokenVerifier');
-const tokenAuthCheck = require('./../../Misc/Token/TokenAuthCheck');
+const helpers = require("../../Utils/HelperFunctions");
+const tokenVerifier = require('./../../Utils/Token/TokenVerifier');
+const tokenAuthCheck = require('./../../Utils/Token/TokenAuthCheck');
 const md5 = require('md5');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
 
 const addBikeRouter = express.Router();
 
@@ -17,13 +17,14 @@ addBikeRouter.post('/api/bike/add', tokenVerifier, tokenAuthCheck, bikeRequestVe
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
-                if (error['name'] == 'TokenExpiredError') return res.status(401).json({
-                    "status": {
-                        "code": 401,
-                        "message": "Token expired"
-                    },
-                    "data": null
-                });
+                if (error['name'] == 'TokenExpiredError')
+                    return res.status(401).json({
+                        "status": {
+                            "code": 401,
+                            "message": "Token expired"
+                        },
+                        "data": null
+                    });
                 logger.error("Attempt to login with invalid token");
                 return res.status(400).json({
                     "status": {

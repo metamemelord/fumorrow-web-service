@@ -1,3 +1,6 @@
+const filename = require('path').basename(__filename);
+const logger = require('../Loggers/index').LoggerFactory.getLogger(filename);
+
 function generateNewId(length) {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -13,7 +16,13 @@ function checkDate(date) {
 }
 
 function resolvePrivilages(privilageBitMask) {
-    const availablePrivilages = ['movies', 'books', 'bikes', 'cars'];
+    var availablePrivilages = [];
+    try {
+        availablePrivilages = process.env.AVAILABLE_PRIVILAGES.split(',');
+    } catch (error) {
+        logger.error("Could not find available privilages in environment");
+        return availablePrivilages;
+    }
     var grantedPrivilages = new Array();
     var i = 0;
     while (privilageBitMask > 0) {
@@ -52,10 +61,17 @@ function isNotEmpty(variable) {
     return !isEmpty(variable);
 }
 
+function toTitleCase(string) {
+    return string.split(' ')
+        .map(s => s.slice(0, 1).toUpperCase() + s.slice(1).toLowerCase())
+        .join(' ');
+}
+
 module.exports = {
     generateNewId: generateNewId,
     checkDate: checkDate,
     resolvePrivilages: resolvePrivilages,
     isEmpty: isEmpty,
-    isNotEmpty: isNotEmpty
+    isNotEmpty: isNotEmpty,
+    toTitleCase: toTitleCase
 }

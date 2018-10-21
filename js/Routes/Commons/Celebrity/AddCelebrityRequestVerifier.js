@@ -1,6 +1,6 @@
 const filename = require('path').basename(__filename);
 const logger = require('../../../Loggers/index').LoggerFactory.getLogger(filename);;
-const isEmpty = require('./../../../Misc/HelperFunctions').isEmpty;
+const isEmpty = require('./../../../Utils/HelperFunctions').isEmpty;
 
 module.exports = (req, res, next) => {
     try {

@@ -4,8 +4,8 @@ const bikeRequestVerifier = require('../RouteUtils').requestIdVerifier;
 const bikeDAO = DAL.BikeDAO;
 const deleteBikeRouter = express.Router();
 const jwt = require('jsonwebtoken');
-const tokenVerifier = require('./../../Misc/Token/TokenVerifier');
-const tokenAuthCheck = require('./../../Misc/Token/TokenAuthCheck');
+const tokenVerifier = require('./../../Utils/Token/TokenVerifier');
+const tokenAuthCheck = require('./../../Utils/Token/TokenAuthCheck');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
@@ -13,13 +13,14 @@ deleteBikeRouter.post('/api/bike/delete', tokenVerifier, tokenAuthCheck, bikeReq
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
-                if (error['name'] == 'TokenExpiredError') return res.status(401).json({
-                    "status": {
-                        "code": 401,
-                        "message": "Token expired"
-                    },
-                    "data": null
-                });
+                if (error['name'] == 'TokenExpiredError')
+                    return res.status(401).json({
+                        "status": {
+                            "code": 401,
+                            "message": "Token expired"
+                        },
+                        "data": null
+                    });
                 logger.error("Attempt to login with invalid token");
                 return res.status(400).json({
                     "status": {

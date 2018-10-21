@@ -4,7 +4,7 @@ const bikeDAOForRetrieval = DAL.BikeDAOForRetrieval;
 const bikeByIdRouter = express.Router();
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers').LoggerFactory.getLogger(filename);
-const isNotEmpty = require('../../Misc/HelperFunctions').isNotEmpty;
+const isNotEmpty = require('../../Utils/HelperFunctions').isNotEmpty;
 
 bikeByIdRouter.post('/api/bike/:id', function (req, res) {
     try {
