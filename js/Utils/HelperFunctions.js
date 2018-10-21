@@ -17,22 +17,19 @@ function checkDate(date) {
 
 function resolvePrivilages(privilageBitMask) {
     var availablePrivilages = [];
+    var grantedPrivilages = [];
     try {
         availablePrivilages = process.env.AVAILABLE_PRIVILAGES.split(',');
     } catch (error) {
         logger.error("Could not find available privilages in environment");
-        return availablePrivilages;
+        return grantedPrivilages;
     }
-    var grantedPrivilages = new Array();
     var i = 0;
-    while (privilageBitMask > 0) {
+    while (privilageBitMask > 0 && i < availablePrivilages.length) {
         if (privilageBitMask % 2) {
             grantedPrivilages.push(availablePrivilages[i]);
         }
         i++;
-        if (i == availablePrivilages.length) {
-            break;
-        }
         privilageBitMask = Math.floor(privilageBitMask / 2);
     }
     return grantedPrivilages;
