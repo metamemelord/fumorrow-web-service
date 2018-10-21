@@ -1,7 +1,7 @@
 const filename = require('path').basename(__filename);
 const logger = require('../Loggers/index').LoggerFactory.getLogger(filename);
 
-function generateNewId(length) {
+function generateSalt(length) {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     for (var i = 0; i < length; i++)
@@ -68,7 +68,7 @@ function toTitleCase(string) {
 }
 
 module.exports = {
-    generateNewId: generateNewId,
+    generateSalt: generateSalt,
     checkDate: checkDate,
     resolvePrivilages: resolvePrivilages,
     isEmpty: isEmpty,

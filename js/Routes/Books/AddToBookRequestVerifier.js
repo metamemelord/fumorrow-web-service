@@ -6,8 +6,7 @@ module.exports = (req, res, next) => {
     try {
         if (isEmpty(req.body.book_name) || isEmpty(req.body.day) || isEmpty(req.body.month) ||
             isEmpty(req.body.year) || isEmpty(req.body.author) || isEmpty(req.body.language) ||
-            isEmpty(req.body.genres) || isEmpty(req.body.description) || isEmpty(req.body.referrer_name) ||
-            isEmpty(req.body.redirect_url)) {
+            isEmpty(req.body.genres) || isEmpty(req.body.texts) || isEmpty(req.body.partners)) {
             return res.status(400).json({
                 "status": {
                     "code": 400,

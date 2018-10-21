@@ -73,37 +73,27 @@ var bikeSchema = new mongoose.Schema({
         type: Number,
         required: false
     },
-    related_videos: {
+    images: {
         type: Array,
-        required: false
+        default: []
+    },
+    videos: {
+        type: Array,
+        default: []
+    },
+    texts: {
+        type: Array,
+        default: []
+    },
+    partners: {
+        type: Array,
+        default: []
     },
     related_bikes: {
         type: Array,
         required: false
     },
-    description: {
-        type: String,
-        required: true
-    },
     key_features: {
-        type: String,
-        required: false
-    },
-    image_provider: {
-        type: Array,
-        lowercase: true,
-        required:false
-    },
-    image_url: {
-        type: Array,
-        default: []
-    },
-    referrer_name: {
-        type: String,
-        lowercase: true,
-        required: false
-    },
-    redirect_url: {
         type: String,
         required: false
     },
@@ -111,17 +101,21 @@ var bikeSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    is_sponsored_banner: {
+    is_released: {
         type: Boolean,
         default: false
     },
-    is_released: {
+    is_live: {
         type: Boolean,
         default: false
     },
     click_counter: {
         type: Number,
         default: 0
+    },
+    external_ratings: {
+        type: Array,
+        default: []
     },
     predicted_ratings: {
         type: Array,
@@ -134,10 +128,6 @@ var bikeSchema = new mongoose.Schema({
     user_visit_info: {
         type: Array,
         default: []
-    },
-    is_partner_sponsored: {
-        type: Boolean,
-        default: false
     },
     recheck_needed: {
         type: Boolean,
