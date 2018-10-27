@@ -63,28 +63,20 @@ addBookRouter.post('/api/book/add', tokenVerifier, tokenAuthCheck, bookRequestVe
                         publisher: bookData.publisher,
                         genres: bookData.genres,
                         similar_books: bookData.similar_books,
-                        description: bookData.description,
-                        image_provider: bookData.image_provider,
-                        image_url: bookData.image_url,
-                        ecom_image_url: bookData.ecom_image_url,
-                        ecombook_url: bookData.ecombook_url,
-                        referrer_name: bookData.referrer_name,
-                        redirect_url: bookData.redirect_url,
+                        images: bookData.images,
+                        videos: bookData.videos,
+                        texts: bookData.texts,
+                        partners: bookData.partners,
                         is_sponsored: bookData.is_sponsored,
                         is_released: false,
                         is_live: bookData.is_live,
                         mpaa_rating: bookData.mpaa_rating,
-                        trivia: bookData.trivia,
-                        teasers: bookData.teasers,
-                        related_videos: bookData.related_videos,
-                        external_ratings: bookData.external_ratings,
-                        is_partner_sponsored: false
+                        external_ratings: bookData.external_ratings
                     }
                     length = 12 - bookObject._id.length;
-                    bookObject._id += helpers.generateNewId(length);
+                    bookObject._id += helpers.generateSalt(length);
                     var uniqueId = bookObject.book_name + bookObject.release_date.toString() + bookData.referrerName;
-                    uniqueId = uniqueId.replace(/\s/g, '');
-                    bookObject.uid = md5(uniqueId);
+                    bookObject.uid = md5(uniqueId.replace(/\s/g, ''));
                     bookObject.genres.sort();
                     bookObject.is_released = helpers.checkDate(bookObject.release_date);
                     bookDAO.addBook(bookObject, function (status, message, data) {

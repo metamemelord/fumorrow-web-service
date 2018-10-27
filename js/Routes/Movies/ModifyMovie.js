@@ -1,7 +1,7 @@
 const express = require('express');
 const DAL = require('../../DAL/index');
 const movieIdVerifier = require('../RouteUtils').requestIdVerifier;
-const movieRequestVerifier = require('../Bikes/AddToBikeRequestVerifier');
+const movieRequestVerifier = require('./AddToMovieRequestVerifier');
 const movieDAO = DAL.MovieDAO;
 const md5 = require('md5');
 const jwt = require('jsonwebtoken');
@@ -59,31 +59,29 @@ modifyMovieRouter.post('/api/movie/modify',
                                 timeZone: 'Asia/Calcutta'
                             }),
                             uid: "",
-                            artists: movieData.artists,
-                            directors: movieData.directors,
+                            cast: movieData.cast,
+                            crew: movieData.crew,
                             language: movieData.language,
                             genres: movieData.genres,
                             runtime: movieData.runtime,
-                            description: movieData.description,
-                            image_provider: movieData.image_provider,
-                            image_url: movieData.image_url,
-                            referrer_name: movieData.referrer_name,
-                            redirect_url: movieData.redirect_url,
+                            images: movieData.images,
+                            videos: movieData.videos,
+                            texts: movieData.texts,
+                            partners: movieData.partners,
+                            showing_at: movieData.showing_at,
                             is_sponsored: movieData.is_sponsored,
                             is_released: false,
                             is_live: movieData.is_live,
+                            click_counter: movieData.click_counter,
                             mpaa_rating: movieData.mpaa_rating,
                             budget: movieData.budget,
-                            trivia: movieData.trivia,
-                            trailers: movieData.trailers,
-                            teasers: movieData.teasers,
-                            related_videos: movieData.related_videos,
                             external_ratings: movieData.external_ratings,
-                            is_partner_sponsored: false
+                            predicted_ratings: bookData.predicted_ratings,
+                            favorited_by: bookData.favorited_by,
+                            user_visit_info: boodData.user_visit_info
                         }
                         var uniqueId = movieObject.title + movieObject.release_date.toString() + movieData.referrerName;
-                        uniqueId = uniqueId.replace(/\s/g, '');
-                        movieObject.uid = md5(uniqueId);
+                        movieObject.uid = md5(uniqueId.replace(/\s/g, ''));
                         movieObject.genres.sort();
                         movieObject.is_released = helpers.checkDate(movieObject.release_date);
                         movieDAO.modifyMovie(movieObject, function (status, message, data) {
