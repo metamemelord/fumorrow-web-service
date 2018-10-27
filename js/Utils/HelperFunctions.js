@@ -1,4 +1,7 @@
-function generateNewId(length) {
+const filename = require('path').basename(__filename);
+const logger = require('../Loggers/index').LoggerFactory.getLogger(filename);
+
+function generateSalt(length) {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     for (var i = 0; i < length; i++)
@@ -13,17 +16,20 @@ function checkDate(date) {
 }
 
 function resolvePrivilages(privilageBitMask) {
-    const availablePrivilages = ['movies', 'books', 'bikes', 'cars'];
-    var grantedPrivilages = new Array();
+    var availablePrivilages = [];
+    var grantedPrivilages = [];
+    try {
+        availablePrivilages = process.env.AVAILABLE_PRIVILAGES.split(',');
+    } catch (error) {
+        logger.error("Could not find available privilages in environment");
+        return grantedPrivilages;
+    }
     var i = 0;
-    while (privilageBitMask > 0) {
+    while (privilageBitMask > 0 && i < availablePrivilages.length) {
         if (privilageBitMask % 2) {
             grantedPrivilages.push(availablePrivilages[i]);
         }
         i++;
-        if (i == availablePrivilages.length) {
-            break;
-        }
         privilageBitMask = Math.floor(privilageBitMask / 2);
     }
     return grantedPrivilages;
@@ -52,10 +58,17 @@ function isNotEmpty(variable) {
     return !isEmpty(variable);
 }
 
+function toTitleCase(string) {
+    return string.split(' ')
+        .map(s => s.slice(0, 1).toUpperCase() + s.slice(1).toLowerCase())
+        .join(' ');
+}
+
 module.exports = {
-    generateNewId: generateNewId,
+    generateSalt: generateSalt,
     checkDate: checkDate,
     resolvePrivilages: resolvePrivilages,
     isEmpty: isEmpty,
-    isNotEmpty: isNotEmpty
+    isNotEmpty: isNotEmpty,
+    toTitleCase: toTitleCase
 }

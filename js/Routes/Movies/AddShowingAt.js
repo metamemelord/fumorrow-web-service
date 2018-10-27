@@ -5,10 +5,10 @@ const addShowingAtRouter = express.Router();
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 const jwt = require('jsonwebtoken');
-const helpers = require("../../Misc/HelperFunctions");
-const tokenVerifier = require('./../../Misc/Token/TokenVerifier');
-const tokenAuthCheck = require('./../../Misc/Token/TokenAuthCheck');
-const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+const helpers = require("../../Utils/HelperFunctions");
+const tokenVerifier = require('./../../Utils/Token/TokenVerifier');
+const tokenAuthCheck = require('./../../Utils/Token/TokenAuthCheck');
+const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
 
 addShowingAtRouter.post('/api/movie/showingat', tokenVerifier, tokenAuthCheck, function (req, res) {
     try {

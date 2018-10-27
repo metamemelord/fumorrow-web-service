@@ -20,11 +20,11 @@ var movieSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    artists: {
+    cast: {
         type: Array,
         required: true
     },
-    directors: {
+    crew: {
         type: Array,
         required: true
     },
@@ -40,27 +40,21 @@ var movieSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    description: {
-        type: String,
-        required: true
+    images: {
+        type: Array,
+        default: []
     },
-    image_provider: {
-        type: String,
-        lowercase: true,
-        required: true
+    videos: {
+        type: Array,
+        default: []
     },
-    image_url: {
-        type: String,
-        required: true
+    texts: {
+        type: Array,
+        default: []
     },
-    referrer_name: {
-        type: String,
-        lowercase: true,
-        required: true
-    },
-    redirect_url: {
-        type: String,
-        required: true
+    partners: {
+        type: Array,
+        default: []
     },
     showing_at: {
         type: Array,
@@ -71,6 +65,10 @@ var movieSchema = new mongoose.Schema({
         default: false
     },
     is_released: {
+        type: Boolean,
+        default: false
+    },
+    is_live: {
         type: Boolean,
         default: false
     },
@@ -85,22 +83,6 @@ var movieSchema = new mongoose.Schema({
     budget: {
         type: Number,
         default: 0
-    },
-    trivia: {
-        type: Array,
-        default: []
-    },
-    trailers: {
-        type: Array,
-        default: []
-    },
-    teasers: {
-        type: Array,
-        default: []
-    },
-    related_videos: {
-        type: Array,
-        default: []
     },
     external_ratings: {
         type: Array,
@@ -117,10 +99,6 @@ var movieSchema = new mongoose.Schema({
     user_visit_info: {
         type: Array,
         default: []
-    },
-    is_partner_sponsored: {
-        type: Boolean,
-        default: false
     },
     recheck_needed: {
         type: Boolean,

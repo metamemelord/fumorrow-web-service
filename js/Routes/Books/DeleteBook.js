@@ -4,10 +4,10 @@ const bookRequestVerifier = require('../RouteUtils').requestIdVerifier;
 const bookDAO = DAL.BookDAO;
 const deleteBookRouter = express.Router();
 const jwt = require('jsonwebtoken');
-const helpers = require("../../Misc/HelperFunctions");
-const tokenVerifier = require('./../../Misc/Token/TokenVerifier');
-const tokenAuthCheck = require('./../../Misc/Token/TokenAuthCheck');
-const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+const helpers = require("../../Utils/HelperFunctions");
+const tokenVerifier = require('./../../Utils/Token/TokenVerifier');
+const tokenAuthCheck = require('./../../Utils/Token/TokenAuthCheck');
+const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
@@ -15,13 +15,14 @@ deleteBookRouter.post('/api/book/delete', tokenVerifier, tokenAuthCheck, bookReq
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
-                if (error['name'] == 'TokenExpiredError') return res.status(401).json({
-                    "status": {
-                        "code": 401,
-                        "message": "Token expired"
-                    },
-                    "data": null
-                });
+                if (error['name'] == 'TokenExpiredError')
+                    return res.status(401).json({
+                        "status": {
+                            "code": 401,
+                            "message": "Token expired"
+                        },
+                        "data": null
+                    });
                 logger.error("Attempt to login with invalid token");
                 return res.status(400).json({
                     "status": {

@@ -3,13 +3,13 @@ const DAL = require('../../DAL/index');
 const movieRequestVerifier = require('../Movies/AddToMovieRequestVerifier');
 const movieDAO = DAL.MovieDAO;
 const jwt = require('jsonwebtoken');
-const helpers = require("../../Misc/HelperFunctions");
-const tokenVerifier = require('./../../Misc/Token/TokenVerifier');
-const tokenAuthCheck = require('./../../Misc/Token/TokenAuthCheck');
+const helpers = require("../../Utils/HelperFunctions");
+const tokenVerifier = require('./../../Utils/Token/TokenVerifier');
+const tokenAuthCheck = require('./../../Utils/Token/TokenAuthCheck');
 const md5 = require('md5');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
 
 const addMovieRouter = express.Router();
 
@@ -17,13 +17,14 @@ addMovieRouter.post('/api/movie/add', tokenVerifier, tokenAuthCheck, movieReques
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
-                if (error['name'] == 'TokenExpiredError') return res.status(401).json({
-                    "status": {
-                        "code": 401,
-                        "message": "Token expired"
-                    },
-                    "data": null
-                });
+                if (error['name'] == 'TokenExpiredError')
+                    return res.status(401).json({
+                        "status": {
+                            "code": 401,
+                            "message": "Token expired"
+                        },
+                        "data": null
+                    });
                 logger.error("Attempt to login with invalid token");
                 return res.status(400).json({
                     "status": {
@@ -52,33 +53,27 @@ addMovieRouter.post('/api/movie/add', tokenVerifier, tokenAuthCheck, movieReques
                             timeZone: 'Asia/Calcutta'
                         }),
                         uid: "",
-                        artists: movieData.artists,
-                        directors: movieData.directors,
+                        cast: movieData.cast,
+                        crew: movieData.crew,
                         language: movieData.language,
                         genres: movieData.genres,
                         runtime: movieData.runtime,
-                        description: movieData.description,
-                        image_provider: movieData.image_provider,
-                        image_url: movieData.image_url,
-                        referrer_name: movieData.referrer_name,
-                        redirect_url: movieData.redirect_url,
+                        images: movieData.images,
+                        videos: movieData.videos,
+                        texts: movieData.texts,
+                        partners: movieData.partners,
+                        showing_at: movieData.showing_at,
                         is_sponsored: movieData.is_sponsored,
                         is_released: false,
                         is_live: movieData.is_live,
                         mpaa_rating: movieData.mpaa_rating,
                         budget: movieData.budget,
-                        trivia: movieData.trivia,
-                        trailers: movieData.trailers,
-                        teasers: movieData.teasers,
-                        related_videos: movieData.related_videos,
                         external_ratings: movieData.external_ratings,
-                        is_partner_sponsored: false
                     }
                     length = 12 - movieObject._id.length;
-                    movieObject._id += helpers.generateNewId(length);
+                    movieObject._id += helpers.generateSalt(length);
                     var uniqueId = movieObject.title + movieObject.release_date.toString() + movieData.referrerName;
-                    uniqueId = uniqueId.replace(/\s/g, '');
-                    movieObject.uid = md5(uniqueId);
+                    movieObject.uid = md5(uniqueId.replace(/\s/g, ''));
                     movieObject.genres.sort();
                     movieObject.is_released = helpers.checkDate(movieObject.release_date);
                     movieDAO.addMovie(movieObject, function (status, message, data) {

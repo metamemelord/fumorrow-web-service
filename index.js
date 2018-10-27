@@ -1,9 +1,7 @@
 const express = require('express');
-const path = require('path');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 const logger = require('./js/Loggers/index').LoggerFactory.getLogger('Web-Service');
-const filename = require('path').basename(__filename);
 const packageJson = require('./package.json');
 
 var fumorrow = express();

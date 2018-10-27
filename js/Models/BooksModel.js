@@ -68,63 +68,37 @@ var bookSchema = new mongoose.Schema({
         type: Array,
         default: []
     },
-    description: {
-        type: String,
-        required: true
-    },
-    image_provider: {
-        type: String,
-        lowercase: true,
-        required:false
-    },
-    image_url: {
-        type: String,
+    images: {
+        type: Array,
         default: []
     },
-    ecom_image_url: {
-        type: String,
-        required: false
+    videos: {
+        type: Array,
+        default: []
     },
-    ecombook_url: {
-        type: String,
-        required: false
-    }, 
-    referrer_name: {
-        type: String,
-        lowercase: true,
-        required: false
+    texts: {
+        type: Array,
+        default: []
     },
-    redirect_url: {
-        type: String,
-        required: false
+    partners: {
+        type: Array,
+        default: []
     },
     is_sponsored: {
         type: Boolean,
-        default: false
-    },
-    is_sponsored_banner: {
-        type: String,
         default: false
     },
     is_released: {
         type: Boolean,
         default: false
     },
+    is_live: {
+        type: Boolean,
+        default: false
+    },
     click_counter: {
         type: Number,
         default: 0
-    },
-    trivia: {
-        type: Array,
-        default: []
-    },
-    teasers: {
-        type: Array,
-        default: []
-    },
-    related_videos: {
-        type: Array,
-        default: []
     },
     external_ratings: {
         type: Array,
@@ -141,10 +115,6 @@ var bookSchema = new mongoose.Schema({
     user_visit_info: {
         type: Array,
         default: []
-    },
-    is_partner_sponsored: {
-        type: Boolean,
-        default: false
     },
     recheck_needed: {
         type: Boolean,

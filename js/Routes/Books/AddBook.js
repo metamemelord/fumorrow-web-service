@@ -3,13 +3,13 @@ const DAL = require('../../DAL/index');
 const bookRequestVerifier = require('../Books/AddToBookRequestVerifier');
 const bookDAO = DAL.BookDAO;
 const jwt = require('jsonwebtoken');
-const helpers = require("../../Misc/HelperFunctions");
-const tokenVerifier = require('./../../Misc/Token/TokenVerifier');
-const tokenAuthCheck = require('./../../Misc/Token/TokenAuthCheck');
+const helpers = require("../../Utils/HelperFunctions");
+const tokenVerifier = require('./../../Utils/Token/TokenVerifier');
+const tokenAuthCheck = require('./../../Utils/Token/TokenAuthCheck');
 const md5 = require('md5');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
 
 const addBookRouter = express.Router();
 
@@ -17,13 +17,14 @@ addBookRouter.post('/api/book/add', tokenVerifier, tokenAuthCheck, bookRequestVe
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
-                if (error['name'] == 'TokenExpiredError') return res.status(401).json({
-                    "status": {
-                        "code": 401,
-                        "message": "Token expired"
-                    },
-                    "data": null
-                });
+                if (error['name'] == 'TokenExpiredError')
+                    return res.status(401).json({
+                        "status": {
+                            "code": 401,
+                            "message": "Token expired"
+                        },
+                        "data": null
+                    });
                 logger.error("Attempt to login with invalid token");
                 return res.status(400).json({
                     "status": {
@@ -62,28 +63,20 @@ addBookRouter.post('/api/book/add', tokenVerifier, tokenAuthCheck, bookRequestVe
                         publisher: bookData.publisher,
                         genres: bookData.genres,
                         similar_books: bookData.similar_books,
-                        description: bookData.description,
-                        image_provider: bookData.image_provider,
-                        image_url: bookData.image_url,
-                        ecom_image_url: bookData.ecom_image_url,
-                        ecombook_url: bookData.ecombook_url,
-                        referrer_name: bookData.referrer_name,
-                        redirect_url: bookData.redirect_url,
+                        images: bookData.images,
+                        videos: bookData.videos,
+                        texts: bookData.texts,
+                        partners: bookData.partners,
                         is_sponsored: bookData.is_sponsored,
                         is_released: false,
                         is_live: bookData.is_live,
                         mpaa_rating: bookData.mpaa_rating,
-                        trivia: bookData.trivia,
-                        teasers: bookData.teasers,
-                        related_videos: bookData.related_videos,
-                        external_ratings: bookData.external_ratings,
-                        is_partner_sponsored: false
+                        external_ratings: bookData.external_ratings
                     }
                     length = 12 - bookObject._id.length;
-                    bookObject._id += helpers.generateNewId(length);
+                    bookObject._id += helpers.generateSalt(length);
                     var uniqueId = bookObject.book_name + bookObject.release_date.toString() + bookData.referrerName;
-                    uniqueId = uniqueId.replace(/\s/g, '');
-                    bookObject.uid = md5(uniqueId);
+                    bookObject.uid = md5(uniqueId.replace(/\s/g, ''));
                     bookObject.genres.sort();
                     bookObject.is_released = helpers.checkDate(bookObject.release_date);
                     bookDAO.addBook(bookObject, function (status, message, data) {

@@ -9,7 +9,7 @@ var returnAllCelebritiesRoute = express.Router();
 returnAllCelebritiesRoute.post('/api/admin/celebrities', function (req, res) {
     try{
         celebritiesDAO.getAllCelebrities(function(status, message, data) {
-            res.status(status).json({
+            return res.status(status).json({
                 "status":{
                     "code":status,
                     "message":message
