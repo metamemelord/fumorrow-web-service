@@ -27,7 +27,7 @@ function performLogin(userDetails, callback) {
                 con.end();
                 return callback(401, "User does not exist", null);
             }
-            else if (userDataFromDB[0].isApproved === 0) {
+            else if (userDataFromDB[0].is_approved === 0) {
                 con.end();
                 return callback(401, "Not approved by admin", null);
             }
