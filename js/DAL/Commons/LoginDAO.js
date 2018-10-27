@@ -17,7 +17,7 @@ function performLogin(userDetails, callback) {
     try {
         var con = mysql.createConnection(dbDetails);
         con.connect();
-        con.query("select * from category_managers where username =?", [userDetails.username], function (error, userDataFromDB) {
+        con.query("select * from category_managers where username=?", [userDetails.username], function (error, userDataFromDB) {
             if (error) {
                 con.end();
                 logger.error(error);
