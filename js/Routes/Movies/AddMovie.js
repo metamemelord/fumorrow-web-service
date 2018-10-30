@@ -62,6 +62,7 @@ addMovieRouter.post('/api/movie/add', tokenVerifier, tokenAuthCheck, movieReques
                         videos: movieData.videos,
                         texts: movieData.texts,
                         partners: movieData.partners,
+                        showing_at: movieData.showing_at,
                         is_sponsored: movieData.is_sponsored,
                         is_released: false,
                         is_live: movieData.is_live,
@@ -70,10 +71,9 @@ addMovieRouter.post('/api/movie/add', tokenVerifier, tokenAuthCheck, movieReques
                         external_ratings: movieData.external_ratings,
                     }
                     length = 12 - movieObject._id.length;
-                    movieObject._id += helpers.generateNewId(length);
+                    movieObject._id += helpers.generateSalt(length);
                     var uniqueId = movieObject.title + movieObject.release_date.toString() + movieData.referrerName;
-                    uniqueId = uniqueId.replace(/\s/g, '');
-                    movieObject.uid = md5(uniqueId);
+                    movieObject.uid = md5(uniqueId.replace(/\s/g, ''));
                     movieObject.genres.sort();
                     movieObject.is_released = helpers.checkDate(movieObject.release_date);
                     movieDAO.addMovie(movieObject, function (status, message, data) {

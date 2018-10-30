@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 mongoose.set('useFindAndModify', false);
+const isEmpty = require('../../Utils/HelperFunctions').isEmpty;
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
@@ -142,6 +143,8 @@ function returnAllReferrers(callback) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
+		} else if (isEmpty(data)) {
+			callback(204, "No data", null);
 		} else {
 			callback(200, "Success", data[0]);
 		}

@@ -68,16 +68,20 @@ modifyMovieRouter.post('/api/movie/modify',
                             videos: movieData.videos,
                             texts: movieData.texts,
                             partners: movieData.partners,
+                            showing_at: movieData.showing_at,
                             is_sponsored: movieData.is_sponsored,
                             is_released: false,
                             is_live: movieData.is_live,
+                            click_counter: movieData.click_counter,
                             mpaa_rating: movieData.mpaa_rating,
                             budget: movieData.budget,
                             external_ratings: movieData.external_ratings,
+                            predicted_ratings: bookData.predicted_ratings,
+                            favorited_by: bookData.favorited_by,
+                            user_visit_info: boodData.user_visit_info
                         }
                         var uniqueId = movieObject.title + movieObject.release_date.toString() + movieData.referrerName;
-                        uniqueId = uniqueId.replace(/\s/g, '');
-                        movieObject.uid = md5(uniqueId);
+                        movieObject.uid = md5(uniqueId.replace(/\s/g, ''));
                         movieObject.genres.sort();
                         movieObject.is_released = helpers.checkDate(movieObject.release_date);
                         movieDAO.modifyMovie(movieObject, function (status, message, data) {

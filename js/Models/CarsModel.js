@@ -85,50 +85,32 @@ var carSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    images: {
+        type: Array,
+        default: []
+    },
     videos: {
         type: Array,
-        required: false
+        default: []
     },
-    video_credits: {
-        type: String,
-        required: false
+    texts: {
+        type: Array,
+        default: []
+    },
+    partners: {
+        type: Array,
+        default: []
     },
     related_cars: {
         type: Array,
         required: false
     },
-    description: {
-        type: String,
-        required: true
-    },
     key_features: {
-        type: String,
-        required: false
-    },
-    image_provider: {
-        type: Array,
-        lowercase: true,
-        required:false
-    },
-    image_url: {
-        type: Array,
-        default: []
-    },
-    referrer_name: {
-        type: String,
-        lowercase: true,
-        required: false
-    },
-    redirect_url: {
         type: String,
         required: false
     },
     is_sponsored: {
         type: Boolean,
-        default: false
-    },
-    is_sponsored_banner: {
-        type: String,
         default: false
     },
     is_released: {
@@ -150,10 +132,6 @@ var carSchema = new mongoose.Schema({
     user_visit_info: {
         type: Array,
         default: []
-    },
-    is_partner_sponsored: {
-        type: Boolean,
-        default: false
     },
     recheck_needed: {
         type: Boolean,

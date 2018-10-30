@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const helpers = require('./../../Utils/HelperFunctions');
 const isEmpty = helpers.isEmpty;
 const filename = require('path').basename(__filename);
@@ -17,7 +17,7 @@ function performLogin(userDetails, callback) {
     try {
         var con = mysql.createConnection(dbDetails);
         con.connect();
-        con.query("select * from category_managers where username =?", [userDetails.username], function (error, userDataFromDB) {
+        con.query("select * from category_managers where username=?", [userDetails.username], function (error, userDataFromDB) {
             if (error) {
                 con.end();
                 logger.error(error);
@@ -27,7 +27,7 @@ function performLogin(userDetails, callback) {
                 con.end();
                 return callback(401, "User does not exist", null);
             }
-            else if (userDataFromDB[0].isApproved === 0) {
+            else if (userDataFromDB[0].is_approved === 0) {
                 con.end();
                 return callback(401, "Not approved by admin", null);
             }

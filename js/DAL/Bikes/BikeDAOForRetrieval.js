@@ -119,15 +119,22 @@ function returnAllUnchecked(callback) {
 
 function returnAllReferrers(callback) {
 	BikeDBService.aggregate([
+		{ "$match": { "is_approved": true } },
+		{ "$unwind": "$partners" },
 		{
-			$group: {
-				"_id": "$referrer_name",
+			"$group": {
+				"_id": { "partner_id": "$partners.partner_id", "is_sponsored": "$partners.is_sponsored" },
 				"count": { "$sum": 1 }
 			}
 		},
+		{ "$sort": { "count": -1 } },
 		{
-			$sort: { "count": -1 }
-		}
+			"$group": {
+				"_id": null,
+				"partners": { "$push": { "id": "$_id.partner_id", "is_sponsored": "$_id.is_sponsored", "count": "$count" } }
+			}
+		},
+		{ "$project": { "partners": 1, "_id": 0 } }
 	], function (error, data) {
 		if (error) {
 			logger.error(error);

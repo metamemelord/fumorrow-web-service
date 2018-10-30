@@ -68,6 +68,10 @@ var movieSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    is_live: {
+        type: Boolean,
+        default: false
+    },
     click_counter: {
         type: Number,
         default: 0
