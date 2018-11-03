@@ -92,7 +92,7 @@ function modifyVideoGame(object, callback) {
 		VideoGameDBService.findOneAndUpdate({ "_id": object._id },
 			object,
 			{ overwrite: true },
-			function (error) {
+			function (error, data) {
 				if (error) {
 					if (error.name === 'ValidationError') {
 						callback(400, "Error while parsing values", null);
