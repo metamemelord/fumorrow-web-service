@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 mongoose.set('useFindAndModify', false);
+const isEmpty = require('../../Utils/HelperFunctions').isEmpty;
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
@@ -41,8 +42,12 @@ function addMovie(object, callback) {
 				var movieToAdd = new MovieDBService(object);
 				movieToAdd.save(object, function (error) {
 					if (error) {
-						logger.error(error);
-						callback(500, "Error while saving the movie", null);
+						if (error.name === 'ValidationError') {
+							callback(400, "Error while parsing values", null);
+						} else {
+							logger.error(error);
+							callback(500, "Error while saving the movie", null);
+						}
 					} else callback(201, "Success", {
 						"id": object._id,
 						"name": object.title
@@ -64,7 +69,7 @@ function removeById(id, callback) {
 			if (error) {
 				logger.error(error);
 				callback(500, "Internal server error", null);
-			} else if (data === null) {
+			} else if (isEmpty(data)) {
 				callback(404, "Entry does not exist", null);
 			} else {
 				callback(200, "Success", {
@@ -88,9 +93,15 @@ function modifyMovie(object, callback) {
 			object,
 			{ overwrite: true },
 			function (error) {
-				if (error) {
-					logger.error(error);
-					callback(500, "Internal server error", null);
+				if (error, data) {
+					if (error.name === 'ValidationError') {
+						callback(400, "Error while parsing values", null);
+					} else {
+						logger.error(error);
+						callback(500, "Error while modifying the movie", null);
+					}
+				} else if (isEmpty(data)) {
+					callback(404, "Content not found on the server", null);
 				} else {
 					callback(200, "Successfully modified", {
 						"_id": object._id,
@@ -118,7 +129,7 @@ function incrementCounterById(id, callback) {
 			} else if (error) {
 				logger.error(error);
 				callback(500, "Internal error", null);
-			} else if (data === null) {
+			} else if (isEmpty(data)) {
 				callback(404, "Content not found on the server", null);
 			} else {
 				callback(200, "Increment successful", null);
@@ -136,7 +147,7 @@ function approveById(id, callback) {
 		} else if (error) {
 			logger.error(error);
 			callback(500, "Internal error", null);
-		} else if (data === null) {
+		} else if (isEmpty(data)) {
 			callback(404, "Content not found on the server", null);
 		} else {
 			callback(200, "Approved", {
@@ -157,7 +168,7 @@ function markForRecheckById(id, callback) {
 		} else if (error) {
 			logger.error(error);
 			callback(500, "Internal error", null);
-		} else if (data === null) {
+		} else if (isEmpty(data)) {
 			callback(404, "Content not found on the server", null);
 		} else {
 			callback(200, "Checked", {
@@ -180,7 +191,7 @@ function addShowingAt(id, showing_at, callback) {
 			} else if (error) {
 				logger.error(error);
 				callback(500, "Internal error", null);
-			} else if (data === null) {
+			} else if (isEmpty(data)) {
 				callback(404, "Content not found on the server", null);
 			} else {
 				callback(200, "Added theaters", {
@@ -202,7 +213,7 @@ function markReleasedById(id, callback) {
 		} else if (error) {
 			logger.error(error);
 			callback(500, "Internal error", null);
-		} else if (data === null) {
+		} else if (isEmpty(data)) {
 			callback(404, "Content not found on the server", null);
 		} else {
 			callback(200, "Marked passed", {

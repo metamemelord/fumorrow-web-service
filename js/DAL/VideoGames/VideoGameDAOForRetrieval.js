@@ -23,7 +23,7 @@ try {
 require('assert').notEqual(connectionForRetrieval, null);
 
 const videoGameSchema = require('../../Models/VideoGamesModel');
-let VideoGameDBService = connectionForRetrieval.model('videoGame', videoGameSchema);
+let VideoGameDBService = connectionForRetrieval.model('videogame', videoGameSchema);
 
 
 function returnAll(callback) {

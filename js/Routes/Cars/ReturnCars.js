@@ -3,7 +3,7 @@ const DAL = require('../../DAL/index');
 const carDAOForRetrieval = DAL.CarDAOForRetrieval;
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+const isEmpty = require('../../Utils/HelperFunctions').isEmpty;
 var returnCarsRouter = express.Router();
 
 returnCarsRouter.post('/api/cars', function (req, res) {

@@ -3,10 +3,10 @@ const DAL = require('../../DAL/index');
 const videoGameDAOForRetrieval = DAL.VideoGameDAOForRetrieval;
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
 var returnVideoGamesRouter = express.Router();
 
-returnVideoGamesRouter.post('/api/videoGames', function (req, res) {
+returnVideoGamesRouter.post('/api/videogames', function (req, res) {
     try {
         if (isEmpty(req.body.begin) || isEmpty(req.body.limit)) {
             if (isEmpty(req.body.filter)) {

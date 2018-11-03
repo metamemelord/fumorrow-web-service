@@ -4,7 +4,7 @@ const carDAOForRetrieval = DAL.CarDAOForRetrieval;
 const carByIdRouter = express.Router();
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers').LoggerFactory.getLogger(filename);
-const isNotEmpty = require('../../Misc/HelperFunctions').isNotEmpty;
+const isNotEmpty = require('../../Utils/HelperFunctions').isNotEmpty;
 
 carByIdRouter.post('/api/car/:id', function (req, res) {
     try {

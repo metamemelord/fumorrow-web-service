@@ -3,17 +3,17 @@ const DAL = require('../../DAL/index');
 const videoGameRequestVerifier = require('../VideoGames/AddToVideoGameRequestVerifier');
 const videoGameDAO = DAL.VideoGameDAO;
 const jwt = require('jsonwebtoken');
-const helpers = require("../../Misc/HelperFunctions");
-const tokenVerifier = require('./../../Misc/Token/TokenVerifier');
-const tokenAuthCheck = require('./../../Misc/Token/TokenAuthCheck');
+const helpers = require("../../Utils/HelperFunctions");
+const tokenVerifier = require('./../../Utils/Token/TokenVerifier');
+const tokenAuthCheck = require('./../../Utils/Token/TokenAuthCheck');
 const md5 = require('md5');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+const isEmpty = helpers.isEmpty;
 
 const modifyVideoGameRouter = express.Router();
 
-modifyVideoGameRouter.post('/api/videoGame/add', tokenVerifier, tokenAuthCheck, videoGameRequestVerifier, function (req, res) {
+modifyVideoGameRouter.post('/api/videogame/add', tokenVerifier, tokenAuthCheck, videoGameRequestVerifier, function (req, res) {
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
@@ -33,7 +33,7 @@ modifyVideoGameRouter.post('/api/videoGame/add', tokenVerifier, tokenAuthCheck, 
                     "data": null
                 });
             } else {
-                if (!authData['privilages'].includes('videoGames')) {
+                if (!authData['privilages'].includes('video_games')) {
                     return res.status(403).json({
                         "status": {
                             "code": 403,
@@ -53,35 +53,31 @@ modifyVideoGameRouter.post('/api/videoGame/add', tokenVerifier, tokenAuthCheck, 
                         }),
                         uid: "",
                         directors: videoGameData.directors,
-                        image_provider: videoGameData.image_provider,
-                        image_url: videoGameData.image_url,
-                        composer: videoGameData.composer,
+                        composers: videoGameData.composers,
                         engine: videoGameData.engine,
-                        writer: videoGameData.writer,
-                        designer: videoGameData.designer,
-                        developer: videoGameData.developer,
+                        writers: videoGameData.writers,
+                        designers: videoGameData.designers,
+                        developers: videoGameData.developers,
                         series: videoGameData.series,
-                        publisher: videoGameData.publisher,
-                        platform: videoGameData.platform,
-                        genre: videoGameData.genre,
-                        summary: videoGameData.summary,
+                        platforms: videoGameData.platforms,
+                        genres: videoGameData.genres,
                         modes: videoGameData.modes,
+                        images: videoGameData.images,
+                        videos: videoGameData.videos,
+                        texts: videoGameData.texts,
+                        partners: videoGameData.partners,
                         awards: videoGameData.awards,
-                        trivia: videoGameData.trivia,
-                        trailers: videoGameData.trailers,
-                        peervideo: videoGameData.peervideo,
-                        buy_website: videoGameData.buy_website,
-                        description: videoGameData.description,
-                        referrer_name: videoGameData.referrer_name,
                         is_sponsored: videoGameData.is_sponsored,
                         is_released: false,
                         is_live: videoGameData.is_live,
+                        click_counter: videoGameData.click_counter,
                         external_ratings: videoGameData.external_ratings,
-                        is_partner_sponsored: false
+                        predicted_ratings: videoGameData.predicted_ratings,
+                        favorited_by: videoGameData.favorited_by,
+                        user_visit_info: videoGameData.user_visit_info,
                     }
                     var uniqueId = videoGameObject.title + videoGameObject.release_date.toString() + videoGameData.referrerName;
-                    uniqueId = uniqueId.replace(/\s/g, '');
-                    videoGameObject.uid = md5(uniqueId);
+                    videoGameObject.uid = md5(uniqueId.replace(/\s/g, ''));
                     videoGameObject.genres.sort();
                     videoGameObject.is_released = helpers.checkDate(videoGameObject.release_date);
                     videoGameDAO.modifyVideoGame(videoGameObject, function (status, message, data) {

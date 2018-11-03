@@ -22,95 +22,73 @@ var videoGamesSchema = new mongoose.Schema({
     },
     directors: {
         type: Array,
-        required: true
+        default: []
     },
-    image_provider: {
-        type: String,
-        lowercase: true,
-        required: true
-    },
-    image_url: {
-        type: String,
-        required: true
-    },
-    composer: {
-        type: String,
-        required: false
+    composers: {
+        type: Array,
+        default: []
     },
     engine: {
         type: String,
         required: false
     },
-    writer: {
-        type: String,
-        required: false
+    writers: {
+        type: Array,
+        default: []
     },
-    designer: {
-        type: String,
-        required: false
+    designers: {
+        type: Array,
+        default: []
     },
-    developer: {
-        type: String,
-        required: false
+    developers: {
+        type: Array,
+        default: []
     },
     series: {
         type: String,
         required: false
     },
-    publisher: {
-        type: String,
-        required: false
+    platforms: {
+        type: Array,
+        default: []
     },
-    platform: {
-        type: String,
-        required: false
-    },
-    genre: {
-        type: String,
-        required: false
-    },
-    summary: {
-        type: String,
-        required: false
+    genres: {
+        type: Array,
+        default: []
     },
     modes: {
-        type: String,
-        required: false
+        type:Array,
+        default: []
+    },
+    images: {
+        type: Array,
+        default: []
+    },
+    videos: {
+        type: Array,
+        default: []
+    },
+    texts: {
+        type: Array,
+        default: []
+    },
+    partners: {
+        type: Array,
+        default: []
     },
     awards: {
-        type: String,
-        required: false
-    },
-    trivia: {
-        type: String,
-        required: false
-    },
-    trailers: {
         type: Array,
         default: []
-    },
-    peervideo: {
-        type: Array,
-        default: []
-    },
-    buy_website: {
-        type: String,
-        required: false
-    },
-    description: {
-        type: String,
-        required: true
-    },
-    referrer_name: {
-        type: String,
-        lowercase: true,
-        required: true
     },
     is_sponsored: {
         type: Boolean,
         default: false
     },
     is_released: {
+        type: Boolean,
+        default: false
+    },
+    is_live: {
         type: Boolean,
         default: false
     },
@@ -133,10 +111,6 @@ var videoGamesSchema = new mongoose.Schema({
     user_visit_info: {
         type: Array,
         default: []
-    },
-    is_partner_sponsored: {
-        type: Boolean,
-        default: false
     },
     recheck_needed: {
         type: Boolean,
