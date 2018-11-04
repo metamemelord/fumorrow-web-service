@@ -3,12 +3,12 @@ const DAL = require('../../DAL/index');
 const videoGameDAOForRetrieval = DAL.VideoGameDAOForRetrieval;
 const uncheckedVideoGamesRouter = express.Router();
 const jwt = require('jsonwebtoken');
-const tokenVerifier = require('../../Misc/Token/TokenVerifier');
-const tokenAuthCheck = require('../../Misc/Token/TokenAuthCheck');
+const tokenVerifier = require('../../Utils/Token/TokenVerifier');
+const tokenAuthCheck = require('../../Utils/Token/TokenAuthCheck');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
-uncheckedVideoGamesRouter.post('/api/videoGames/unchecked', tokenVerifier, tokenAuthCheck, function (req, res) {
+uncheckedVideoGamesRouter.post('/api/videogames/unchecked', tokenVerifier, tokenAuthCheck, function (req, res) {
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
@@ -28,7 +28,7 @@ uncheckedVideoGamesRouter.post('/api/videoGames/unchecked', tokenVerifier, token
                     "data": null
                 });
             } else {
-                if (!authData['privilages'].includes('videoGames')) {
+                if (!authData['privilages'].includes('video_games')) {
                     return res.status(403).json({
                         "status": {
                             "code": 403,

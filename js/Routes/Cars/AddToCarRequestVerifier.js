@@ -1,11 +1,11 @@
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+const isEmpty = require('../../Utils/HelperFunctions').isEmpty;
 
 module.exports = (req, res, next) => {
     try {
         if (isEmpty(req.body.car_name) || isEmpty(req.body.brand_name) || isEmpty(req.body.month) ||
-            isEmpty(req.body.year) || isEmpty(req.body.description) || isEmpty(req.body.referrer_name)) {
+            isEmpty(req.body.year)) {
             return res.status(400).json({
                 "status": {
                     "code": 400,

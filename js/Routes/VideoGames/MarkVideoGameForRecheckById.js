@@ -4,12 +4,12 @@ const videoGameIdVerifier = require('../RouteUtils').requestIdVerifier;
 const videoGameDAO = DAL.VideoGameDAO;
 const MarkVideoGameForRecheckRouter = express.Router();
 const jwt = require('jsonwebtoken');
-const tokenVerifier = require('../../Misc/Token/TokenVerifier');
-const tokenAuthCheck = require('../../Misc/Token/TokenAuthCheck');
+const tokenVerifier = require('../../Utils/Token/TokenVerifier');
+const tokenAuthCheck = require('../../Utils/Token/TokenAuthCheck');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
-MarkVideoGameForRecheckRouter.post('/api/videoGame/mark_recheck', tokenVerifier, tokenAuthCheck, videoGameIdVerifier, function (req, res) {
+MarkVideoGameForRecheckRouter.post('/api/videogame/mark_recheck', tokenVerifier, tokenAuthCheck, videoGameIdVerifier, function (req, res) {
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
@@ -29,7 +29,7 @@ MarkVideoGameForRecheckRouter.post('/api/videoGame/mark_recheck', tokenVerifier,
                     "data": null
                 });
             } else {
-                if (!authData['privilages'].includes('videoGames')) {
+                if (!authData['privilages'].includes('video_games')) {
                     return res.status(403).json({
                         "status": {
                             "code": 403,

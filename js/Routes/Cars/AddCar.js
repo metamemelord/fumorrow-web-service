@@ -3,13 +3,13 @@ const DAL = require('../../DAL/index');
 const carRequestVerifier = require('../Cars/AddToCarRequestVerifier');
 const carDAO = DAL.CarDAO;
 const jwt = require('jsonwebtoken');
-const helpers = require("../../Misc/HelperFunctions");
-const tokenVerifier = require('./../../Misc/Token/TokenVerifier');
-const tokenAuthCheck = require('./../../Misc/Token/TokenAuthCheck');
+const helpers = require('../../Utils/HelperFunctions');
+const tokenVerifier = require('../../Utils/Token/TokenVerifier');
+const tokenAuthCheck = require('../../Utils/Token/TokenAuthCheck');
 const md5 = require('md5');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Misc/HelperFunctions').isEmpty;
+const isEmpty = helpers.isEmpty;
 
 const addCarRouter = express.Router();
 
@@ -63,30 +63,24 @@ addCarRouter.post('/api/car/add', tokenVerifier, tokenAuthCheck, carRequestVerif
                         transmission: carData.transmission,
                         top_speed: carData.top_speed,
                         fuel_type: carData.fuel_type,
-                        boot_space: carData.boot_space,
                         power_windows: carData.power_windows,
                         airbags: carData.airbags,
                         ABS: carData.ABS,
-                        centrallocking: carData.centrallocking,
-                        foglamps: carData.foglamps,
+                        central_locking: carData.central_locking,
+                        fog_lamps: carData.fog_lamps,
+                        images: carData.images,
                         videos: carData.videos,
-                        video_credits: carData.video_credits,
+                        texts: carData.texts,
+                        partners: carData.partners,
                         related_cars: carData.related_cars,
-                        description: carData.description,
                         key_features: carData.key_features,
-                        image_provider: carData.image_provider,
-                        image_url: carData.image_url,
-                        referrer_name: carData.referrer_name,
-                        redirect_url: carData.redirect_url,
                         is_sponsored: carData.is_sponsored,
                         is_released: false,
                         is_live: carData.is_live,
-                        external_ratings: carData.external_ratings,
-                        is_partner_sponsored: carData.is_partner_sponsored,
-                        is_sponsored_banner: carData.is_sponsored_banner
+                        external_ratings: carData.external_ratings
                     }
-                    length = 12 - bookObject._id.length;
-                    bookObject._id += helpers.generateNewId(length);
+                    length = 12 - carObject._id.length;
+                    carObject._id += helpers.generateSalt(length);
                     var uniqueId = carObject.car_name + carObject.release_date.toString() + carData.brand_name;
                     uniqueId = uniqueId.replace(/\s/g, '');
                     carObject.uid = md5(uniqueId);

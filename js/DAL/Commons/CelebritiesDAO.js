@@ -1,5 +1,6 @@
 const mysql = require('mysql2');
 const helpers = require('./../../Utils/HelperFunctions');
+const isEmpty = helpers.isEmpty;
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
@@ -95,7 +96,7 @@ function getCelebrityById(pid, callback) {
                 if (error) {
                     logger.error(error);
                     return callback(500, "Internal server error", null);
-                } if (helpers.isEmpty(celebrityDataFromDb)) {
+                } if (isEmpty(celebrityDataFromDb)) {
                     return callback(404, "Celebrity not found", null);
                 } else {
                     return callback(200, "Success", celebrityDataFromDb[0]);
@@ -235,29 +236,31 @@ function searchCelebrityByNameTokens(nameTokens, callback) {
                 logger.error(error);
                 return callback(500, "Could not connect to database", null);
             }
-            var checkFirstEntry = 1;
             var sql = "select pid, first_name, middle_name, last_name, profession, dob, image_link from celebrities where (";
-            nameTokens.forEach(function (token) {
-                if(!checkFirstEntry) {
-                    sql += "or "
+            var preparedNameTokens = [];
+            for (var i = 0; i < nameTokens.length; i++) {
+                preparedNameTokens.push('%' + nameTokens[i] + '%');
+                preparedNameTokens.push('%' + nameTokens[i] + '%');
+                preparedNameTokens.push('%' + nameTokens[i] + '%');
+                if (i) {
+                    sql += " or "
                 }
-                sql += `first_name like '%${token}%'`;
-                sql += ` or middle_name like '%${token}%'`;
-                sql += ` or last_name like '%${token}%'`
-                checkFirstEntry = 0;
-            });
+                sql += "first_name like ?";
+                sql += " or middle_name like ?";
+                sql += " or last_name like ?";
+            }
             sql += ') and is_approved=1;'
-            con.query(sql, function (error, data) {
+            con.query(sql, preparedNameTokens, function (error, data) {
                 con.end();
                 if (error) {
                     logger.error(error);
                     return callback(500, "Internal server error", null);
                 } else {
                     var searchResults = [];
-                    data.forEach(function(person) {
+                    data.forEach(function (person) {
                         searchResults.push({
                             "pid": person.pid,
-                            "name" : composeFullName(person.first_name, person.middle_name, person.last_name),
+                            "name": composeFullName(person.first_name, person.middle_name, person.last_name),
                             "dob": person.dob,
                             "image_link": person.image_link,
                         });
@@ -274,8 +277,8 @@ function searchCelebrityByNameTokens(nameTokens, callback) {
 
 function composeFullName(first_name, middle_name, last_name) {
     return helpers.toTitleCase(first_name) + " "
-    + (middle_name == "" ? "" : helpers.toTitleCase(middle_name) + " ")
-    + (last_name == "" ? "" : helpers.toTitleCase(last_name));
+        + (isEmpty(middle_name) ? "" : helpers.toTitleCase(middle_name) + " ")
+        + (isEmpty(last_name) ? "" : helpers.toTitleCase(last_name));
 }
 
 module.exports = {

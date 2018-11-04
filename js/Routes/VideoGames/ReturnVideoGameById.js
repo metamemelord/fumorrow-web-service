@@ -4,9 +4,9 @@ const videoGameDAOForRetrieval = DAL.VideoGameDAOForRetrieval;
 const videoGameByIdRouter = express.Router();
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isNotEmpty = require('./../../Misc/HelperFunctions').isNotEmpty;
+const isNotEmpty = require('./../../Utils/HelperFunctions').isNotEmpty;
 
-videoGameByIdRouter.post('/api/videoGame/:id', function (req, res) {
+videoGameByIdRouter.post('/api/videogame/:id', function (req, res) {
     try {
         if (isNotEmpty(req.body._id) || isNotEmpty(req.params.id)) {
             var id = isNotEmpty(req.params.id) ? req.params.id : req.body._id;
