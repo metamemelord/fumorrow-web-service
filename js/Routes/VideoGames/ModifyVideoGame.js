@@ -13,7 +13,7 @@ const isEmpty = helpers.isEmpty;
 
 const modifyVideoGameRouter = express.Router();
 
-modifyVideoGameRouter.post('/api/videogame/add', tokenVerifier, tokenAuthCheck, videoGameRequestVerifier, function (req, res) {
+modifyVideoGameRouter.post('/api/videogame/modify', tokenVerifier, tokenAuthCheck, videoGameRequestVerifier, function (req, res) {
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
