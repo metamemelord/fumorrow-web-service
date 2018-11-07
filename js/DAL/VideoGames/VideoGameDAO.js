@@ -25,21 +25,21 @@ require('assert').notEqual(connection, null);
 // Importing movie schema service
 
 const videoGameSchema = require('../../Models/VideoGamesModel');
-let VideoGameDBService = connection.model('videogame', videoGameSchema);
+let videoGameDBService = connection.model('videogame', videoGameSchema);
 
 // Service methods
 
 function addVideoGame(object, callback) {
 	try {
 		object._id = mongoose.Types.ObjectId(object._id);
-		VideoGameDBService.findOne({ $or: [{ "_id": object._id }, { "uid": object.uid }] }, function (error, data) {
+		videoGameDBService.findOne({ $or: [{ "_id": object._id }, { "uid": object.uid }] }, function (error, data) {
 			if (data) {
 				callback(409, "Entry already exists", null);
 			} else if (error) {
 				logger.error(error);
 				callback(500, "Internal server error", null);
 			} else {
-				var videoGameToAdd = new VideoGameDBService(object);
+				var videoGameToAdd = new videoGameDBService(object);
 				videoGameToAdd.save(object, function (error) {
 					if (error) {
 						if (error.name === 'ValidationError') {
@@ -63,7 +63,7 @@ function addVideoGame(object, callback) {
 
 function removeById(id, callback) {
 	try {
-		VideoGameDBService.findOneAndDelete({
+		videoGameDBService.findOneAndDelete({
 			_id: id
 		}, function (error, data) {
 			if (error) {
@@ -89,26 +89,35 @@ function modifyVideoGame(object, callback) {
 	try {
 		object.recheck_needed = false;
 		object.is_approved = false;
-		VideoGameDBService.findOneAndUpdate({ "_id": object._id },
-			object,
-			{ overwrite: true },
-			function (error, data) {
-				if (error) {
-					if (error.name === 'ValidationError') {
-						callback(400, "Error while parsing values", null);
-					} else {
-						logger.error(error);
-						callback(500, "Error while modifying the videogame", null);
-					}
-				} else if (isEmpty(data)) {
-					callback(404, "Content not found on the server", null);
-				} else {
-					callback(200, "Successfully modified", {
-						"_id": object._id,
-						"name": object.title
+		videoGameDBService.findOne({ "uid": object.uid }, function (error, data) {
+			if (error) {
+				logger.error(error);
+				return callback(500, "Internal server error", null);
+			} else if (!isEmpty(data) && !(object.override_uid_check)) {
+				return callback(409, "Entry already exists", null);
+			} else {
+				videoGameDBService.findOneAndUpdate({ "_id": object._id },
+					object,
+					{ overwrite: true },
+					function (error, data) {
+						if (error) {
+							if (error.name === 'ValidationError') {
+								callback(400, "Error while parsing values", null);
+							} else {
+								logger.error(error);
+								callback(500, "Error while modifying the videogame", null);
+							}
+						} else if (isEmpty(data)) {
+							callback(404, "Content not found on the server", null);
+						} else {
+							callback(200, "Successfully modified", {
+								"_id": object._id,
+								"name": object.title
+							});
+						}
 					});
-				}
-			});
+			}
+		});
 	} catch (error) {
 		logger.error(error);
 		callback(500, "Internal server error", null);
@@ -116,7 +125,7 @@ function modifyVideoGame(object, callback) {
 }
 
 function incrementCounterById(id, callback) {
-	VideoGameDBService.findOneAndUpdate({ _id: id }, {
+	videoGameDBService.findOneAndUpdate({ _id: id }, {
 		$inc: {
 			'click_counter': 1
 		}
@@ -135,7 +144,7 @@ function incrementCounterById(id, callback) {
 }
 
 function approveById(id, callback) {
-	VideoGameDBService.findOneAndUpdate({ _id: id }, {
+	videoGameDBService.findOneAndUpdate({ _id: id }, {
 		'is_approved': true,
 		'recheck_needed': false
 	}, function (error, data) {
@@ -156,7 +165,7 @@ function approveById(id, callback) {
 }
 
 function markForRecheckById(id, callback) {
-	VideoGameDBService.findOneAndUpdate({ _id: id }, {
+	videoGameDBService.findOneAndUpdate({ _id: id }, {
 		'recheck_needed': true,
 		'is_approved': false
 	}, function (error, data) {

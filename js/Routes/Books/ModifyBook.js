@@ -48,9 +48,18 @@ modifyBookRouter.post('/api/book/modify',
                             },
                             "data": null
                         });
+                    } else if (isEmpty(req.body.override_uid_check)) {
+                        return res.status(400).json({
+                            "status": {
+                                "code": 400,
+                                "message": "Overriding UID check not specified"
+                            },
+                            "data": null
+                        });
                     } else {
                         var bookData = req.body;
                         var bookObject = {
+                            override_uid_check: bookData.override_uid_check,
                             _id: bookData._id,
                             book_name: bookData.book_name,
                             release_date: new Date(bookData.year, bookData.month, bookData.day).toLocaleString('en-US', {

@@ -25,21 +25,21 @@ require('assert').notEqual(connection, null);
 // Importing movie schema service
 
 const carSchema = require('../../Models/CarsModel');
-let CarDBService = connection.model('car', carSchema);
+let carDBService = connection.model('car', carSchema);
 
 // Service methods
 
 function addCar(object, callback) {
 	try {
 		object._id = mongoose.Types.ObjectId(object._id);
-		CarDBService.findOne({ $or: [{ "_id": object._id }, { "uid": object.uid }] }, function (error, data) {
+		carDBService.findOne({ $or: [{ "_id": object._id }, { "uid": object.uid }] }, function (error, data) {
 			if (data) {
 				callback(409, "Entry already exists", null);
 			} else if (error) {
 				logger.error(error);
 				callback(500, "Internal server error", null);
 			} else {
-				var carToAdd = new CarDBService(object);
+				var carToAdd = new carDBService(object);
 				carToAdd.save(object, function (error) {
 					if (error) {
 						if (error.name === 'ValidationError') {
@@ -63,7 +63,7 @@ function addCar(object, callback) {
 
 function removeById(id, callback) {
 	try {
-		CarDBService.findOneAndRemove({
+		carDBService.findOneAndRemove({
 			_id: id
 		}, function (error, data) {
 			if (error) {
@@ -88,26 +88,35 @@ function modifyCar(object, callback) {
 	try {
 		object.recheck_needed = false;
 		object.is_approved = false;
-		CarDBService.findOneAndUpdate({ "_id": object._id },
-			object,
-			{ overwrite: true },
-			function (error, data) {
-				if (error) {
-					if (error.name === 'ValidationError') {
-						callback(400, "Error while parsing values", null);
-					} else {
-						logger.error(error);
-						callback(500, "Error while modifying the car", null);
-					}
-				} else if (isEmpty(data)) {
-					callback(404, "Content not found on the server", null);
-				} else {
-					callback(200, "Successfully modified", {
-						"_id": object._id,
-						"car_name": object.car_name
+		carDBService.findOne({ "uid": object.uid }, function (error, data) {
+			if (error) {
+				logger.error(error);
+				return callback(500, "Internal server error", null);
+			} else if (!isEmpty(data) && !(object.override_uid_check)) {
+				return callback(409, "Entry already exists", null);
+			} else {
+				carDBService.findOneAndUpdate({ "_id": object._id },
+					object,
+					{ overwrite: true },
+					function (error, data) {
+						if (error) {
+							if (error.name === 'ValidationError') {
+								callback(400, "Error while parsing values", null);
+							} else {
+								logger.error(error);
+								callback(500, "Error while modifying the car", null);
+							}
+						} else if (isEmpty(data)) {
+							callback(404, "Content not found on the server", null);
+						} else {
+							callback(200, "Successfully modified", {
+								"_id": object._id,
+								"car_name": object.car_name
+							});
+						}
 					});
-				}
-			});
+			}
+		});
 	} catch (error) {
 		logger.error(error);
 		callback(500, "Internal server error", null);
@@ -115,7 +124,7 @@ function modifyCar(object, callback) {
 }
 
 function incrementCounterById(id, callback) {
-	CarDBService.findOneAndUpdate({ _id: id }, {
+	carDBService.findOneAndUpdate({ _id: id }, {
 		$inc: {
 			'click_counter': 1
 		}
@@ -134,7 +143,7 @@ function incrementCounterById(id, callback) {
 }
 
 function approveById(id, callback) {
-	CarDBService.findOneAndUpdate({ _id: id }, {
+	carDBService.findOneAndUpdate({ _id: id }, {
 		'is_approved': true,
 		'recheck_needed': false
 	}, function (error, data) {
@@ -154,7 +163,7 @@ function approveById(id, callback) {
 }
 
 function markForRecheckById(id, callback) {
-	CarDBService.findOneAndUpdate({ _id: id }, {
+	carDBService.findOneAndUpdate({ _id: id }, {
 		'recheck_needed': true,
 		'is_approved': false
 	}, function (error, data) {

@@ -41,11 +41,20 @@ modifyVideoGameRouter.post('/api/videogame/modify', tokenVerifier, tokenAuthChec
                         },
                         "data": null
                     });
+                } else if (isEmpty(req.body.override_uid_check)) {
+                    return res.status(400).json({
+                        "status": {
+                            "code": 400,
+                            "message": "Overriding UID check not specified"
+                        },
+                        "data": null
+                    });
                 } else {
                     var videoGameData = req.body;
                     if (isEmpty(videoGameData.hour)) videoGameData.hour = 0;
                     if (isEmpty(videoGameData.minute)) videoGameData.minute = 0;
                     var videoGameObject = {
+                        override_uid_check: videoGameData.override_uid_check,
                         _id: videoGameData._id,
                         title: videoGameData.title,
                         release_date: new Date(videoGameData.year, videoGameData.month, videoGameData.day, videoGameData.hour, videoGameData.minute).toLocaleString('en-US', {
@@ -74,7 +83,7 @@ modifyVideoGameRouter.post('/api/videogame/modify', tokenVerifier, tokenAuthChec
                         external_ratings: videoGameData.external_ratings,
                         predicted_ratings: videoGameData.predicted_ratings,
                         favorited_by: videoGameData.favorited_by,
-                        user_visit_info: videoGameData.user_visit_info,
+                        user_visit_info: videoGameData.user_visit_info
                     }
                     var uniqueId = videoGameObject.title + videoGameObject.release_date.toString() + videoGameData.referrerName;
                     videoGameObject.uid = md5(uniqueId.replace(/\s/g, ''));
