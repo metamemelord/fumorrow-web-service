@@ -24,29 +24,29 @@ require('assert').notEqual(connection, null);
 
 // Importing movie schema service
 
-const bookSchema = require('../../Models/BooksModel');
-let bookDBService = connection.model('book', bookSchema);
+const carSchema = require('../../Models/CarsModel');
+let carDBService = connection.model('car', carSchema);
 
 // Service methods
 
-function addBook(object, callback) {
+function addCar(object, callback) {
 	try {
 		object._id = mongoose.Types.ObjectId(object._id);
-		bookDBService.findOne({ $or: [{ "_id": object._id }, { "uid": object.uid }] }, function (error, data) {
+		carDBService.findOne({ $or: [{ "_id": object._id }, { "uid": object.uid }] }, function (error, data) {
 			if (data) {
 				callback(409, "Entry already exists", null);
 			} else if (error) {
 				logger.error(error);
 				callback(500, "Internal server error", null);
 			} else {
-				var bookToAdd = new bookDBService(object);
-				bookToAdd.save(object, function (error) {
+				var carToAdd = new carDBService(object);
+				carToAdd.save(object, function (error) {
 					if (error) {
 						if (error.name === 'ValidationError') {
 							callback(400, "Error while parsing values", null);
 						} else {
 							logger.error(error);
-							callback(500, "Error while saving the book", null);
+							callback(500, "Error while saving the car", null);
 						}
 					} else callback(201, "Success", {
 						"id": object._id,
@@ -63,7 +63,7 @@ function addBook(object, callback) {
 
 function removeById(id, callback) {
 	try {
-		bookDBService.findOneAndRemove({
+		carDBService.findOneAndRemove({
 			_id: id
 		}, function (error, data) {
 			if (error) {
@@ -73,7 +73,7 @@ function removeById(id, callback) {
 				callback(404, "Entry does not exist", null);
 			} else {
 				callback(200, "Success", {
-					"name": data.book_name
+					"name": data.car_name
 				});
 			}
 		})
@@ -84,18 +84,18 @@ function removeById(id, callback) {
 	}
 }
 
-function modifyBook(object, callback) {
+function modifyCar(object, callback) {
 	try {
 		object.recheck_needed = false;
 		object.is_approved = false;
-		bookDBService.findOne({ "uid": object.uid }, function (error, data) {
+		carDBService.findOne({ "uid": object.uid }, function (error, data) {
 			if (error) {
 				logger.error(error);
 				return callback(500, "Internal server error", null);
 			} else if (!isEmpty(data) && !(object.override_uid_check)) {
 				return callback(409, "Entry already exists", null);
 			} else {
-				bookDBService.findOneAndUpdate({ "_id": object._id },
+				carDBService.findOneAndUpdate({ "_id": object._id },
 					object,
 					{ overwrite: true },
 					function (error, data) {
@@ -104,14 +104,14 @@ function modifyBook(object, callback) {
 								callback(400, "Error while parsing values", null);
 							} else {
 								logger.error(error);
-								callback(500, "Error while modifying the book", null);
+								callback(500, "Error while modifying the car", null);
 							}
 						} else if (isEmpty(data)) {
 							callback(404, "Content not found on the server", null);
 						} else {
 							callback(200, "Successfully modified", {
 								"_id": object._id,
-								"book_name": object.book_name
+								"car_name": object.car_name
 							});
 						}
 					});
@@ -124,7 +124,7 @@ function modifyBook(object, callback) {
 }
 
 function incrementCounterById(id, callback) {
-	bookDBService.findOneAndUpdate({ _id: id }, {
+	carDBService.findOneAndUpdate({ _id: id }, {
 		$inc: {
 			'click_counter': 1
 		}
@@ -143,7 +143,7 @@ function incrementCounterById(id, callback) {
 }
 
 function approveById(id, callback) {
-	bookDBService.findOneAndUpdate({ _id: id }, {
+	carDBService.findOneAndUpdate({ _id: id }, {
 		'is_approved': true,
 		'recheck_needed': false
 	}, function (error, data) {
@@ -156,16 +156,16 @@ function approveById(id, callback) {
 			callback(404, "Content not found on the server", null);
 		} else {
 			callback(200, "Approved", {
-				"_id": data._id,
-				"book_name": data.book_name
+				"_id": id
 			});
 		}
 	});
 }
 
 function markForRecheckById(id, callback) {
-	bookDBService.findOneAndUpdate({ _id: id }, {
-		'recheck_needed': true
+	carDBService.findOneAndUpdate({ _id: id }, {
+		'recheck_needed': true,
+		'is_approved': false
 	}, function (error, data) {
 		if (error instanceof mongoose.CastError) {
 			callback(412, "Invalid ID", null);
@@ -175,18 +175,17 @@ function markForRecheckById(id, callback) {
 		} else if (isEmpty(data)) {
 			callback(404, "Content not found on the server", null);
 		} else {
-			callback(200, "Checked", {
-				"_id": data._id,
-				"book_name": data.book_name
+			callback(200, "Marked for recheck", {
+				"_id": id
 			});
 		}
 	});
 }
 
 module.exports = {
-	addBook: addBook,
+	addCar: addCar,
 	removeById: removeById,
-	modifyBook: modifyBook,
+	modifyCar: modifyCar,
 	incrementCounterById: incrementCounterById,
 	approveById: approveById,
 	markForRecheckById: markForRecheckById

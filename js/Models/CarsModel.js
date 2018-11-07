@@ -29,7 +29,7 @@ var carSchema = new mongoose.Schema({
         type: Array,
         required: false
     },
-    released_date: {
+    release_date: {
         type: Date,
         required: true
     },
@@ -61,12 +61,8 @@ var carSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    boot_space: {
-        type: Number,
-        required: false
-    },
     power_windows: {
-        type: String,
+        type: Boolean,
         required: false
     },
     airbags: {
@@ -77,11 +73,11 @@ var carSchema = new mongoose.Schema({
         type: Boolean,
         required: false
     },
-    centrallocking: {
+    central_locking: {
         type: Boolean,
         required: false
     },
-    foglamps: {
+    fog_lamps: {
         type: String,
         required: false
     },
@@ -117,9 +113,17 @@ var carSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    is_live: {
+        type: Boolean,
+        default: false
+    },
     click_counter: {
         type: Number,
         default: 0
+    },
+    external_ratings: {
+        type: Array,
+        default: []
     },
     predicted_ratings: {
         type: Array,
@@ -140,7 +144,7 @@ var carSchema = new mongoose.Schema({
     is_approved: {
         type: Boolean,
         default: false
-    },
+    }
 });
 
 module.exports = carSchema;

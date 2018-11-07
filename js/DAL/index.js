@@ -4,6 +4,10 @@ const BookDAO = require('./Books/BookDAO');
 const BookDAOForRetrieval = require('./Books/BookDAOForRetrieval');
 const BikeDAO = require('./Bikes/BikeDAO');
 const BikeDAOForRetrieval = require('./Bikes/BikeDAOForRetrieval');
+const CarDAO = require('./Cars/CarDAO');
+const CarDAOForRetrieval = require('./Cars/CarDAOForRetrieval');
+const VideoGameDAO = require('./VideoGames/VideoGameDAO');
+const VideoGameDAOForRetrieval = require('./VideoGames/VideoGameDAOForRetrieval');
 
 // Common routes
 
@@ -18,6 +22,10 @@ module.exports = {
     BookDAOForRetrieval: BookDAOForRetrieval,
     BikeDAO: BikeDAO,
     BikeDAOForRetrieval: BikeDAOForRetrieval,
+    CarDAO: CarDAO,
+    CarDAOForRetrieval: CarDAOForRetrieval,
+    VideoGameDAO: VideoGameDAO,
+    VideoGameDAOForRetrieval: VideoGameDAOForRetrieval,
     LoginDAO: LoginDAO,
     RegistrationDAO: RegistrationDAO,
     CelebritiesDAO: CelebritiesDAO

@@ -48,11 +48,20 @@ modifyMovieRouter.post('/api/movie/modify',
                             },
                             "data": null
                         });
+                    } else if (isEmpty(req.body.override_uid_check)) {
+                        return res.status(400).json({
+                            "status": {
+                                "code": 400,
+                                "message": "Overriding UID check not specified"
+                            },
+                            "data": null
+                        });
                     } else {
                         var movieData = req.body;
                         if (isEmpty(movieData.hour)) movieData.hour = 0;
                         if (isEmpty(movieData.minute)) movieData.minute = 0;
                         var movieObject = {
+                            override_uid_check: movieData.override_uid_check,
                             _id: movieData._id,
                             title: movieData.title,
                             release_date: new Date(movieData.year, movieData.month, movieData.day, movieData.hour, movieData.minute).toLocaleString('en-US', {

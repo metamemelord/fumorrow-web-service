@@ -22,12 +22,12 @@ try {
 
 require('assert').notEqual(connectionForRetrieval, null);
 
-const bookSchema = require('../../Models/BooksModel');
-let bookDBService = connectionForRetrieval.model('book', bookSchema);
+const videoGameSchema = require('../../Models/VideoGamesModel');
+let videoGameDBService = connectionForRetrieval.model('videogame', videoGameSchema);
 
 
 function returnAll(callback) {
-	bookDBService.find({ "is_approved": true }).sort({ "_id": 1 }).exec(function (error, data) {
+	videoGameDBService.find({ "is_approved": true }).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			callback(500, "Internal server error", null);
 		}
@@ -36,7 +36,7 @@ function returnAll(callback) {
 }
 
 function returnInRange(begin, limit, callback) {
-	bookDBService.find({ "is_approved": true }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	videoGameDBService.find({ "is_approved": true }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -46,9 +46,9 @@ function returnInRange(begin, limit, callback) {
 }
 
 function returnAllByFilter(filter, callback) {
-	bookDBService.find({
+	videoGameDBService.find({
 		$and: [
-			{ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] },
+			{ "colors": { "$in": filter } },
 			{ "is_approved": true }
 		]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
@@ -60,9 +60,9 @@ function returnAllByFilter(filter, callback) {
 	});
 }
 function returnInRangeByFilter(filter, begin, limit, callback) {
-	bookDBService.find({
+	videoGameDBService.find({
 		$and: [
-			{ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] },
+			{ "colors": { "$in": filter } },
 			{ "is_approved": true }
 		]
 	}).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
@@ -75,7 +75,7 @@ function returnInRangeByFilter(filter, begin, limit, callback) {
 }
 
 function returnById(id, callback) {
-	bookDBService.findOne({
+	videoGameDBService.findOne({
 		$and: [{ "_id": id }, { "is_approved": true }]
 	}, function (error, data) {
 		if (error) {
@@ -94,7 +94,7 @@ function returnById(id, callback) {
 }
 
 function returnAllForRechecking(callback) {
-	bookDBService.find({
+	videoGameDBService.find({
 		$and: [{ "recheck_needed": true }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
@@ -106,7 +106,7 @@ function returnAllForRechecking(callback) {
 }
 
 function returnAllUnchecked(callback) {
-	bookDBService.find({
+	videoGameDBService.find({
 		$and: [{ "recheck_needed": false }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
@@ -117,37 +117,18 @@ function returnAllUnchecked(callback) {
 	});
 }
 
-
 function returnAllReferrers(callback) {
-	bookDBService.aggregate([
-		{ "$match": { "is_approved": true } },
-		{ "$unwind": "$partners" },
+	videoGameDBService.aggregate([
 		{
-			"$group": {
-				"_id": { "partner_id": "$partners.partner_id", "is_sponsored": "$partners.is_sponsored" },
+			$group: {
+				"_id": "$referrer_name",
 				"count": { "$sum": 1 }
 			}
 		},
-		{ "$sort": { "count": -1 } },
 		{
-			"$group": {
-				"_id": null,
-				"partners": { "$push": { "id": "$_id.partner_id", "is_sponsored": "$_id.is_sponsored", "count": "$count" } }
-			}
-		},
-		{ "$project": { "partners": 1, "_id": 0 } }
-	], function (error, data) {
-		if (error) {
-			logger.error(error);
-			callback(500, "Internal server error", null);
-		} else {
-			callback(200, "Success", data);
+			$sort: { "count": -1 }
 		}
-	});
-}
-
-function returnAllLanguages(callback) {
-	bookDBService.distinct("language", function (error, data) {
+	], function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -166,5 +147,4 @@ module.exports = {
 	getAllForRechecking: returnAllForRechecking,
 	getAllUnchecked: returnAllUnchecked,
 	getAllReferrers: returnAllReferrers,
-	getAllLanguages: returnAllLanguages
 };
