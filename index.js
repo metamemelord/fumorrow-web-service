@@ -39,7 +39,7 @@ fumorrow.use(require('./js/Routes/404'));
 
 // Routes
 
-//Redirecting all the GET requests homepage
+// Redirecting all the GET requests homepage
 
 fumorrow.get('*', function (req, res) {
     try {
