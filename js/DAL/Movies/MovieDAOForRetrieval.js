@@ -24,11 +24,11 @@ try {
 require('assert').notEqual(connectionForRetrieval, null);
 
 const movieSchema = require('../../Models/MovieModel');
-let MovieDBService = connectionForRetrieval.model('movie', movieSchema);
+let movieDBService = connectionForRetrieval.model('movie', movieSchema);
 
 
 function returnAll(callback) {
-	MovieDBService.find({ "is_approved": true }).sort({ "_id": 1 }).exec(function (error, data) {
+	movieDBService.find({ "is_approved": true }).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -38,7 +38,7 @@ function returnAll(callback) {
 }
 
 function returnInRange(begin, limit, callback) {
-	MovieDBService.find({ "is_approved": true }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	movieDBService.find({ "is_approved": true }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -48,7 +48,7 @@ function returnInRange(begin, limit, callback) {
 }
 
 function returnAllByFilter(filter, callback) {
-	MovieDBService.find({
+	movieDBService.find({
 		$and: [
 			{ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] },
 			{ "is_approved": true }
@@ -62,7 +62,7 @@ function returnAllByFilter(filter, callback) {
 	});
 }
 function returnInRangeByFilter(filter, begin, limit, callback) {
-	MovieDBService.find({
+	movieDBService.find({
 		$and: [
 			{ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] },
 			{ "is_approved": true }
@@ -77,7 +77,7 @@ function returnInRangeByFilter(filter, begin, limit, callback) {
 }
 
 function returnById(id, callback) {
-	MovieDBService.findOne({
+	movieDBService.findOne({
 		$and: [{ "_id": id }, { "is_approved": true }]
 	},
 		function (error, data) {
@@ -97,7 +97,7 @@ function returnById(id, callback) {
 }
 
 function returnAllForRechecking(callback) {
-	MovieDBService.find({
+	movieDBService.find({
 		$and: [{ "recheck_needed": true }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
@@ -109,7 +109,7 @@ function returnAllForRechecking(callback) {
 }
 
 function returnAllUnchecked(callback) {
-	MovieDBService.find({
+	movieDBService.find({
 		$and: [{ "recheck_needed": false }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
@@ -122,7 +122,7 @@ function returnAllUnchecked(callback) {
 
 
 function returnAllReferrers(callback) {
-	MovieDBService.aggregate([
+	movieDBService.aggregate([
 		{ "$match": { "is_approved": true } },
 		{ "$unwind": "$partners" },
 		{
@@ -152,7 +152,7 @@ function returnAllReferrers(callback) {
 }
 
 function returnAllLanguages(callback) {
-	MovieDBService.distinct("language", function (error, data) {
+	movieDBService.distinct("language", function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);

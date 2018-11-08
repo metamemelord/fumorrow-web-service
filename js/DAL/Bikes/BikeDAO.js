@@ -25,21 +25,21 @@ require('assert').notEqual(connection, null);
 // Importing movie schema service
 
 const bikeSchema = require('../../Models/BikesModel');
-let BikeDBService = connection.model('bike', bikeSchema);
+let bikeDBService = connection.model('bike', bikeSchema);
 
 // Service methods
 
 function addBike(object, callback) {
 	try {
 		object._id = mongoose.Types.ObjectId(object._id);
-		BikeDBService.findOne({ $or: [{ "_id": object._id }, { "uid": object.uid }] }, function (error, data) {
+		bikeDBService.findOne({ $or: [{ "_id": object._id }, { "uid": object.uid }] }, function (error, data) {
 			if (data) {
 				callback(409, "Entry already exists", null);
 			} else if (error) {
 				logger.error(error);
 				callback(500, "Internal server error", null);
 			} else {
-				var bikeToAdd = new BikeDBService(object);
+				var bikeToAdd = new bikeDBService(object);
 				bikeToAdd.save(object, function (error) {
 					if (error) {
 						if (error.name === 'ValidationError') {
@@ -63,7 +63,7 @@ function addBike(object, callback) {
 
 function removeById(id, callback) {
 	try {
-		BikeDBService.findOneAndRemove({
+		bikeDBService.findOneAndRemove({
 			_id: id
 		}, function (error, data) {
 			if (error) {
@@ -88,26 +88,35 @@ function modifyBike(object, callback) {
 	try {
 		object.recheck_needed = false;
 		object.is_approved = false;
-		BikeDBService.findOneAndUpdate({ "_id": object._id },
-			object,
-			{ overwrite: true },
-			function (error, data) {
-				if (error) {
-					if (error.name === 'ValidationError') {
-						callback(400, "Error while parsing values", null);
-					} else {
-						logger.error(error);
-						callback(500, "Error while modifying the bike", null);
-					}
-				} else if (isEmpty(data)) {
-					callback(404, "Content not found on the server", null);
-				} else {
-					callback(200, "Successfully modified", {
-						"_id": object._id,
-						"bike_name": object.bike_name
+		bikeDBService.findOne({ "uid": object.uid }, function (error, data) {
+			if (error) {
+				logger.error(error);
+				return callback(500, "Internal server error", null);
+			} else if (!isEmpty(data) && !(object.override_uid_check)) {
+				return callback(409, "Entry already exists", null);
+			} else {
+				bikeDBService.findOneAndUpdate({ "_id": object._id },
+					object,
+					{ overwrite: true },
+					function (error, data) {
+						if (error) {
+							if (error.name === 'ValidationError') {
+								callback(400, "Error while parsing values", null);
+							} else {
+								logger.error(error);
+								callback(500, "Error while modifying the bike", null);
+							}
+						} else if (isEmpty(data)) {
+							callback(404, "Content not found on the server", null);
+						} else {
+							callback(200, "Successfully modified", {
+								"_id": object._id,
+								"bike_name": object.bike_name
+							});
+						}
 					});
-				}
-			});
+			}
+		});
 	} catch (error) {
 		logger.error(error);
 		callback(500, "Internal server error", null);
@@ -115,7 +124,7 @@ function modifyBike(object, callback) {
 }
 
 function incrementCounterById(id, callback) {
-	BikeDBService.findOneAndUpdate({ _id: id }, {
+	bikeDBService.findOneAndUpdate({ _id: id }, {
 		$inc: {
 			'click_counter': 1
 		}
@@ -134,7 +143,7 @@ function incrementCounterById(id, callback) {
 }
 
 function approveById(id, callback) {
-	BikeDBService.findOneAndUpdate({ _id: id }, {
+	bikeDBService.findOneAndUpdate({ _id: id }, {
 		'is_approved': true,
 		'recheck_needed': false
 	}, function (error, data) {
@@ -154,7 +163,7 @@ function approveById(id, callback) {
 }
 
 function markForRecheckById(id, callback) {
-	BikeDBService.findOneAndUpdate({ _id: id }, {
+	bikeDBService.findOneAndUpdate({ _id: id }, {
 		'recheck_needed': true,
 		'is_approved': false
 	}, function (error, data) {

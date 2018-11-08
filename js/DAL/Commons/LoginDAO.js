@@ -46,10 +46,7 @@ function performLogin(userDetails, callback) {
                         expiresIn: lease_time
                     }, function (error, token) {
                         if (error) {
-                            setTimeout(function () {
-                                logger.error(error);
-                                return callback(500, "Internal server error", null);
-                            }, 5000);
+                            return callback(500, "Internal server error", null);
                         } else {
                             return callback(200, "Success", {
                                 "token": token,

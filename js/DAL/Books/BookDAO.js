@@ -25,21 +25,21 @@ require('assert').notEqual(connection, null);
 // Importing movie schema service
 
 const bookSchema = require('../../Models/BooksModel');
-let BookDBService = connection.model('book', bookSchema);
+let bookDBService = connection.model('book', bookSchema);
 
 // Service methods
 
 function addBook(object, callback) {
 	try {
 		object._id = mongoose.Types.ObjectId(object._id);
-		BookDBService.findOne({ $or: [{ "_id": object._id }, { "uid": object.uid }] }, function (error, data) {
+		bookDBService.findOne({ $or: [{ "_id": object._id }, { "uid": object.uid }] }, function (error, data) {
 			if (data) {
 				callback(409, "Entry already exists", null);
 			} else if (error) {
 				logger.error(error);
 				callback(500, "Internal server error", null);
 			} else {
-				var bookToAdd = new BookDBService(object);
+				var bookToAdd = new bookDBService(object);
 				bookToAdd.save(object, function (error) {
 					if (error) {
 						if (error.name === 'ValidationError') {
@@ -63,7 +63,7 @@ function addBook(object, callback) {
 
 function removeById(id, callback) {
 	try {
-		BookDBService.findOneAndRemove({
+		bookDBService.findOneAndRemove({
 			_id: id
 		}, function (error, data) {
 			if (error) {
@@ -88,26 +88,35 @@ function modifyBook(object, callback) {
 	try {
 		object.recheck_needed = false;
 		object.is_approved = false;
-		BookDBService.findOneAndUpdate({ "_id": object._id },
-			object,
-			{ overwrite: true },
-			function (error, data) {
-				if (error) {
-					if (error.name === 'ValidationError') {
-						callback(400, "Error while parsing values", null);
-					} else {
-						logger.error(error);
-						callback(500, "Error while modifying the book", null);
-					}
-				} else if (isEmpty(data)) {
-					callback(404, "Content not found on the server", null);
-				} else {
-					callback(200, "Successfully modified", {
-						"_id": object._id,
-						"book_name": object.book_name
+		bookDBService.findOne({ "uid": object.uid }, function (error, data) {
+			if (error) {
+				logger.error(error);
+				return callback(500, "Internal server error", null);
+			} else if (!isEmpty(data) && !(object.override_uid_check)) {
+				return callback(409, "Entry already exists", null);
+			} else {
+				bookDBService.findOneAndUpdate({ "_id": object._id },
+					object,
+					{ overwrite: true },
+					function (error, data) {
+						if (error) {
+							if (error.name === 'ValidationError') {
+								callback(400, "Error while parsing values", null);
+							} else {
+								logger.error(error);
+								callback(500, "Error while modifying the book", null);
+							}
+						} else if (isEmpty(data)) {
+							callback(404, "Content not found on the server", null);
+						} else {
+							callback(200, "Successfully modified", {
+								"_id": object._id,
+								"book_name": object.book_name
+							});
+						}
 					});
-				}
-			});
+			}
+		});
 	} catch (error) {
 		logger.error(error);
 		callback(500, "Internal server error", null);
@@ -115,7 +124,7 @@ function modifyBook(object, callback) {
 }
 
 function incrementCounterById(id, callback) {
-	BookDBService.findOneAndUpdate({ _id: id }, {
+	bookDBService.findOneAndUpdate({ _id: id }, {
 		$inc: {
 			'click_counter': 1
 		}
@@ -134,7 +143,7 @@ function incrementCounterById(id, callback) {
 }
 
 function approveById(id, callback) {
-	BookDBService.findOneAndUpdate({ _id: id }, {
+	bookDBService.findOneAndUpdate({ _id: id }, {
 		'is_approved': true,
 		'recheck_needed': false
 	}, function (error, data) {
@@ -155,7 +164,7 @@ function approveById(id, callback) {
 }
 
 function markForRecheckById(id, callback) {
-	BookDBService.findOneAndUpdate({ _id: id }, {
+	bookDBService.findOneAndUpdate({ _id: id }, {
 		'recheck_needed': true
 	}, function (error, data) {
 		if (error instanceof mongoose.CastError) {

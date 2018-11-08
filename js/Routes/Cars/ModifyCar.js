@@ -38,6 +38,14 @@ modifyCarRouter.post('/api/car/modify',
                         },
                         "data": null
                     });
+                } else if (isEmpty(req.body.override_uid_check)) {
+                    return res.status(400).json({
+                        "status": {
+                            "code": 400,
+                            "message": "Overriding UID check not specified"
+                        },
+                        "data": null
+                    });
                 } else {
                     if (!authData['privilages'].includes('cars')) {
                         return res.status(403).json({
@@ -47,12 +55,13 @@ modifyCarRouter.post('/api/car/modify',
                             },
                             "data": null
                         });
-                    } else  {
+                    } else {
                         var carData = req.body;
                         if (isEmpty(carData.hour)) carData.hour = 0;
                         if (isEmpty(carData.minute)) carData.minute = 0;
                         if (isEmpty(carData.day)) carData.day = 0;
                         var carObject = {
+                            override_uid_check: carData.override_uid_check,
                             _id: carData._id,
                             car_name: carData.car_name,
                             release_date: new Date(carData.year, carData.month, carData.day, carData.hour, carData.minute).toLocaleString('en-US', {

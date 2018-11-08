@@ -23,11 +23,11 @@ try {
 require('assert').notEqual(connectionForRetrieval, null);
 
 const carSchema = require('../../Models/CarsModel');
-let CarDBService = connectionForRetrieval.model('car', carSchema);
+let carDBService = connectionForRetrieval.model('car', carSchema);
 
 
 function returnAll(callback) {
-	CarDBService.find({ "is_approved": true }).sort({ "_id": 1 }).exec(function (error, data) {
+	carDBService.find({ "is_approved": true }).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			callback(500, "Internal server error", null);
 		}
@@ -36,7 +36,7 @@ function returnAll(callback) {
 }
 
 function returnInRange(begin, limit, callback) {
-	CarDBService.find({ "is_approved": true }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	carDBService.find({ "is_approved": true }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -46,7 +46,7 @@ function returnInRange(begin, limit, callback) {
 }
 
 function returnAllByFilter(filter, callback) {
-	CarDBService.find({
+	carDBService.find({
 		$and: [
 			{ "colors": { "$in": filter } },
 			{ "is_approved": true }
@@ -60,7 +60,7 @@ function returnAllByFilter(filter, callback) {
 	});
 }
 function returnInRangeByFilter(filter, begin, limit, callback) {
-	CarDBService.find({
+	carDBService.find({
 		$and: [
 			{ "colors": { "$in": filter } },
 			{ "is_approved": true }
@@ -75,7 +75,7 @@ function returnInRangeByFilter(filter, begin, limit, callback) {
 }
 
 function returnById(id, callback) {
-	CarDBService.findOne({
+	carDBService.findOne({
 		$and: [{ "_id": id }, { "is_approved": true }]
 	}, function (error, data) {
 		if (error) {
@@ -94,7 +94,7 @@ function returnById(id, callback) {
 }
 
 function returnAllForRechecking(callback) {
-	CarDBService.find({
+	carDBService.find({
 		$and: [{ "recheck_needed": true }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
@@ -106,7 +106,7 @@ function returnAllForRechecking(callback) {
 }
 
 function returnAllUnchecked(callback) {
-	CarDBService.find({
+	carDBService.find({
 		$and: [{ "recheck_needed": false }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
@@ -118,7 +118,7 @@ function returnAllUnchecked(callback) {
 }
 
 function returnAllReferrers(callback) {
-	CarDBService.aggregate([
+	carDBService.aggregate([
 		{
 			$group: {
 				"_id": "$referrer_name",

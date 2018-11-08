@@ -23,11 +23,11 @@ try {
 require('assert').notEqual(connectionForRetrieval, null);
 
 const bikeSchema = require('../../Models/BikesModel');
-let BikeDBService = connectionForRetrieval.model('bike', bikeSchema);
+let bikeDBService = connectionForRetrieval.model('bike', bikeSchema);
 
 
 function returnAll(callback) {
-	BikeDBService.find({ "is_approved": true }).sort({ "_id": 1 }).exec(function (error, data) {
+	bikeDBService.find({ "is_approved": true }).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			callback(500, "Internal server error", null);
 		}
@@ -36,7 +36,7 @@ function returnAll(callback) {
 }
 
 function returnInRange(begin, limit, callback) {
-	BikeDBService.find({ "is_approved": true }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	bikeDBService.find({ "is_approved": true }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -46,7 +46,7 @@ function returnInRange(begin, limit, callback) {
 }
 
 function returnAllByFilter(filter, callback) {
-	BikeDBService.find({
+	bikeDBService.find({
 		$and: [
 			{ "colors": { "$in": filter } },
 			{ "is_approved": true }
@@ -60,7 +60,7 @@ function returnAllByFilter(filter, callback) {
 	});
 }
 function returnInRangeByFilter(filter, begin, limit, callback) {
-	BikeDBService.find({
+	bikeDBService.find({
 		$and: [
 			{ "colors": { "$in": filter } },
 			{ "is_approved": true }
@@ -75,7 +75,7 @@ function returnInRangeByFilter(filter, begin, limit, callback) {
 }
 
 function returnById(id, callback) {
-	BikeDBService.findOne({
+	bikeDBService.findOne({
 		$and: [{ "_id": id }, { "is_approved": true }]
 	}, function (error, data) {
 		if (error) {
@@ -94,7 +94,7 @@ function returnById(id, callback) {
 }
 
 function returnAllForRechecking(callback) {
-	BikeDBService.find({
+	bikeDBService.find({
 		$and: [{ "recheck_needed": true }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
@@ -106,7 +106,7 @@ function returnAllForRechecking(callback) {
 }
 
 function returnAllUnchecked(callback) {
-	BikeDBService.find({
+	bikeDBService.find({
 		$and: [{ "recheck_needed": false }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
@@ -118,7 +118,7 @@ function returnAllUnchecked(callback) {
 }
 
 function returnAllReferrers(callback) {
-	BikeDBService.aggregate([
+	bikeDBService.aggregate([
 		{ "$match": { "is_approved": true } },
 		{ "$unwind": "$partners" },
 		{

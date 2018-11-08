@@ -23,11 +23,11 @@ try {
 require('assert').notEqual(connectionForRetrieval, null);
 
 const bookSchema = require('../../Models/BooksModel');
-let BookDBService = connectionForRetrieval.model('book', bookSchema);
+let bookDBService = connectionForRetrieval.model('book', bookSchema);
 
 
 function returnAll(callback) {
-	BookDBService.find({ "is_approved": true }).sort({ "_id": 1 }).exec(function (error, data) {
+	bookDBService.find({ "is_approved": true }).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			callback(500, "Internal server error", null);
 		}
@@ -36,7 +36,7 @@ function returnAll(callback) {
 }
 
 function returnInRange(begin, limit, callback) {
-	BookDBService.find({ "is_approved": true }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	bookDBService.find({ "is_approved": true }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -46,7 +46,7 @@ function returnInRange(begin, limit, callback) {
 }
 
 function returnAllByFilter(filter, callback) {
-	BookDBService.find({
+	bookDBService.find({
 		$and: [
 			{ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] },
 			{ "is_approved": true }
@@ -60,7 +60,7 @@ function returnAllByFilter(filter, callback) {
 	});
 }
 function returnInRangeByFilter(filter, begin, limit, callback) {
-	BookDBService.find({
+	bookDBService.find({
 		$and: [
 			{ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] },
 			{ "is_approved": true }
@@ -75,7 +75,7 @@ function returnInRangeByFilter(filter, begin, limit, callback) {
 }
 
 function returnById(id, callback) {
-	BookDBService.findOne({
+	bookDBService.findOne({
 		$and: [{ "_id": id }, { "is_approved": true }]
 	}, function (error, data) {
 		if (error) {
@@ -94,7 +94,7 @@ function returnById(id, callback) {
 }
 
 function returnAllForRechecking(callback) {
-	BookDBService.find({
+	bookDBService.find({
 		$and: [{ "recheck_needed": true }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
@@ -106,7 +106,7 @@ function returnAllForRechecking(callback) {
 }
 
 function returnAllUnchecked(callback) {
-	BookDBService.find({
+	bookDBService.find({
 		$and: [{ "recheck_needed": false }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
@@ -119,7 +119,7 @@ function returnAllUnchecked(callback) {
 
 
 function returnAllReferrers(callback) {
-	BookDBService.aggregate([
+	bookDBService.aggregate([
 		{ "$match": { "is_approved": true } },
 		{ "$unwind": "$partners" },
 		{
@@ -147,7 +147,7 @@ function returnAllReferrers(callback) {
 }
 
 function returnAllLanguages(callback) {
-	BookDBService.distinct("language", function (error, data) {
+	bookDBService.distinct("language", function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);

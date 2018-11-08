@@ -23,11 +23,11 @@ try {
 require('assert').notEqual(connectionForRetrieval, null);
 
 const videoGameSchema = require('../../Models/VideoGamesModel');
-let VideoGameDBService = connectionForRetrieval.model('videogame', videoGameSchema);
+let videoGameDBService = connectionForRetrieval.model('videogame', videoGameSchema);
 
 
 function returnAll(callback) {
-	VideoGameDBService.find({ "is_approved": true }).sort({ "_id": 1 }).exec(function (error, data) {
+	videoGameDBService.find({ "is_approved": true }).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			callback(500, "Internal server error", null);
 		}
@@ -36,7 +36,7 @@ function returnAll(callback) {
 }
 
 function returnInRange(begin, limit, callback) {
-	VideoGameDBService.find({ "is_approved": true }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	videoGameDBService.find({ "is_approved": true }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -46,7 +46,7 @@ function returnInRange(begin, limit, callback) {
 }
 
 function returnAllByFilter(filter, callback) {
-	VideoGameDBService.find({
+	videoGameDBService.find({
 		$and: [
 			{ "colors": { "$in": filter } },
 			{ "is_approved": true }
@@ -60,7 +60,7 @@ function returnAllByFilter(filter, callback) {
 	});
 }
 function returnInRangeByFilter(filter, begin, limit, callback) {
-	VideoGameDBService.find({
+	videoGameDBService.find({
 		$and: [
 			{ "colors": { "$in": filter } },
 			{ "is_approved": true }
@@ -75,7 +75,7 @@ function returnInRangeByFilter(filter, begin, limit, callback) {
 }
 
 function returnById(id, callback) {
-	VideoGameDBService.findOne({
+	videoGameDBService.findOne({
 		$and: [{ "_id": id }, { "is_approved": true }]
 	}, function (error, data) {
 		if (error) {
@@ -94,7 +94,7 @@ function returnById(id, callback) {
 }
 
 function returnAllForRechecking(callback) {
-	VideoGameDBService.find({
+	videoGameDBService.find({
 		$and: [{ "recheck_needed": true }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
@@ -106,7 +106,7 @@ function returnAllForRechecking(callback) {
 }
 
 function returnAllUnchecked(callback) {
-	VideoGameDBService.find({
+	videoGameDBService.find({
 		$and: [{ "recheck_needed": false }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
@@ -118,7 +118,7 @@ function returnAllUnchecked(callback) {
 }
 
 function returnAllReferrers(callback) {
-	VideoGameDBService.aggregate([
+	videoGameDBService.aggregate([
 		{
 			$group: {
 				"_id": "$referrer_name",

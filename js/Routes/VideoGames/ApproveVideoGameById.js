@@ -41,6 +41,9 @@ ApproveVideoGameRouter.post('/api/videogame/approve', tokenVerifier, tokenAuthCh
                     try {
                         var id = req.body._id;
                         videoGameDAO.approveById(id, function (status, message, data) {
+                            if (status === 200) {
+                                logger.warn(authData.username + " approved " + id);
+                            }
                             return res.status(status).json({
                                 "status": {
                                     "code": status,

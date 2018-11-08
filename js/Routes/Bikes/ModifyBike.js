@@ -48,12 +48,21 @@ modifyBikeRouter.post('/api/bike/modify',
                             },
                             "data": null
                         });
+                    } else if (isEmpty(req.body.override_uid_check)) {
+                        return res.status(400).json({
+                            "status": {
+                                "code": 400,
+                                "message": "Overriding UID check not specified"
+                            },
+                            "data": null
+                        });
                     } else {
                         var bikeData = req.body;
                         if (isEmpty(bikeData.hour)) bikeData.hour = 0;
                         if (isEmpty(bikeData.minute)) bikeData.minute = 0;
                         if (isEmpty(bikeData.day)) bikeData.day = 0;
                         var bikeObject = {
+                            override_uid_check: bikeData.override_uid_check,
                             _id: bikeData._id,
                             bike_name: bikeData.bike_name,
                             release_date: new Date(bikeData.year, bikeData.month, bikeData.day, bikeData.hour, bikeData.minute).toLocaleString('en-US', {

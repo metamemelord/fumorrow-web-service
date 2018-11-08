@@ -5,8 +5,8 @@ const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
 module.exports = (req, res, next) => {
     try {
         if (isEmpty(req.body.title) || isEmpty(req.body.day) || isEmpty(req.body.month) ||
-            isEmpty(req.body.year) || isEmpty(req.body.partners) || 
-            isEmpty(req.body.genres) || isEmpty(req.body.platform)) {
+            isEmpty(req.body.year) || isEmpty(req.body.partners) ||
+            isEmpty(req.body.genres) || isEmpty(req.body.platforms)) {
             return res.status(400).json({
                 "status": {
                     "code": 400,
