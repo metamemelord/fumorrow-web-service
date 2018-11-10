@@ -54,7 +54,7 @@ var bikeSchema = new mongoose.Schema({
         required: false
     },
     power: {
-        type: Number,
+        type: String,
         required: false
     },
     gear_box: {
