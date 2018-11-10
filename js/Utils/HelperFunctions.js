@@ -64,11 +64,40 @@ function toTitleCase(string) {
         .join(' ');
 }
 
+function isNumber(variable) {
+    var _result = isNotEmpty(variable);
+    try {
+        _result &= !isNaN(parseInt(variable))
+    } catch (error) {
+        _result &= false;
+    }
+    return _result
+}
+
+function isInteger(variable) {
+    var _result = isNumber(variable);
+    if (_result) {
+        _result &= variable == Math.floor(variable);
+    }
+    return _result;
+}
+
+function isString(variable) {
+    var _result = isNotEmpty(variable);
+    if (_result) {
+        _result &= variable.constructor === String;
+    }
+    return _result;
+}
+
 module.exports = {
-    generateSalt: generateSalt,
-    checkDate: checkDate,
-    resolvePrivilages: resolvePrivilages,
-    isEmpty: isEmpty,
-    isNotEmpty: isNotEmpty,
-    toTitleCase: toTitleCase
+    generateSalt,
+    checkDate,
+    resolvePrivilages,
+    isEmpty,
+    isNotEmpty,
+    toTitleCase,
+    isNumber,
+    isInteger,
+    isString
 }

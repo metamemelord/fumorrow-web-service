@@ -185,12 +185,11 @@ function markForRecheckById(id, callback) {
 	});
 }
 
-
 module.exports = {
-	addVideoGame: addVideoGame,
-	removeById: removeById,
-	modifyVideoGame: modifyVideoGame,
-	incrementCounterById: incrementCounterById,
-	approveById: approveById,
-	markForRecheckById: markForRecheckById,
+	addVideoGame,
+	removeById,
+	modifyVideoGame,
+	incrementCounterById,
+	approveById,
+	markForRecheckById
 };

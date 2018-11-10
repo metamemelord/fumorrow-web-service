@@ -234,12 +234,12 @@ function markReleasedById(id, callback) {
 }
 
 module.exports = {
-	addMovie: addMovie,
-	removeById: removeById,
-	modifyMovie: modifyMovie,
-	incrementCounterById: incrementCounterById,
-	approveById: approveById,
-	markForRecheckById: markForRecheckById,
-	addShowingAt: addShowingAt,
-	markReleasedById: markReleasedById
+	addMovie,
+	removeById,
+	modifyMovie,
+	incrementCounterById,
+	approveById,
+	markForRecheckById,
+	addShowingAt,
+	markReleasedById
 };

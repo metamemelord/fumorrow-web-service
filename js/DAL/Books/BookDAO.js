@@ -184,10 +184,10 @@ function markForRecheckById(id, callback) {
 }
 
 module.exports = {
-	addBook: addBook,
-	removeById: removeById,
-	modifyBook: modifyBook,
-	incrementCounterById: incrementCounterById,
-	approveById: approveById,
-	markForRecheckById: markForRecheckById
+	addBook,
+	removeById,
+	modifyBook,
+	incrementCounterById,
+	approveById,
+	markForRecheckById
 };

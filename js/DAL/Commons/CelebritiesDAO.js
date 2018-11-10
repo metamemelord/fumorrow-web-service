@@ -249,8 +249,43 @@ function searchCelebrityByNameTokens(nameTokens, callback) {
                 sql += " or middle_name like ?";
                 sql += " or last_name like ?";
             }
-            sql += ') and is_approved=1;'
+            sql += ') and is_approved=1;';
             con.query(sql, preparedNameTokens, function (error, data) {
+                con.end();
+                if (error) {
+                    logger.error(error);
+                    return callback(500, "Internal server error", null);
+                } else {
+                    var searchResults = [];
+                    data.forEach(function (person) {
+                        searchResults.push({
+                            "pid": person.pid,
+                            "name": composeFullName(person.first_name, person.middle_name, person.last_name),
+                            "dob": person.dob,
+                            "image_link": person.image_link,
+                        });
+                    });
+                    return callback(200, "OK", searchResults);
+                }
+            });
+        });
+    } catch (error) {
+        logger.error(error);
+        return callback(500, "Internal server error", null)
+    }
+}
+
+function searchCelebrityByPid(pid, callback) {
+    try {
+        var con = mysql.createConnection(dbDetails);
+        con.connect(function (error) {
+            if (error) {
+                logger.error(error);
+                return callback(500, "Could not connect to database", null);
+            }
+            var sql = "select pid, first_name, middle_name, last_name, profession, dob, image_link from celebrities" +
+                " where pid like ? and is_approved=1;";
+            con.query(sql, pid + '%', function (error, data) {
                 con.end();
                 if (error) {
                     logger.error(error);
@@ -282,12 +317,13 @@ function composeFullName(first_name, middle_name, last_name) {
 }
 
 module.exports = {
-    addCelebrity: addCelebrity,
-    deleteCelebrity: deleteCelebrity,
-    updateCelebrity: updateCelebrity,
-    getCelebrityById: getCelebrityById,
-    getAllCelebrities: getAllCelebrities,
-    getAllUnapprovedCelebrities: getAllUnapprovedCelebrities,
-    approveCelebrityById: approveCelebrityById,
-    searchCelebrityByNameTokens: searchCelebrityByNameTokens
+    addCelebrity,
+    deleteCelebrity,
+    updateCelebrity,
+    getCelebrityById,
+    getAllCelebrities,
+    getAllUnapprovedCelebrities,
+    approveCelebrityById,
+    searchCelebrityByNameTokens,
+    searchCelebrityByPid
 }

@@ -1,26 +1,25 @@
 const express = require('express');
-const DAL = require('./../../../DAL/index');
-const celebritiesDAO = DAL.CelebritiesDAO;
 const filename = require('path').basename(__filename);
 const logger = require('../../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('../../../Utils/HelperFunctions').isEmpty;
+const helpers = require('../../../Utils/HelperFunctions');
+const AbstractCelebritySearchStrategy = require('../../../lib/CelebritySearch/AbstractCelebritySearchStrategy');
 
-var returnAllCelebritiesRoute = express.Router();
+var searchCelebrityRoute = express.Router();
 
-returnAllCelebritiesRoute.post('/api/admin/celebrities/search', function (req, res) {
+searchCelebrityRoute.post('/api/admin/celebrities/search', function (req, res) {
     try {
-        var name = req.body.name;
-        if (isEmpty(name)) {
+        var parameter = req.body.parameter;
+        if (helpers.isEmpty(parameter) || !(helpers.isString(parameter) || helpers.isInteger(parameter))) {
             return res.status(400).json({
                 "status": {
                     "code": 400,
-                    "message": "Enter a valid name"
+                    "message": "Invalid parameter"
                 },
                 "data": null
             });
         }
-        var nameTokens = name.toLowerCase().split(" ");
-        celebritiesDAO.searchCelebrityByNameTokens(nameTokens, function (status, message, data) {
+        const searchStrategy = AbstractCelebritySearchStrategy.getSearchStrategy(parameter);
+        searchStrategy.search(parameter, function (status, message, data) {
             return res.status(status).json({
                 "status": {
                     "code": status,
@@ -41,4 +40,4 @@ returnAllCelebritiesRoute.post('/api/admin/celebrities/search', function (req, r
     }
 });
 
-module.exports = returnAllCelebritiesRoute;
+module.exports = searchCelebrityRoute;
