@@ -85,9 +85,9 @@ modifyMovieRouter.post('/api/movie/modify',
                             mpaa_rating: movieData.mpaa_rating,
                             budget: movieData.budget,
                             external_ratings: movieData.external_ratings,
-                            predicted_ratings: bookData.predicted_ratings,
-                            favorited_by: bookData.favorited_by,
-                            user_visit_info: boodData.user_visit_info
+                            predicted_ratings: movieData.predicted_ratings,
+                            favorited_by: movieData.favorited_by,
+                            user_visit_info: movieData.user_visit_info
                         }
                         var uniqueId = movieObject.title + movieObject.release_date.toString() + movieData.referrerName;
                         movieObject.uid = md5(uniqueId.replace(/\s/g, ''));
