@@ -6,8 +6,7 @@ module.exports = (req, res, next) => {
     try {
         if (isEmpty(req.body.title) || isEmpty(req.body.day) || isEmpty(req.body.month) ||
             isEmpty(req.body.year) || isEmpty(req.body.cast) || isEmpty(req.body.language) ||
-            isEmpty(req.body.crew) || isEmpty(req.body.genres) || isEmpty(req.body.texts) ||
-            isEmpty(req.body.images) || isEmpty(req.body.partners)) {
+            isEmpty(req.body.crew) || isEmpty(req.body.genres)) {
             return res.status(400).json({
                 "status": {
                     "code": 400,
