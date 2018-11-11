@@ -99,8 +99,8 @@ function modifyMovie(object, callback) {
 				movieDBService.findOneAndUpdate({ "_id": object._id },
 					object,
 					{ overwrite: true },
-					function (error) {
-						if (error, data) {
+					function (error, data) {
+						if (error) {
 							if (error.name === 'ValidationError') {
 								callback(400, "Error while parsing values", null);
 							} else {
