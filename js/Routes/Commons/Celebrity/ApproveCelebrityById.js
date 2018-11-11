@@ -53,7 +53,7 @@ approveCelebrityRouter.post('/api/admin/celebrity/approve', tokenVerifier, token
                     }
                     celebritiesDAO.approveCelebrityById(pid, function (status, message, data) {
                         if (status === 200) {
-                            logger.warn(authData.username + " approved " + id);
+                            logger.warn(authData.username + " approved " + pid);
                         }
                         return res.status(status).json({
                             "status": {
