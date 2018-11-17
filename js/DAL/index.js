@@ -14,19 +14,21 @@ const VideoGameDAOForRetrieval = require('./VideoGames/VideoGameDAOForRetrieval'
 const LoginDAO = require('./Commons/LoginDAO');
 const RegistrationDAO = require('./Commons/RegistrationDAO');
 const CelebritiesDAO = require('./Commons/CelebritiesDAO');
+const TokenVerification = require('./Commons/TokenVerification');
 
 module.exports = {
-    MovieDAO: MovieDAO,
-    MovieDAOForRetrieval: MovieDAOForRetrieval,
-    BookDAO: BookDAO,
-    BookDAOForRetrieval: BookDAOForRetrieval,
-    BikeDAO: BikeDAO,
-    BikeDAOForRetrieval: BikeDAOForRetrieval,
-    CarDAO: CarDAO,
-    CarDAOForRetrieval: CarDAOForRetrieval,
-    VideoGameDAO: VideoGameDAO,
-    VideoGameDAOForRetrieval: VideoGameDAOForRetrieval,
-    LoginDAO: LoginDAO,
-    RegistrationDAO: RegistrationDAO,
-    CelebritiesDAO: CelebritiesDAO
+    MovieDAO,
+    MovieDAOForRetrieval,
+    BookDAO,
+    BookDAOForRetrieval,
+    BikeDAO,
+    BikeDAOForRetrieval,
+    CarDAO,
+    CarDAOForRetrieval,
+    VideoGameDAO,
+    VideoGameDAOForRetrieval,
+    LoginDAO,
+    RegistrationDAO,
+    CelebritiesDAO,
+    TokenVerification
 }

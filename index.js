@@ -63,3 +63,5 @@ fumorrow.listen(3000, (error) => {
         logger.info("Server started");
     }
 });
+
+module.exports = fumorrow;
