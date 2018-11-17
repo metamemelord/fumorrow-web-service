@@ -1,0 +1,55 @@
+{
+    "cast": [
+        {
+            "name": "Sample Actor",
+            "type": "Actor"
+        },
+        {
+            "pid": 20,
+            "type": "Actress"
+        }
+    ],
+    "crew": [
+        {
+            "name": "Sample Director",
+            "type": "Director"
+        }
+    ],
+    "genres": [
+        "Comedy"
+    ],
+    "runtime": -1,
+    "images": [],
+    "videos": [],
+    "texts": [
+        {
+            "url": "test_url",
+            "type": "External Article"
+        }
+    ],
+    "partners": [
+        {
+            "name": "Sample Partner",
+            "type": "Product House"
+        }
+    ],
+    "showing_at": [],
+    "is_sponsored": false,
+    "is_released": false,
+    "is_live": false,
+    "click_counter": 0,
+    "mpaa_rating": "U",
+    "budget": -1,
+    "external_ratings": [],
+    "predicted_ratings": [],
+    "favorited_by": [],
+    "user_visit_info": [],
+    "recheck_needed": false,
+    "is_approved": false,
+    "_id": "32353130323031397962715a",
+    "title": "test",
+    "release_date": "2019-11-24T18:30:00.000Z",
+    "uid": "5f7eb690892ef28a5146e19ebe8a009f",
+    "language": 0,
+    "__v": 0
+}
