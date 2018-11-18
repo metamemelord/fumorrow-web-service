@@ -22,7 +22,7 @@ function performLogin(userDetails, callback) {
             if (error) {
                 logger.error(error);
                 return callback(500, "Internal server error", null);
-            } if (userDataFromDB === undefined || userDataFromDB.length === 0) {
+            } else if (userDataFromDB === undefined || userDataFromDB.length === 0) {
                 return callback(401, "User does not exist", null);
             } else if (userDataFromDB[0].is_approved === 0) {
                 return callback(401, "Not approved by admin", null);
