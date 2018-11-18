@@ -3,7 +3,7 @@ mongoose.set('useFindAndModify', false);
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
-const privateFields = {
+const privateBikeFields = {
 	is_approved: 0,
 	recheck_needed: 0,
 	click_counter: 0,
@@ -38,7 +38,7 @@ let bikeDBService = connectionForRetrieval.model('bike', bikeSchema);
 
 
 function getAll(callback) {
-	bikeDBService.find({ "is_approved": true }, privateFields).sort({ "_id": 1 }).exec(function (error, data) {
+	bikeDBService.find({ "is_approved": true }, privateBikeFields).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			callback(500, "Internal server error", null);
 		}
@@ -47,7 +47,7 @@ function getAll(callback) {
 }
 
 function getInRange(begin, limit, callback) {
-	bikeDBService.find({ "is_approved": true }, privateFields).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	bikeDBService.find({ "is_approved": true }, privateBikeFields).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -62,7 +62,7 @@ function getAllByFilter(filter, callback) {
 			{ "colors": { "$in": filter } },
 			{ "is_approved": true }
 		]
-	}, privateFields).sort({ "_id": 1 }).exec(function (error, data) {
+	}, privateBikeFields).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -76,7 +76,7 @@ function getInRangeByFilter(filter, begin, limit, callback) {
 			{ "colors": { "$in": filter } },
 			{ "is_approved": true }
 		]
-	}, privateFields).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	}, privateBikeFields).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -88,7 +88,7 @@ function getInRangeByFilter(filter, begin, limit, callback) {
 function getById(id, callback) {
 	bikeDBService.findOne({
 		$and: [{ "_id": id }, { "is_approved": true }]
-	}, privateFields, function (error, data) {
+	}, privateBikeFields, function (error, data) {
 		if (error) {
 			if (error.name === "CastError") {
 				callback(400, "Invalid ID", null);

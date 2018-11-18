@@ -3,6 +3,17 @@ mongoose.set('useFindAndModify', false);
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
+const privateVideoGameFields = {
+	is_approved: 0,
+	recheck_needed: 0,
+	click_counter: 0,
+	external_ratings: 0,
+	predicted_ratings: 0,
+	user_visit_info: 0,
+	uid: 0,
+	__v: 0
+}
+
 var connectionForRetrieval = null;
 try {
 	connectionForRetrieval = mongoose.createConnection(process.env.DATABASE_CONNECTION_STRING_FOR_READING_ONLY, { useNewUrlParser: true });
@@ -27,7 +38,7 @@ let videoGameDBService = connectionForRetrieval.model('videogame', videoGameSche
 
 
 function getAll(callback) {
-	videoGameDBService.find({ "is_approved": true }).sort({ "_id": 1 }).exec(function (error, data) {
+	videoGameDBService.find({ "is_approved": true }, privateVideoGameFields).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			callback(500, "Internal server error", null);
 		}
@@ -36,7 +47,7 @@ function getAll(callback) {
 }
 
 function getInRange(begin, limit, callback) {
-	videoGameDBService.find({ "is_approved": true }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	videoGameDBService.find({ "is_approved": true }, privateVideoGameFields).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -51,7 +62,7 @@ function getAllByFilter(filter, callback) {
 			{ "colors": { "$in": filter } },
 			{ "is_approved": true }
 		]
-	}).sort({ "_id": 1 }).exec(function (error, data) {
+	}, privateVideoGameFields).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -65,7 +76,7 @@ function getInRangeByFilter(filter, begin, limit, callback) {
 			{ "colors": { "$in": filter } },
 			{ "is_approved": true }
 		]
-	}).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	}, privateVideoGameFields).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -77,7 +88,7 @@ function getInRangeByFilter(filter, begin, limit, callback) {
 function getById(id, callback) {
 	videoGameDBService.findOne({
 		$and: [{ "_id": id }, { "is_approved": true }]
-	}, function (error, data) {
+	}, privateVideoGameFields, function (error, data) {
 		if (error) {
 			if (error.name === "CastError") {
 				callback(400, "Invalid ID", null);
