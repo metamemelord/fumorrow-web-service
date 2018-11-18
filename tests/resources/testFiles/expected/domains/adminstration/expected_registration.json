@@ -1,0 +1,10 @@
+{
+    "status": {
+        "code": 201,
+        "message": "User added successfully. Contact ADMIN for approval."
+    },
+    "data": {
+        "username": "test_user",
+        "name": "Test"
+    }
+}
