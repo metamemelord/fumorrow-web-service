@@ -43,9 +43,10 @@ fumorrow.use(require('./js/Routes/404'));
 
 fumorrow.get('*', function (req, res) {
     try {
-        res.writeHead(301, {
+        res.writeHead(302, {
             Location: 'http://www.fumorrow.com'
         });
+        res.redirect('http://www.fumorrow.com');
     } catch (error) {
         logger.error(error);
     } finally {
