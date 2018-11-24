@@ -15,6 +15,7 @@ const LoginDAO = require('./Commons/LoginDAO');
 const RegistrationDAO = require('./Commons/RegistrationDAO');
 const CelebritiesDAO = require('./Commons/CelebritiesDAO');
 const TokenVerification = require('./Commons/TokenVerification');
+const MediaDAO = require('./Commons/media');
 
 module.exports = {
     MovieDAO,
@@ -30,5 +31,6 @@ module.exports = {
     LoginDAO,
     RegistrationDAO,
     CelebritiesDAO,
-    TokenVerification
+    TokenVerification,
+    MediaDAO
 }
