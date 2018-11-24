@@ -3,6 +3,17 @@ mongoose.set('useFindAndModify', false);
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
+const privateCarFields = {
+	is_approved: 0,
+	recheck_needed: 0,
+	click_counter: 0,
+	external_ratings: 0,
+	predicted_ratings: 0,
+	user_visit_info: 0,
+	uid: 0,
+	__v: 0
+}
+
 var connectionForRetrieval = null;
 try {
 	connectionForRetrieval = mongoose.createConnection(process.env.DATABASE_CONNECTION_STRING_FOR_READING_ONLY, { useNewUrlParser: true });
@@ -27,7 +38,7 @@ let carDBService = connectionForRetrieval.model('car', carSchema);
 
 
 function getAll(callback) {
-	carDBService.find({ "is_approved": true }).sort({ "_id": 1 }).exec(function (error, data) {
+	carDBService.find({ "is_approved": true }).sort({ "_id": 1 }, privateCarFields).exec(function (error, data) {
 		if (error) {
 			callback(500, "Internal server error", null);
 		}
@@ -36,7 +47,7 @@ function getAll(callback) {
 }
 
 function getInRange(begin, limit, callback) {
-	carDBService.find({ "is_approved": true }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	carDBService.find({ "is_approved": true }).sort({ "_id": 1 }, privateCarFields).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -51,7 +62,7 @@ function getAllByFilter(filter, callback) {
 			{ "colors": { "$in": filter } },
 			{ "is_approved": true }
 		]
-	}).sort({ "_id": 1 }).exec(function (error, data) {
+	}, privateCarFields).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -65,7 +76,7 @@ function getInRangeByFilter(filter, begin, limit, callback) {
 			{ "colors": { "$in": filter } },
 			{ "is_approved": true }
 		]
-	}).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	}, privateCarFields).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -77,7 +88,7 @@ function getInRangeByFilter(filter, begin, limit, callback) {
 function getById(id, callback) {
 	carDBService.findOne({
 		$and: [{ "_id": id }, { "is_approved": true }]
-	}, function (error, data) {
+	}, privateCarFields, function (error, data) {
 		if (error) {
 			if (error.name === "CastError") {
 				callback(400, "Invalid ID", null);
