@@ -4,6 +4,17 @@ const isEmpty = require('../../Utils/HelperFunctions').isEmpty;
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
+const privateMovieFields = {
+	is_approved: 0,
+	recheck_needed: 0,
+	click_counter: 0,
+	external_ratings: 0,
+	predicted_ratings: 0,
+	user_visit_info: 0,
+	uid: 0,
+	__v: 0
+}
+
 var connectionForRetrieval = null;
 try {
 	connectionForRetrieval = mongoose.createConnection(process.env.DATABASE_CONNECTION_STRING_FOR_READING_ONLY, { useNewUrlParser: true });
@@ -28,7 +39,7 @@ let movieDBService = connectionForRetrieval.model('movie', movieSchema);
 
 
 function getAll(callback) {
-	movieDBService.find({ "is_approved": true }).sort({ "_id": 1 }).exec(function (error, data) {
+	movieDBService.find({ "is_approved": true }, privateMovieFields).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -38,7 +49,7 @@ function getAll(callback) {
 }
 
 function getInRange(begin, limit, callback) {
-	movieDBService.find({ "is_approved": true }).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	movieDBService.find({ "is_approved": true }, privateMovieFields).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -53,7 +64,7 @@ function getAllByFilter(filter, callback) {
 			{ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] },
 			{ "is_approved": true }
 		]
-	}).sort({ "_id": 1 }).exec(function (error, data) {
+	}, privateMovieFields).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -67,7 +78,7 @@ function getInRangeByFilter(filter, begin, limit, callback) {
 			{ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] },
 			{ "is_approved": true }
 		]
-	}).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	}, privateMovieFields).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -79,7 +90,7 @@ function getInRangeByFilter(filter, begin, limit, callback) {
 function getById(id, callback) {
 	movieDBService.findOne({
 		$and: [{ "_id": id }, { "is_approved": true }]
-	},
+	}, privateMovieFields,
 		function (error, data) {
 			if (error) {
 				logger.error(error);
