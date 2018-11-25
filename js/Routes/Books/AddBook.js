@@ -70,7 +70,6 @@ addBookRouter.post('/api/book/add', tokenVerifier, tokenAuthCheck, bookRequestVe
                         is_sponsored: bookData.is_sponsored,
                         is_released: false,
                         is_live: bookData.is_live,
-                        mpaa_rating: bookData.mpaa_rating,
                         external_ratings: bookData.external_ratings
                     }
                     length = 12 - bookObject._id.length;
