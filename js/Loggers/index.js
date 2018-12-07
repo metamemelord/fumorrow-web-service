@@ -1,3 +1,3 @@
 module.exports = {
-    LoggerFactory: require('./modules/Logger')
-}
+	LoggerFactory: require("./modules/Logger")
+};

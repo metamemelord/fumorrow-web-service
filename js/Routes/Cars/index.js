@@ -1,19 +1,18 @@
-const express = require('express');
-const filename = require('path').basename(__filename);
+const express = require("express");
 const carIndexRouter = express.Router();
 
 // Getting routes
 
-const returnCars = require('./ReturnCars');
-const addCar = require('./AddCar');
-const deleteCar = require('./DeleteCar');
-const miscRoutes = require('./Misc');
-const returnCarById = require('./ReturnCarById');
-const returnAllUnchecked = require('./ReturnAllUncheckedCars');
-const returnAllRecheckNeeded = require('./ReturnAllCarsRecheckNeeded');
-const markForRecheckById = require('./MarkCarForRecheckById');
-const approveById = require('./ApproveCarById');
-const modifyCar = require('./ModifyCar');
+const returnCars = require("./ReturnCars");
+const addCar = require("./AddCar");
+const deleteCar = require("./DeleteCar");
+const miscRoutes = require("./Misc");
+const returnCarById = require("./ReturnCarById");
+const returnAllUnchecked = require("./ReturnAllUncheckedCars");
+const returnAllRecheckNeeded = require("./ReturnAllCarsRecheckNeeded");
+const markForRecheckById = require("./MarkCarForRecheckById");
+const approveById = require("./ApproveCarById");
+const modifyCar = require("./ModifyCar");
 
 // CRUD OPERATIONS
 
