@@ -2,100 +2,104 @@ var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var webSeriesSchema = new mongoose.Schema({
-    _id:{
+    _id: {
         type: Schema.ObjectId,
         required: true
     },
-    uid:{
+    uid: {
         type: String,
-        lowercase:true,
+        lowercase: true,
         required: true
     },
-    title:{
+    title: {
         type: String,
-        lowercase:true,
-        required:true
-    },
-    startDate:{
-        type:Date,
+        lowercase: true,
         required: true
     },
-    endDate:{
-        type:Date
+    release_date: {
+        type: Date,
+        required: true
     },
-    artists:{
-        type:[String],
-        required:true
+    cast: {
+        type: Array,
+        required: true
     },
-    director:{
-        type: String,
-        required:true
+    crew: {
+        type: Array,
+        required: true
     },
-    genres:{
-        type:[Number],
-        required:true
+    genres: {
+        type: Array,
+        required: true
     },
-    season:{
-        type:Number,
-        default:0
-    },
-    language:{
-        type:Number,
-        required:true
-    },
-    description:{
-        type:String,
-        required:true
-    },
-    imageProvider:{
-        type:String,
-        required:true
-    },
-    imageUrl:{
-        type:String,
-        required:true
-    },
-    referrerName:{
-        type:String,
-        lowercase:true,
-        required:true
-    },
-    redirectUrl:{
-        type:String,
-        required:true
-    },
-    isSponsored:{
-        type:Boolean,
-        default:false
-    },
-    hasStarted:{
-        type:Boolean,
-        default:false
-    },
-    hasEnded:{
-        type:Boolean,
-        default:false
-    },
-    currentEpisode:{
-        type:Number,
+    runtime: {
+        type: Number,
         default: 0
     },
-    currentEpisodeDescription:{
-        type:String,
-        default:"NA"
+    language: {
+        type: Number,
+        required: true
     },
-    clickCounter:{
-        type:Number,
-        default:0
+    images: {
+        type: Array,
+        default: []
     },
-    isChecked:{
-        type:Boolean,
+    videos: {
+        type: Array,
+        default: []
+    },
+    texts: {
+        type: Array,
+        default: []
+    },
+    mpaa_rating: {
+        type: String,
+        default: "U"
+    },
+    partners: {
+        type: Array,
+        default: []
+    },
+    is_sponsored: {
+        type: Boolean,
         default: false
     },
-    isApproved:{
-        type:Boolean,
+    is_released: {
+        type: Boolean,
         default: false
-    }
+    },
+    is_live: {
+        type: Boolean,
+        default: false
+    },
+    click_counter: {
+        type: Number,
+        default: 0
+    },
+    external_ratings: {
+        type: Array,
+        default: []
+    },
+    predicted_ratings: {
+        type: Array,
+        default: []
+    },
+    favorited_by: {
+        type: Array,
+        default: []
+    },
+    user_visit_info: {
+        type: Array,
+        default: []
+    },
+    recheck_needed: {
+        type: Boolean,
+        default: false
+    },
+    is_approved: {
+        type: Boolean,
+        default: false
+    },
 });
 
 module.exports = webSeriesSchema;

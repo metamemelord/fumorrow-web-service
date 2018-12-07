@@ -8,6 +8,8 @@ const CarDAO = require('./Cars/CarDAO');
 const CarDAOForRetrieval = require('./Cars/CarDAOForRetrieval');
 const VideoGameDAO = require('./VideoGames/VideoGameDAO');
 const VideoGameDAOForRetrieval = require('./VideoGames/VideoGameDAOForRetrieval');
+const WebSeriesDAO = require('./WebSeries/WebSeriesDAO');
+const WebSeriesDAOForRetrieval = require('./WebSeries/WebSeriesDAOForRetrieval');
 
 // Common routes
 
@@ -28,6 +30,8 @@ module.exports = {
     CarDAOForRetrieval,
     VideoGameDAO,
     VideoGameDAOForRetrieval,
+    WebSeriesDAO,
+    WebSeriesDAOForRetrieval,
     LoginDAO,
     RegistrationDAO,
     CelebritiesDAO,
