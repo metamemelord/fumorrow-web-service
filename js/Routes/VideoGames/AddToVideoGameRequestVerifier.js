@@ -1,32 +1,32 @@
-const filename = require('path').basename(__filename);
-const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
+const filename = require("path").basename(__filename);
+const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
+const isEmpty = require("./../../Utils/HelperFunctions").isEmpty;
 
 module.exports = (req, res, next) => {
-    try {
-        if (isEmpty(req.body.title) || isEmpty(req.body.day) || isEmpty(req.body.month) ||
+	try {
+		if (isEmpty(req.body.title) || isEmpty(req.body.day) || isEmpty(req.body.month) ||
             isEmpty(req.body.year) || isEmpty(req.body.partners) ||
             isEmpty(req.body.genres) || isEmpty(req.body.platforms)) {
-            return res.status(400).json({
-                "status": {
-                    "code": 400,
-                    "message": "Mandatory fields cannot be left blank"
-                },
-                "data": null
-            });
-        }
-        else {
-            next();
-        }
-    }
-    catch (error) {
-        logger.error(error);
-        return res.status(500).json({
-            "status": {
-                "code": 500,
-                "message": "Internal server error"
-            },
-            "data": null
-        });
-    }
-}
+			return res.status(400).json({
+				"status": {
+					"code": 400,
+					"message": "Mandatory fields cannot be left blank"
+				},
+				"data": null
+			});
+		}
+		else {
+			next();
+		}
+	}
+	catch (error) {
+		logger.error(error);
+		return res.status(500).json({
+			"status": {
+				"code": 500,
+				"message": "Internal server error"
+			},
+			"data": null
+		});
+	}
+};

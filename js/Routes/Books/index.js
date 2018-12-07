@@ -1,18 +1,18 @@
-const express = require('express');
+const express = require("express");
 const bookIndexRouter = express.Router();
 
 // Getting routes
 
-const returnBooks = require('./ReturnBooks');
-const addBook = require('./AddBook');
-const deleteBook = require('./DeleteBook');
-const miscRoutes = require('./Misc');
-const returnBookById = require('./ReturnBookById');
-const returnAllUnchecked = require('./ReturnAllUncheckedBooks');
-const returnAllRecheckNeeded = require('./ReturnAllBookRecheckNeeded');
-const markForRecheckById = require('./MarkBookForRecheckById');
-const approveById = require('./ApproveBookById');
-const modifyBook = require('./ModifyBook');
+const returnBooks = require("./ReturnBooks");
+const addBook = require("./AddBook");
+const deleteBook = require("./DeleteBook");
+const miscRoutes = require("./Misc");
+const returnBookById = require("./ReturnBookById");
+const returnAllUnchecked = require("./ReturnAllUncheckedBooks");
+const returnAllRecheckNeeded = require("./ReturnAllBookRecheckNeeded");
+const markForRecheckById = require("./MarkBookForRecheckById");
+const approveById = require("./ApproveBookById");
+const modifyBook = require("./ModifyBook");
 
 // CRUD OPERATIONS
 

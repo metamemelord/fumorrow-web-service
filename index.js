@@ -36,13 +36,12 @@ fumorrow.use(require('./js/Routes/Cars'));
 fumorrow.use(require('./js/Routes/VideoGames'));
 fumorrow.use(require('./js/Routes/Bikes'));
 fumorrow.use(require('./js/Routes/WebSeries'));
-fumorrow.use(require('./js/Routes/Anime'))
+fumorrow.use(require('./js/Routes/Anime'));
 fumorrow.use(require('./js/Routes/404'));
 
 // Routes
 
 // Redirecting all the GET requests homepage
-
 fumorrow.get('*', function (req, res) {
     try {
         res.writeHead(302, {
@@ -57,7 +56,6 @@ fumorrow.get('*', function (req, res) {
 });
 
 // Server
-
 fumorrow.listen(3000, (error) => {
     if (error) {
         logger.fatal(error);

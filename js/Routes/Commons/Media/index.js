@@ -1,7 +1,7 @@
-const express = require('express');
+const express = require("express");
 const mediaRouter = express.Router();
 
-const imageMediaRouter = require('./Images');
+const imageMediaRouter = require("./Images");
 
 mediaRouter.use(imageMediaRouter);
 

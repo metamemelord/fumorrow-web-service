@@ -1,18 +1,18 @@
-const express = require('express');
+const express = require("express");
 const bikeIndexRouter = express.Router();
 
 // Getting routes
 
-const returnBikes = require('./ReturnBikes');
-const addBike = require('./AddBike');
-const deleteBike = require('./DeleteBike');
-const miscRoutes = require('./Misc');
-const returnBikeById = require('./ReturnBikeById');
-const returnAllUnchecked = require('./ReturnAllUncheckedBikes');
-const returnAllRecheckNeeded = require('./ReturnAllBikesRecheckNeeded');
-const markForRecheckById = require('./MarkBikeForRecheckById');
-const approveById = require('./ApproveBikeById');
-const modifyBike = require('./ModifyBike');
+const returnBikes = require("./ReturnBikes");
+const addBike = require("./AddBike");
+const deleteBike = require("./DeleteBike");
+const miscRoutes = require("./Misc");
+const returnBikeById = require("./ReturnBikeById");
+const returnAllUnchecked = require("./ReturnAllUncheckedBikes");
+const returnAllRecheckNeeded = require("./ReturnAllBikesRecheckNeeded");
+const markForRecheckById = require("./MarkBikeForRecheckById");
+const approveById = require("./ApproveBikeById");
+const modifyBike = require("./ModifyBike");
 
 // CRUD OPERATIONS
 

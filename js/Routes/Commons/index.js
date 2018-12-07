@@ -1,11 +1,11 @@
-const express = require('express');
+const express = require("express");
 const commonsRouter = express.Router();
 
-const loginRouter = require('./Login');
-const registrationRouter = require('./Registration');
-const celebrityRouter = require('./Celebrity/index');
-const verifyTokenRouter = require('./VerifyToken');
-const mediaRouter = require('./Media');
+const loginRouter = require("./Login");
+const registrationRouter = require("./Registration");
+const celebrityRouter = require("./Celebrity/index");
+const verifyTokenRouter = require("./VerifyToken");
+const mediaRouter = require("./Media");
 
 commonsRouter.use(loginRouter);
 commonsRouter.use(registrationRouter);

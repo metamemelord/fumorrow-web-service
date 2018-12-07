@@ -1,18 +1,18 @@
-const express = require('express');
+const express = require("express");
 const animeIndexRouter = express.Router();
 
 // Getting routes
 
-const returnAnime = require('./ReturnAnimes');
-const addAnime = require('./AddAnime');
-const deleteAnime = require('./DeleteAnime');
-const modifyAnime = require('./ModifyAnime');
-const miscRoutes = require('./Misc');
-const returnAllUnchecked = require('./ReturnAllUncheckedAnimes');
-const returnAllRecheckNeeded = require('./ReturnAllAnimesRecheckNeeded');
-const approveById = require('./ApproveAnimeById');
-const markForRecheckById = require('./MarkAnimeForRecheckById');
-const returnAnimeById = require('./ReturnAnimeById');
+const returnAnime = require("./ReturnAnimes");
+const addAnime = require("./AddAnime");
+const deleteAnime = require("./DeleteAnime");
+const modifyAnime = require("./ModifyAnime");
+const miscRoutes = require("./Misc");
+const returnAllUnchecked = require("./ReturnAllUncheckedAnimes");
+const returnAllRecheckNeeded = require("./ReturnAllAnimesRecheckNeeded");
+const approveById = require("./ApproveAnimeById");
+const markForRecheckById = require("./MarkAnimeForRecheckById");
+const returnAnimeById = require("./ReturnAnimeById");
 
 // CRUD OPERATIONS
 
