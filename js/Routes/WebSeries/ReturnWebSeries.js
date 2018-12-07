@@ -6,7 +6,7 @@ const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
 var webSeriesMoviesRouter = express.Router();
 
-webSeriesMoviesRouter.post('/api/webSeries', function (req, res) {
+webSeriesMoviesRouter.post('/api/web-series', function (req, res) {
     try {
         if (isEmpty(req.body.begin) || isEmpty(req.body.limit)) {
             if (isEmpty(req.body.filter)) {
