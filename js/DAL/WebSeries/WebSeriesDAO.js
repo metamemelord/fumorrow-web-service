@@ -85,7 +85,7 @@ function removeById(id, callback) {
 	}
 }
 
-function modifyMovie(object, callback) {
+function modifyWebSeries(object, callback) {
 	try {
 		object.recheck_needed = false;
 		object.is_approved = false;
@@ -211,7 +211,7 @@ function markReleasedById(id, callback) {
 module.exports = {
 	addWebSeries,
 	removeById,
-	modifyMovie,
+	modifyWebSeries,
 	incrementCounterById,
 	approveById,
 	markForRecheckById,

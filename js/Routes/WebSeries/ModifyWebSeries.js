@@ -72,7 +72,8 @@ modifyWebSeriesRouter.post('/api/web-series/modify',
                             crew: webSeriesData.crew,
                             language: webSeriesData.language,
                             genres: webSeriesData.genres,
-                            runtime: webSeriesData.runtime,
+                            season: webSeriesData.season,
+                            episodes: webSeriesData.episodes,
                             images: webSeriesData.images,
                             videos: webSeriesData.videos,
                             texts: webSeriesData.texts,
@@ -80,8 +81,9 @@ modifyWebSeriesRouter.post('/api/web-series/modify',
                             is_sponsored: webSeriesData.is_sponsored,
                             is_released: false,
                             is_live: webSeriesData.is_live,
+                            is_running_now: webSeriesData.is_running_now,
                             click_counter: webSeriesData.click_counter,
-                            mpaa_rating: webSeriesData.mpaa_rating,
+                            tv_pg_rating: webSeriesData.tv_pg_rating,
                             external_ratings: webSeriesData.external_ratings,
                             predicted_ratings: webSeriesData.predicted_ratings,
                             favorited_by: webSeriesData.favorited_by,
@@ -91,7 +93,7 @@ modifyWebSeriesRouter.post('/api/web-series/modify',
                         webSeriesObject.uid = md5(uniqueId.replace(/\s/g, ''));
                         webSeriesObject.genres.sort();
                         webSeriesObject.is_released = helpers.checkDate(webSeriesObject.release_date);
-                        webSeriesDAO.modifyMovie(webSeriesObject, function (status, message, data) {
+                        webSeriesDAO.modifyWebSeries(webSeriesObject, function (status, message, data) {
                             return res.status(status).json({
                                 "status": {
                                     "code": status,

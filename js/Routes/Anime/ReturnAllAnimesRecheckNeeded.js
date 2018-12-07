@@ -8,7 +8,7 @@ const tokenAuthCheck = require('../../Utils/Token/TokenAuthCheck');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
-recheckNeededAnimeRouter.post('/api/anime/recheck', tokenVerifier, tokenAuthCheck, function (req, res) {
+recheckNeededAnimeRouter.post('/api/animes/recheck', tokenVerifier, tokenAuthCheck, function (req, res) {
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {

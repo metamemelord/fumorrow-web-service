@@ -20,6 +20,10 @@ var webSeriesSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
+    anime_type: {
+        type: String,
+        required: true
+    },
     cast: {
         type: Array,
         required: true
@@ -40,6 +44,14 @@ var webSeriesSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+	season: {
+		type: Number,
+		required: true
+	},
+	episodes: {
+		type: Array,
+		default: []
+	},
     images: {
         type: Array,
         default: []
@@ -52,13 +64,13 @@ var webSeriesSchema = new mongoose.Schema({
         type: Array,
         default: []
     },
-    tv_pg_rating: {
-        type: String,
-        default: "TV-Y"
-    },
     partners: {
         type: Array,
         default: []
+    },
+    tv_pg_rating: {
+        type: String,
+        default: "TV-Y"
     },
     is_sponsored: {
         type: Boolean,
@@ -72,6 +84,10 @@ var webSeriesSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+	is_running_now: {
+		type: Boolean,
+		default: false
+	},
     click_counter: {
         type: Number,
         default: 0

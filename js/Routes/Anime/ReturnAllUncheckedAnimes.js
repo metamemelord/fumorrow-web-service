@@ -8,7 +8,7 @@ const tokenAuthCheck = require('../../Utils/Token/TokenAuthCheck');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
-uncheckedAnimeRouter.post('/api/anime/unchecked', tokenVerifier, tokenAuthCheck, function (req, res) {
+uncheckedAnimeRouter.post('/api/animes/unchecked', tokenVerifier, tokenAuthCheck, function (req, res) {
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {

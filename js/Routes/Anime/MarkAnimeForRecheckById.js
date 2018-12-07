@@ -2,14 +2,14 @@ const express = require('express');
 const DAL = require('../../DAL/index');
 const animeIdVerifier = require('../RouteUtils').requestIdVerifier;
 const animeDAO = DAL.AnimeDAO;
-const MarkAnimeForRecheckRouter = express.Router();
+const markAnimeForRecheckRouter = express.Router();
 const jwt = require('jsonwebtoken');
 const tokenVerifier = require('../../Utils/Token/TokenVerifier');
 const tokenAuthCheck = require('../../Utils/Token/TokenAuthCheck');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
-MarkAnimeForRecheckRouter.post('/api/anime/mark_recheck', tokenVerifier, tokenAuthCheck, animeIdVerifier, function (req, res) {
+markAnimeForRecheckRouter.post('/api/anime/mark_recheck', tokenVerifier, tokenAuthCheck, animeIdVerifier, function (req, res) {
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
@@ -30,7 +30,7 @@ MarkAnimeForRecheckRouter.post('/api/anime/mark_recheck', tokenVerifier, tokenAu
                     "data": null
                 });
             } else {
-                if (!authData['privilages'].includes('webSeires')) {
+                if (!authData['privilages'].includes('anime')) {
                     return res.status(403).json({
                         "status": {
                             "code": 403,
@@ -70,4 +70,4 @@ MarkAnimeForRecheckRouter.post('/api/anime/mark_recheck', tokenVerifier, tokenAu
     }
 });
 
-module.exports = MarkAnimeForRecheckRouter;
+module.exports = markAnimeForRecheckRouter;

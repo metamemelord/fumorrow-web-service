@@ -5,7 +5,7 @@ const isEmpty = require('../../Utils/HelperFunctions').isEmpty;
 module.exports = (req, res, next) => {
     try {
         if (isEmpty(req.body.title) || isEmpty(req.body.day) || isEmpty(req.body.month) ||
-            isEmpty(req.body.year) || isEmpty(req.body.cast) || isEmpty(req.body.language) ||
+            isEmpty(req.body.year) || isEmpty(req.body.anime_type) || isEmpty(req.body.cast) || isEmpty(req.body.language) ||
             isEmpty(req.body.crew) || isEmpty(req.body.genres)) {
             return res.status(400).json({
                 "status": {

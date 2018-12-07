@@ -67,12 +67,14 @@ modifyAnimeRouter.post('/api/anime/modify',
                             release_date: new Date(animeData.year, animeData.month, animeData.day, animeData.hour, animeData.minute).toLocaleString('en-US', {
                                 timeZone: 'Asia/Calcutta'
                             }),
+                            anime_type: animeData.anime_type,
                             uid: "",
                             cast: animeData.cast,
                             crew: animeData.crew,
                             language: animeData.language,
                             genres: animeData.genres,
-                            runtime: animeData.runtime,
+                            season: animeData.season,
+                            episodes: animeData.episodes,
                             images: animeData.images,
                             videos: animeData.videos,
                             texts: animeData.texts,
@@ -81,7 +83,8 @@ modifyAnimeRouter.post('/api/anime/modify',
                             is_released: false,
                             is_live: animeData.is_live,
                             click_counter: animeData.click_counter,
-                            mpaa_rating: animeData.mpaa_rating,
+                            is_running_now: animeData.is_running_now,
+                            tv_pg_rating: animeData.tv_pg_rating,
                             external_ratings: animeData.external_ratings,
                             predicted_ratings: animeData.predicted_ratings,
                             favorited_by: animeData.favorited_by,
@@ -91,7 +94,7 @@ modifyAnimeRouter.post('/api/anime/modify',
                         animeObject.uid = md5(uniqueId.replace(/\s/g, ''));
                         animeObject.genres.sort();
                         animeObject.is_released = helpers.checkDate(animeObject.release_date);
-                        animeDAO.modifyMovie(animeObject, function (status, message, data) {
+                        animeDAO.modifyAnime(animeObject, function (status, message, data) {
                             return res.status(status).json({
                                 "status": {
                                     "code": status,

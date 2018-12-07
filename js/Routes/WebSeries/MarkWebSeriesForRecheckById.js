@@ -2,14 +2,14 @@ const express = require('express');
 const DAL = require('../../DAL/index');
 const webSeriesIdVerifier = require('../RouteUtils').requestIdVerifier;
 const webSeriesDAO = DAL.WebSeriesDAO;
-const MarkWebSeriesForRecheckRouter = express.Router();
+const markWebSeriesForRecheckRouter = express.Router();
 const jwt = require('jsonwebtoken');
 const tokenVerifier = require('../../Utils/Token/TokenVerifier');
 const tokenAuthCheck = require('../../Utils/Token/TokenAuthCheck');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
-MarkWebSeriesForRecheckRouter.post('/api/web-series/mark_recheck', tokenVerifier, tokenAuthCheck, webSeriesIdVerifier, function (req, res) {
+markWebSeriesForRecheckRouter.post('/api/web-series/mark_recheck', tokenVerifier, tokenAuthCheck, webSeriesIdVerifier, function (req, res) {
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
@@ -30,7 +30,7 @@ MarkWebSeriesForRecheckRouter.post('/api/web-series/mark_recheck', tokenVerifier
                     "data": null
                 });
             } else {
-                if (!authData['privilages'].includes('webSeires')) {
+                if (!authData['privilages'].includes('web-series')) {
                     return res.status(403).json({
                         "status": {
                             "code": 403,
@@ -70,4 +70,4 @@ MarkWebSeriesForRecheckRouter.post('/api/web-series/mark_recheck', tokenVerifier
     }
 });
 
-module.exports = MarkWebSeriesForRecheckRouter;
+module.exports = markWebSeriesForRecheckRouter;

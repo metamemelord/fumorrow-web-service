@@ -12,21 +12,21 @@ webSeriesByIdRouter.post('/api/web-series/:id', function (req, res) {
             var id = isNotEmpty(req.params.id) ? req.params.id : req.body._id;
             webSeriesDAOForRetrieval.getById(id, function (status, message, data) {
                 return res.status(status).json({
-                    "status":{
-                        "code":status,
-                        "message":message
+                    "status": {
+                        "code": status,
+                        "message": message
                     },
-                    "data":data
+                    "data": data
                 });
             });
         }
         else {
             return res.status(400).json({
-                "status":{
-                    "code":400,
-                    "message":"Provide an ID before proceeding"
+                "status": {
+                    "code": 400,
+                    "message": "Provide an ID before proceeding"
                 },
-                "data":null
+                "data": null
             });
         }
     } catch (error) {

@@ -29,7 +29,7 @@ let animeDBService = connection.model('anime', animeSchema);
 
 // Service methods
 
-function addanime(object, callback) {
+function addAnime(object, callback) {
 	try {
 		object._id = mongoose.Types.ObjectId(object._id);
 		animeDBService.findOne({ $or: [{ "_id": object._id }, { "uid": object.uid }] }, function (error, data) {
@@ -85,7 +85,7 @@ function removeById(id, callback) {
 	}
 }
 
-function modifyMovie(object, callback) {
+function modifyAnime(object, callback) {
 	try {
 		object.recheck_needed = false;
 		object.is_approved = false;
@@ -209,9 +209,9 @@ function markReleasedById(id, callback) {
 }
 
 module.exports = {
-	addanime,
+	addAnime,
 	removeById,
-	modifyMovie,
+	modifyAnime,
 	incrementCounterById,
 	approveById,
 	markForRecheckById,

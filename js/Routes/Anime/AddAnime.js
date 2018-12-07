@@ -52,22 +52,23 @@ addAnimeRouter.post('/api/anime/add', tokenVerifier, tokenAuthCheck, animeReques
                         release_date: new Date(animeData.year, animeData.month, animeData.day, animeData.hour, animeData.minute).toLocaleString('en-US', {
                             timeZone: 'Asia/Calcutta'
                         }),
+                        anime_type: animeData.anime_type,
                         uid: "",
                         cast: animeData.cast,
                         crew: animeData.crew,
                         language: animeData.language,
                         genres: animeData.genres,
-                        runtime: animeData.runtime,
+                        season: animeData.season,
+                        episodes: animeData.episodes,
                         images: animeData.images,
                         videos: animeData.videos,
                         texts: animeData.texts,
                         partners: animeData.partners,
-                        showing_at: animeData.showing_at,
                         is_sponsored: animeData.is_sponsored,
                         is_released: false,
                         is_live: animeData.is_live,
-                        mpaa_rating: animeData.mpaa_rating,
-                        budget: animeData.budget,
+                        is_running_now: animeData.is_running_now,
+                        tv_pg_rating: animeData.tv_pg_rating,
                         external_ratings: animeData.external_ratings,
                     }
                     length = 12 - animeObject._id.length;
