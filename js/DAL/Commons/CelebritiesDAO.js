@@ -90,7 +90,7 @@ function getCelebrityById(pid, callback) {
                 logger.error(error);
                 return callback(500, "Could not connect to database", null);
             }
-            var sql = "select pid, first_name, middle_name, last_name, profession,dob,description, gender, image_link from celebrities where pid=? and is_approved=1";
+            var sql = "select pid, first_name, middle_name, last_name, profession, dob, description, gender, image_link from celebrities where pid=? and is_approved=1";
             con.query(sql, pid, function (error, celebrityDataFromDb) {
                 con.end();
                 if (error) {
@@ -117,7 +117,7 @@ function getAllCelebrities(callback) {
                 logger.error(error);
                 return callback(500, "Could not connect to database", null);
             }
-            var sql = "select pid, first_name, middle_name, last_name, profession,dob,description, gender, image_link from celebrities where is_approved=1";
+            var sql = "select pid, first_name, middle_name, last_name, profession, dob, description, gender, image_link from celebrities where is_approved=1";
             con.query(sql, function (error, celebrities) {
                 con.end();
                 if (error) {
@@ -142,7 +142,7 @@ function getAllUnapprovedCelebrities(callback) {
                 logger.error(error);
                 return callback(500, "Could not connect to database", null);
             }
-            var sql = "select pid, first_name, middle_name, last_name, profession,dob,description, gender, image_link from celebrities where is_approved=0";
+            var sql = "select pid, first_name, middle_name, last_name, profession, dob, description, gender, image_link from celebrities where is_approved=0";
             con.query(sql, function (error, celebrities) {
                 con.end();
                 if (error) {

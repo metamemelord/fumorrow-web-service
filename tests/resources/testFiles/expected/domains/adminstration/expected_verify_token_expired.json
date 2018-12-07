@@ -1,0 +1,7 @@
+{
+    "status": {
+        "code": 401,
+        "message": "Token expired"
+    },
+    "data": null
+}

@@ -1,0 +1,77 @@
+{
+    "_id": "313131323031395137486164",
+    "title": "Uri: The Surgical Strike",
+    "day": 11.0,
+    "month": 1.0,
+    "year": 2019.0,
+    "language": 0,
+    "genres": [
+        "Action",
+        "Drama",
+        "War"
+    ],
+    "runtime": 112.0,
+    "mpaa": "null",
+    "budget": -1,
+    "cast": [
+        {
+            "type": "Actor",
+            "pid": 130
+        },
+        {
+            "type": "Actor",
+            "pid": 71
+        },
+        {
+            "type": "Actress",
+            "pid": 134
+        }
+    ],
+    "crew": [
+        {
+            "type": "Director",
+            "pid": 6
+        }
+    ],
+    "images": [
+        {
+            "url": "https://res.cloudinary.com/fumedia/image/upload/v1541838688/product/movies/uri_DP.jpg",
+            "type": "Display"
+        },
+        {
+            "url": "https://res.cloudinary.com/fumedia/image/upload/v1541838686/product/movies/uri_Cover.jpg",
+            "type": "Cover"
+        }
+    ],
+    "videos": [
+        {
+            "url": "https://www.youtube.com/watch?v=aXYPUqFL9ZU",
+            "type": "Teaser"
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=S6_1Ed0dLHQ",
+            "type": "Teaser Trailor Reaction"
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=kSFERQzEbJk",
+            "type": "Trailor"
+        }
+    ],
+    "texts": [
+        {
+            "url": "https://www.timesnownews.com/entertainment/news/bollywood-news/article/uri-the-surgical-strike-glad-a-film-is-being-made-to-honour-our-army-says-nsa-ajit-doval-bollywood-news/291453",
+            "type": "External article"
+        },
+        {
+            "url": "https://www.hindustantimes.com/bollywood/uri-teaser-vicky-kaushal-leads-surgical-strikes-across-loc-as-reel-imitates-real/story-RsfGZF9DnguHCflGAbNY5I.html",
+            "type": "External article"
+        }
+    ],
+    "partners": [
+        {
+            "name": "RSVP Movies",
+            "type": "Production House"
+        }
+    ],
+    "override_uid_check": true
+}
