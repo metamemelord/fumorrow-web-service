@@ -10,6 +10,8 @@ const VideoGameDAO = require('./VideoGames/VideoGameDAO');
 const VideoGameDAOForRetrieval = require('./VideoGames/VideoGameDAOForRetrieval');
 const WebSeriesDAO = require('./WebSeries/WebSeriesDAO');
 const WebSeriesDAOForRetrieval = require('./WebSeries/WebSeriesDAOForRetrieval');
+const AnimeDAO = require('./Anime/AnimeDAO');
+const AnimeDAOForRetrieval = require('./Anime/AnimeDAOForRetrieval');
 
 // Common routes
 
@@ -32,6 +34,8 @@ module.exports = {
     VideoGameDAOForRetrieval,
     WebSeriesDAO,
     WebSeriesDAOForRetrieval,
+    AnimeDAO,
+    AnimeDAOForRetrieval,
     LoginDAO,
     RegistrationDAO,
     CelebritiesDAO,

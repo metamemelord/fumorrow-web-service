@@ -7,7 +7,7 @@ const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 const isNotEmpty = require('./../../Utils/HelperFunctions').isNotEmpty;
 
-webSeriesMiscRouter.post('/api/web-series/inc/:id', function (req, res) {
+webSeriesMiscRouter.post('/api/anime/inc/:id', function (req, res) {
 
     try {
         if (isNotEmpty(req.body._id) || isNotEmpty(req.params.id)) {
@@ -37,7 +37,7 @@ webSeriesMiscRouter.post('/api/web-series/inc/:id', function (req, res) {
     }
 });
 
-webSeriesMiscRouter.post('/api/web-series/partners', function (req, res) {
+webSeriesMiscRouter.post('/api/anime/partners', function (req, res) {
     try {
         webSeriesDAOForRetrieval.getAllReferrers(function (status, message, data) {
             return res.status(status).json({
@@ -60,7 +60,7 @@ webSeriesMiscRouter.post('/api/web-series/partners', function (req, res) {
     }
 });
 
-webSeriesMiscRouter.post('/api/web-series/languages', function (req, res) {
+webSeriesMiscRouter.post('/api/anime/languages', function (req, res) {
     try {
         webSeriesDAOForRetrieval.getAllLanguages(function (status, message, data) {
             return res.status(status).json({

@@ -9,7 +9,7 @@ const tokenAuthCheck = require('./../../Utils/Token/TokenAuthCheck');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
-deleteWebSeriesRouter.post('/api/webSeries/delete', tokenVerifier, tokenAuthCheck, webSeriesIdVerifier, function (req, res) {
+deleteWebSeriesRouter.post('/api/web-series/delete', tokenVerifier, tokenAuthCheck, webSeriesIdVerifier, function (req, res) {
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
@@ -30,7 +30,7 @@ deleteWebSeriesRouter.post('/api/webSeries/delete', tokenVerifier, tokenAuthChec
                     "data": null
                 });
             } else {
-                if (!authData['privilages'].includes('webSeries')) {
+                if (!authData['privilages'].includes('web-series')) {
                     return res.status(403).json({
                         "status": {
                             "code": 403,

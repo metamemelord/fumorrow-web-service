@@ -1,16 +1,16 @@
 const express = require('express');
 const DAL = require('../../DAL/index');
-const webSeriesDAOForRetrieval = DAL.WebSeriesDAOForRetrieval;
+const animeDAOForRetrieval = DAL.AnimeDAOForRetrieval;
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
-const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
-var webSeriesMoviesRouter = express.Router();
+const isEmpty = require('../../Utils/HelperFunctions').isEmpty;
+var returnAnimesRouter = express.Router();
 
-webSeriesMoviesRouter.post('/api/webSeries', function (req, res) {
+returnAnimesRouter.post('/api/animes', function (req, res) {
     try {
         if (isEmpty(req.body.begin) || isEmpty(req.body.limit)) {
             if (isEmpty(req.body.filter)) {
-                webSeriesDAOForRetrieval.getAll(function (status, message, data) {
+                animeDAOForRetrieval.getAll(function (status, message, data) {
                     return res.status(status).json({
                         "status": {
                             "code": status,
@@ -21,7 +21,7 @@ webSeriesMoviesRouter.post('/api/webSeries', function (req, res) {
                 });
             } else {
                 var filter = req.body.filter;
-                webSeriesDAOForRetrieval.getAllByFilter(filter, function (status, message, data) {
+                animeDAOForRetrieval.getAllByFilter(filter, function (status, message, data) {
                     return res.status(status).json({
                         "status": {
                             "code": status,
@@ -33,7 +33,7 @@ webSeriesMoviesRouter.post('/api/webSeries', function (req, res) {
             }
         } else {
             if (isEmpty(req.body.filter)) {
-                webSeriesDAOForRetrieval.getInRange(req.body.begin, req.body.limit, function (status, message, data) {
+                animeDAOForRetrieval.getInRange(req.body.begin, req.body.limit, function (status, message, data) {
                     return res.status(status).json({
                         "status": {
                             "code": status,
@@ -44,7 +44,7 @@ webSeriesMoviesRouter.post('/api/webSeries', function (req, res) {
                 });
             } else {
                 var filterWithRange = req.body.filter;
-                webSeriesDAOForRetrieval.getInRangeByFilter(filterWithRange, req.body.begin, req.body.limit, function (status, message, data) {
+                animeDAOForRetrieval.getInRangeByFilter(filterWithRange, req.body.begin, req.body.limit, function (status, message, data) {
                     return res.status(status).json({
                         "status": {
                             "code": status,
@@ -67,4 +67,4 @@ webSeriesMoviesRouter.post('/api/webSeries', function (req, res) {
     }
 });
 
-module.exports = webSeriesMoviesRouter;
+module.exports = returnAnimesRouter;

@@ -29,12 +29,13 @@ fumorrow.use((error, req, res, next) => {
 /**
  *  API Routes
  */
-fumorrow.use(require('./js/Routes/Commons/index'));
-fumorrow.use(require('./js/Routes/Movies/index'));
-fumorrow.use(require('./js/Routes/Books/index'));
-fumorrow.use(require('./js/Routes/Cars/index'));
-fumorrow.use(require('./js/Routes/VideoGames/index'));
-fumorrow.use(require('./js/Routes/Bikes/index'));
+fumorrow.use(require('./js/Routes/Commons'));
+fumorrow.use(require('./js/Routes/Movies'));
+fumorrow.use(require('./js/Routes/Books'));
+fumorrow.use(require('./js/Routes/Cars'));
+fumorrow.use(require('./js/Routes/VideoGames'));
+fumorrow.use(require('./js/Routes/Bikes'));
+fumorrow.use(require('./js/Routes/Anime'))
 fumorrow.use(require('./js/Routes/404'));
 
 // Routes

@@ -13,7 +13,7 @@ const isEmpty = require('./../../Utils/HelperFunctions').isEmpty;
 
 const addWebSeriesRouter = express.Router();
 
-addWebSeriesRouter.post('/api/webSeries/add', tokenVerifier, tokenAuthCheck, webSeriesRequestVerifier, function (req, res) {
+addWebSeriesRouter.post('/api/web-series/add', tokenVerifier, tokenAuthCheck, webSeriesRequestVerifier, function (req, res) {
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
@@ -34,7 +34,7 @@ addWebSeriesRouter.post('/api/webSeries/add', tokenVerifier, tokenAuthCheck, web
                     "data": null
                 });
             } else {
-                if (!authData['privilages'].includes('webSeries')) {
+                if (!authData['privilages'].includes('web-series')) {
                     return res.status(403).json({
                         "status": {
                             "code": 403,

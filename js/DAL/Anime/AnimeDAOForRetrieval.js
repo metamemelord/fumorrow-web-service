@@ -4,7 +4,7 @@ const isEmpty = require('../../Utils/HelperFunctions').isEmpty;
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
-const privateWebSeriesFields = {
+const privateanimeFields = {
 	is_approved: 0,
 	recheck_needed: 0,
 	click_counter: 0,
@@ -34,12 +34,12 @@ try {
 
 require('assert').notEqual(connectionForRetrieval, null);
 
-const webSeriesSchema = require('../../Models/WebSeriesModel');
-let webSeriesDBService = connectionForRetrieval.model('webseries', webSeriesSchema);
+const animeSchema = require('../../Models/AnimeModel');
+let animeDBService = connectionForRetrieval.model('anime', animeSchema);
 
 
 function getAll(callback) {
-	webSeriesDBService.find({ "is_approved": true }, privateWebSeriesFields).sort({ "_id": 1 }).exec(function (error, data) {
+	animeDBService.find({ "is_approved": true }, privateanimeFields).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -49,7 +49,7 @@ function getAll(callback) {
 }
 
 function getInRange(begin, limit, callback) {
-	webSeriesDBService.find({ "is_approved": true }, privateWebSeriesFields).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	animeDBService.find({ "is_approved": true }, privateanimeFields).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -59,12 +59,12 @@ function getInRange(begin, limit, callback) {
 }
 
 function getAllByFilter(filter, callback) {
-	webSeriesDBService.find({
+	animeDBService.find({
 		$and: [
 			{ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] },
 			{ "is_approved": true }
 		]
-	}, privateWebSeriesFields).sort({ "_id": 1 }).exec(function (error, data) {
+	}, privateanimeFields).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -73,12 +73,12 @@ function getAllByFilter(filter, callback) {
 	});
 }
 function getInRangeByFilter(filter, begin, limit, callback) {
-	webSeriesDBService.find({
+	animeDBService.find({
 		$and: [
 			{ $or: [{ "language": { "$in": filter } }, { "genres": { "$in": filter } }] },
 			{ "is_approved": true }
 		]
-	}, privateWebSeriesFields).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
+	}, privateanimeFields).sort({ "_id": 1 }).skip(begin).limit(limit).exec(function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);
@@ -88,9 +88,9 @@ function getInRangeByFilter(filter, begin, limit, callback) {
 }
 
 function getById(id, callback) {
-	webSeriesDBService.findOne({
+	animeDBService.findOne({
 		$and: [{ "_id": id }, { "is_approved": true }]
-	}, privateWebSeriesFields,
+	}, privateanimeFields,
 		function (error, data) {
 			if (error) {
 				logger.error(error);
@@ -108,7 +108,7 @@ function getById(id, callback) {
 }
 
 function getAllForRechecking(callback) {
-	webSeriesDBService.find({
+	animeDBService.find({
 		$and: [{ "recheck_needed": true }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
@@ -120,7 +120,7 @@ function getAllForRechecking(callback) {
 }
 
 function getAllUnchecked(callback) {
-	webSeriesDBService.find({
+	animeDBService.find({
 		$and: [{ "recheck_needed": false }, { "is_approved": false }]
 	}).sort({ "_id": 1 }).exec(function (error, data) {
 		if (error) {
@@ -133,7 +133,7 @@ function getAllUnchecked(callback) {
 
 
 function getAllReferrers(callback) {
-	webSeriesDBService.aggregate([
+	animeDBService.aggregate([
 		{ "$match": { "is_approved": true } },
 		{ "$unwind": "$partners" },
 		{
@@ -163,7 +163,7 @@ function getAllReferrers(callback) {
 }
 
 function getAllLanguages(callback) {
-	webSeriesDBService.distinct("language", function (error, data) {
+	animeDBService.distinct("language", function (error, data) {
 		if (error) {
 			logger.error(error);
 			callback(500, "Internal server error", null);

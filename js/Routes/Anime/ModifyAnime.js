@@ -1,8 +1,8 @@
 const express = require('express');
 const DAL = require('../../DAL/index');
-const webSeriesIdVerifier = require('../RouteUtils').requestIdVerifier;
-const webSeriesRequestVerifier = require('./AddToWebSeriesRequestVerifier');
-const webSeriesDAO = DAL.WebSeriesDAO;
+const animeIdVerifier = require('../RouteUtils').requestIdVerifier;
+const animeRequestVerifier = require('./AddToAnimeRequestVerifier');
+const animeDAO = DAL.AnimeDAO;
 const md5 = require('md5');
 const jwt = require('jsonwebtoken');
 const helpers = require("../../Utils/HelperFunctions");
@@ -12,13 +12,13 @@ const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 const isEmpty = require('../../Utils/HelperFunctions').isEmpty;
 
-const modifyWebSeriesRouter = express.Router();
+const modifyAnimeRouter = express.Router();
 
-modifyWebSeriesRouter.post('/api/web-series/modify',
+modifyAnimeRouter.post('/api/anime/modify',
     tokenVerifier,
     tokenAuthCheck,
-    webSeriesIdVerifier,
-    webSeriesRequestVerifier,
+    animeIdVerifier,
+    animeRequestVerifier,
     function (req, res) {
         try {
             jwt.verify(req.token, process.env.key, function (error, authData) {
@@ -40,7 +40,7 @@ modifyWebSeriesRouter.post('/api/web-series/modify',
                         "data": null
                     });
                 } else {
-                    if (!authData['privilages'].includes('web-series')) {
+                    if (!authData['privilages'].includes('anime')) {
                         return res.status(403).json({
                             "status": {
                                 "code": 403,
@@ -57,41 +57,41 @@ modifyWebSeriesRouter.post('/api/web-series/modify',
                             "data": null
                         });
                     } else {
-                        var webSeriesData = req.body;
-                        if (isEmpty(webSeriesData.hour)) webSeriesData.hour = 0;
-                        if (isEmpty(webSeriesData.minute)) webSeriesData.minute = 0;
-                        var webSeriesObject = {
-                            override_uid_check: webSeriesData.override_uid_check,
-                            _id: webSeriesData._id,
-                            title: webSeriesData.title,
-                            release_date: new Date(webSeriesData.year, webSeriesData.month, webSeriesData.day, webSeriesData.hour, webSeriesData.minute).toLocaleString('en-US', {
+                        var animeData = req.body;
+                        if (isEmpty(animeData.hour)) animeData.hour = 0;
+                        if (isEmpty(animeData.minute)) animeData.minute = 0;
+                        var animeObject = {
+                            override_uid_check: animeData.override_uid_check,
+                            _id: animeData._id,
+                            title: animeData.title,
+                            release_date: new Date(animeData.year, animeData.month, animeData.day, animeData.hour, animeData.minute).toLocaleString('en-US', {
                                 timeZone: 'Asia/Calcutta'
                             }),
                             uid: "",
-                            cast: webSeriesData.cast,
-                            crew: webSeriesData.crew,
-                            language: webSeriesData.language,
-                            genres: webSeriesData.genres,
-                            runtime: webSeriesData.runtime,
-                            images: webSeriesData.images,
-                            videos: webSeriesData.videos,
-                            texts: webSeriesData.texts,
-                            partners: webSeriesData.partners,
-                            is_sponsored: webSeriesData.is_sponsored,
+                            cast: animeData.cast,
+                            crew: animeData.crew,
+                            language: animeData.language,
+                            genres: animeData.genres,
+                            runtime: animeData.runtime,
+                            images: animeData.images,
+                            videos: animeData.videos,
+                            texts: animeData.texts,
+                            partners: animeData.partners,
+                            is_sponsored: animeData.is_sponsored,
                             is_released: false,
-                            is_live: webSeriesData.is_live,
-                            click_counter: webSeriesData.click_counter,
-                            mpaa_rating: webSeriesData.mpaa_rating,
-                            external_ratings: webSeriesData.external_ratings,
-                            predicted_ratings: webSeriesData.predicted_ratings,
-                            favorited_by: webSeriesData.favorited_by,
-                            user_visit_info: webSeriesData.user_visit_info
+                            is_live: animeData.is_live,
+                            click_counter: animeData.click_counter,
+                            mpaa_rating: animeData.mpaa_rating,
+                            external_ratings: animeData.external_ratings,
+                            predicted_ratings: animeData.predicted_ratings,
+                            favorited_by: animeData.favorited_by,
+                            user_visit_info: animeData.user_visit_info
                         }
-                        var uniqueId = webSeriesObject.title + webSeriesObject.release_date.toString() + webSeriesData.referrerName;
-                        webSeriesObject.uid = md5(uniqueId.replace(/\s/g, ''));
-                        webSeriesObject.genres.sort();
-                        webSeriesObject.is_released = helpers.checkDate(webSeriesObject.release_date);
-                        webSeriesDAO.modifyMovie(webSeriesObject, function (status, message, data) {
+                        var uniqueId = animeObject.title + animeObject.release_date.toString() + animeData.referrerName;
+                        animeObject.uid = md5(uniqueId.replace(/\s/g, ''));
+                        animeObject.genres.sort();
+                        animeObject.is_released = helpers.checkDate(animeObject.release_date);
+                        animeDAO.modifyMovie(animeObject, function (status, message, data) {
                             return res.status(status).json({
                                 "status": {
                                     "code": status,
@@ -115,4 +115,4 @@ modifyWebSeriesRouter.post('/api/web-series/modify',
         }
     });
 
-module.exports = modifyWebSeriesRouter;
+module.exports = modifyAnimeRouter;

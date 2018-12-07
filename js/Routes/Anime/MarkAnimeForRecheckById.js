@@ -1,15 +1,15 @@
 const express = require('express');
 const DAL = require('../../DAL/index');
-const webSeriesIdVerifier = require('../RouteUtils').requestIdVerifier;
-const webSeriesDAO = DAL.WebSeriesDAO;
-const ApproveWebSeriesRouter = express.Router();
+const animeIdVerifier = require('../RouteUtils').requestIdVerifier;
+const animeDAO = DAL.AnimeDAO;
+const MarkAnimeForRecheckRouter = express.Router();
 const jwt = require('jsonwebtoken');
-const tokenVerifier = require('./../../Utils/Token/TokenVerifier');
-const tokenAuthCheck = require('./../../Utils/Token/TokenAuthCheck');
+const tokenVerifier = require('../../Utils/Token/TokenVerifier');
+const tokenAuthCheck = require('../../Utils/Token/TokenAuthCheck');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
-ApproveWebSeriesRouter.post('/api/web-series/approve', tokenVerifier, tokenAuthCheck, webSeriesIdVerifier, function (req, res) {
+MarkAnimeForRecheckRouter.post('/api/anime/mark_recheck', tokenVerifier, tokenAuthCheck, animeIdVerifier, function (req, res) {
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {
@@ -30,7 +30,7 @@ ApproveWebSeriesRouter.post('/api/web-series/approve', tokenVerifier, tokenAuthC
                     "data": null
                 });
             } else {
-                if (!authData['privilages'].includes('web-series')) {
+                if (!authData['privilages'].includes('webSeires')) {
                     return res.status(403).json({
                         "status": {
                             "code": 403,
@@ -41,10 +41,7 @@ ApproveWebSeriesRouter.post('/api/web-series/approve', tokenVerifier, tokenAuthC
                 } else {
                     try {
                         var id = req.body._id;
-                        webSeriesDAO.approveById(id, function (status, message, data) {
-                            if (status === 200) {
-                                logger.warn(authData.username + " approved " + id);
-                            }
+                        animeDAO.markForRecheckById(id, function (status, message, data) {
                             return res.status(status).json({
                                 "status": {
                                     "code": status,
@@ -73,4 +70,4 @@ ApproveWebSeriesRouter.post('/api/web-series/approve', tokenVerifier, tokenAuthC
     }
 });
 
-module.exports = ApproveWebSeriesRouter;
+module.exports = MarkAnimeForRecheckRouter;

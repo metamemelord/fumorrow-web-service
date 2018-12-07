@@ -21,7 +21,6 @@ webSeriesIndexRouter.use(returnWebSeries);
 webSeriesIndexRouter.use(addWebSeries);
 webSeriesIndexRouter.use(deleteWebSeries);
 webSeriesIndexRouter.use(modifyWebSeries);
-webSeriesIndexRouter.use(showingAt);
 webSeriesIndexRouter.use(miscRoutes);
 webSeriesIndexRouter.use(returnAllUnchecked);
 webSeriesIndexRouter.use(returnAllRecheckNeeded);

@@ -9,7 +9,7 @@ const tokenAuthCheck = require('../../Utils/Token/TokenAuthCheck');
 const filename = require('path').basename(__filename);
 const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
 
-MarkWebSeriesForRecheckRouter.post('/api/webSeries/mark_recheck', tokenVerifier, tokenAuthCheck, webSeriesIdVerifier, function (req, res) {
+MarkWebSeriesForRecheckRouter.post('/api/web-series/mark_recheck', tokenVerifier, tokenAuthCheck, webSeriesIdVerifier, function (req, res) {
     try {
         jwt.verify(req.token, process.env.key, function (error, authData) {
             if (error) {

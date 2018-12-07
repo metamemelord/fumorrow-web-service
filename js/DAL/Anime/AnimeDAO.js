@@ -22,31 +22,31 @@ try {
 
 require('assert').notEqual(connection, null);
 
-// Importing webSeries schema service
+// Importing anime schema service
 
-const webSeriesSchema = require('../../Models/WebSeriesModel');
-let webSeriesDBService = connection.model('webseries', webSeriesSchema);
+const animeSchema = require('../../Models/AnimeModel');
+let animeDBService = connection.model('anime', animeSchema);
 
 // Service methods
 
-function addWebSeries(object, callback) {
+function addanime(object, callback) {
 	try {
 		object._id = mongoose.Types.ObjectId(object._id);
-		webSeriesDBService.findOne({ $or: [{ "_id": object._id }, { "uid": object.uid }] }, function (error, data) {
+		animeDBService.findOne({ $or: [{ "_id": object._id }, { "uid": object.uid }] }, function (error, data) {
 			if (data) {
 				callback(409, "Entry already exists", null);
 			} else if (error) {
 				logger.error(error);
 				callback(500, "Internal server error", null);
 			} else {
-				var webSeriesToAdd = new webSeriesDBService(object);
-				webSeriesToAdd.save(object, function (error) {
+				var animeToAdd = new animeDBService(object);
+				animeToAdd.save(object, function (error) {
 					if (error) {
 						if (error.name === 'ValidationError') {
 							callback(400, "Error while parsing values", null);
 						} else {
 							logger.error(error);
-							callback(500, "Error while saving the webSeries", null);
+							callback(500, "Error while saving the anime", null);
 						}
 					} else callback(201, "Success", {
 						"id": object._id,
@@ -63,7 +63,7 @@ function addWebSeries(object, callback) {
 
 function removeById(id, callback) {
 	try {
-		webSeriesDBService.findOneAndDelete({
+		animeDBService.findOneAndDelete({
 			_id: id
 		}, function (error, data) {
 			if (error) {
@@ -89,14 +89,14 @@ function modifyMovie(object, callback) {
 	try {
 		object.recheck_needed = false;
 		object.is_approved = false;
-		webSeriesDBService.findOne({ "uid": object.uid }, function (error, data) {
+		animeDBService.findOne({ "uid": object.uid }, function (error, data) {
 			if (error) {
 				logger.error(error);
 				return callback(500, "Internal server error", null);
 			} else if (!isEmpty(data) && !(object.override_uid_check)) {
 				return callback(409, "Entry already exists", null);
 			} else {
-				webSeriesDBService.findOneAndUpdate({ "_id": object._id },
+				animeDBService.findOneAndUpdate({ "_id": object._id },
 					object,
 					{ overwrite: true },
 					function (error, data) {
@@ -105,7 +105,7 @@ function modifyMovie(object, callback) {
 								callback(400, "Error while parsing values", null);
 							} else {
 								logger.error(error);
-								callback(500, "Error while modifying the webSeries", null);
+								callback(500, "Error while modifying the anime", null);
 							}
 						} else if (isEmpty(data)) {
 							callback(404, "Content not found on the server", null);
@@ -125,7 +125,7 @@ function modifyMovie(object, callback) {
 }
 
 function incrementCounterById(id, callback) {
-	webSeriesDBService.findOneAndUpdate({
+	animeDBService.findOneAndUpdate({
 		$and: [{ "_id": id }, { "is_approved": true }]
 	}, {
 			$inc: {
@@ -147,7 +147,7 @@ function incrementCounterById(id, callback) {
 }
 
 function approveById(id, callback) {
-	webSeriesDBService.findOneAndUpdate({ _id: id }, {
+	animeDBService.findOneAndUpdate({ _id: id }, {
 		'is_approved': true,
 		'recheck_needed': false
 	}, function (error, data) {
@@ -168,7 +168,7 @@ function approveById(id, callback) {
 }
 
 function markForRecheckById(id, callback) {
-	webSeriesDBService.findOneAndUpdate({ _id: id }, {
+	animeDBService.findOneAndUpdate({ _id: id }, {
 		'recheck_needed': true,
 		'is_approved': false
 	}, function (error, data) {
@@ -189,7 +189,7 @@ function markForRecheckById(id, callback) {
 }
 
 function markReleasedById(id, callback) {
-	webSeriesDBService.findOneAndUpdate({ _id: id }, {
+	animeDBService.findOneAndUpdate({ _id: id }, {
 		'is_released': true
 	}, function (error, data) {
 		if (error instanceof mongoose.CastError) {
@@ -209,7 +209,7 @@ function markReleasedById(id, callback) {
 }
 
 module.exports = {
-	addWebSeries,
+	addanime,
 	removeById,
 	modifyMovie,
 	incrementCounterById,
