@@ -33,7 +33,7 @@ try {
 
 require("assert").notEqual(connectionForRetrieval, null);
 
-const videoGameSchema = require("../../Models/VideoGamesModel");
+const videoGameSchema = require("../../Models/VideoGameModel");
 let videoGameDBService = connectionForRetrieval.model("videogame", videoGameSchema);
 
 

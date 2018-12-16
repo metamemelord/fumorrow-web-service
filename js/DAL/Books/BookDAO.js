@@ -24,7 +24,7 @@ require("assert").notEqual(connection, null);
 
 // Importing movie schema service
 
-const bookSchema = require("../../Models/BooksModel");
+const bookSchema = require("../../Models/BookModel");
 let bookDBService = connection.model("book", bookSchema);
 
 // Service methods

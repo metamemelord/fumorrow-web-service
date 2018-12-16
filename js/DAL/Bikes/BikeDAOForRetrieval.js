@@ -33,7 +33,7 @@ try {
 
 require("assert").notEqual(connectionForRetrieval, null);
 
-const bikeSchema = require("../../Models/BikesModel");
+const bikeSchema = require("../../Models/BikeModel");
 let bikeDBService = connectionForRetrieval.model("bike", bikeSchema);
 
 

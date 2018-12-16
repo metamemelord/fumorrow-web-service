@@ -24,7 +24,7 @@ require("assert").notEqual(connection, null);
 
 // Importing movie schema service
 
-const videoGameSchema = require("../../Models/VideoGamesModel");
+const videoGameSchema = require("../../Models/VideoGameModel");
 let videoGameDBService = connection.model("videogame", videoGameSchema);
 
 // Service methods
