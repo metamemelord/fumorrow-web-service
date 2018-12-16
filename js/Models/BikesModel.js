@@ -136,7 +136,7 @@ var bikeSchema = new mongoose.Schema({
 	is_approved: {
 		type: Boolean,
 		default: false
-	},
+	}
 });
 
 module.exports = bikeSchema;

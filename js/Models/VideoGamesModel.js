@@ -119,7 +119,7 @@ var videoGamesSchema = new mongoose.Schema({
 	is_approved: {
 		type: Boolean,
 		default: false
-	},
+	}
 });
 
 module.exports = videoGamesSchema;

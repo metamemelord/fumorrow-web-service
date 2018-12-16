@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-var webSeriesSchema = new mongoose.Schema({
+var mobilePhoneSchema = new mongoose.Schema({
 	_id: {
 		type: Schema.ObjectId,
 		required: true
@@ -11,7 +11,7 @@ var webSeriesSchema = new mongoose.Schema({
 		lowercase: true,
 		required: true
 	},
-	title: {
+	name: {
 		type: String,
 		lowercase: true,
 		required: true
@@ -20,27 +20,77 @@ var webSeriesSchema = new mongoose.Schema({
 		type: Date,
 		required: true
 	},
-	cast: {
+	brand: {
+		type: String,
+		lowercase: true,
+		required: true
+	},
+	price: {
 		type: Array,
-		required: true
+		default: []
 	},
-	crew: {
+	form_factor: {
+		type: String,
+		default: "Phone"
+	},
+	flash_sale: {
 		type: Array,
+		default: []
+	},
+	memory: {
+		ram: {
+			type: String,
+			required: true
+		},
+		internal_storage: {
+			type: String,
+			required: true
+		},
+		expandable_storage: {
+			type: String,
+			required: true
+		}
+	}, 
+	camera: {
+		primary: {
+			specification: {
+				type: String,
+				required: true
+			},
+			video_sepcification: String,
+			features: String
+		},
+		secondary: {
+			specification: {
+				type: String,
+				required: true
+			},
+			video_sepcification: String,
+			features: String
+		},
+		flash: String
+	},
+	connectivity: {
+		supported_networks: String,
+		internet_connectivity: Boolean,
+		bluetooth: String,
+		wifi: String,
+		nfc: Boolean,
+		audio_jack: Boolean
+	},
+	battery: {
+		type: String,
 		required: true
 	},
-	genres: {
-		type: Array,
-		required: true
+	build: {
+		dimensions: {
+			height: Number,
+			width: Number,
+			depth: Number
+		},
+		weight: Number
 	},
-	language: {
-		type: Number,
-		required: true
-	},
-	season: {
-		type: Number,
-		required: true
-	},
-	episodes: {
+	sensors: {
 		type: Array,
 		default: []
 	},
@@ -60,10 +110,6 @@ var webSeriesSchema = new mongoose.Schema({
 		type: Array,
 		default: []
 	},
-	tv_pg_rating: {
-		type: String,
-		default: "TV-Y"
-	},
 	is_sponsored: {
 		type: Boolean,
 		default: false
@@ -73,10 +119,6 @@ var webSeriesSchema = new mongoose.Schema({
 		default: false
 	},
 	is_live: {
-		type: Boolean,
-		default: false
-	},
-	is_running_now: {
 		type: Boolean,
 		default: false
 	},
@@ -110,4 +152,4 @@ var webSeriesSchema = new mongoose.Schema({
 	}
 });
 
-module.exports = webSeriesSchema;
+module.exports = mobilePhoneSchema;

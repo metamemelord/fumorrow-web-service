@@ -115,7 +115,7 @@ var webSeriesSchema = new mongoose.Schema({
 	is_approved: {
 		type: Boolean,
 		default: false
-	},
+	}
 });
 
 module.exports = webSeriesSchema;
