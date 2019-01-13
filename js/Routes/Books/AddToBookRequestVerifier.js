@@ -4,29 +4,32 @@ const isEmpty = require("./../../Utils/HelperFunctions").isEmpty;
 
 module.exports = (req, res, next) => {
 	try {
-		if (isEmpty(req.body.book_name) || isEmpty(req.body.day) || isEmpty(req.body.month) ||
-            isEmpty(req.body.year) || isEmpty(req.body.author) || isEmpty(req.body.language) ||
-            isEmpty(req.body.genres) || isEmpty(req.body.texts) || isEmpty(req.body.partners)) {
+		if (
+			isEmpty(req.body.book_name) ||
+      isEmpty(req.body.day) ||
+      isEmpty(req.body.month) ||
+      isEmpty(req.body.year) ||
+      isEmpty(req.body.author) ||
+      isEmpty(req.body.language)
+		) {
 			return res.status(400).json({
-				"status": {
-					"code": 400,
-					"message": "Mandatory fields cannot be left blank"
+				status: {
+					code: 400,
+					message: "Mandatory fields cannot be left blank"
 				},
-				"data": null
+				data: null
 			});
-		}
-		else {
+		} else {
 			next();
 		}
-	}
-	catch (error) {
+	} catch (error) {
 		logger.error(error);
 		return res.status(500).json({
-			"status": {
-				"code": 500,
-				"message": "Internal server error"
+			status: {
+				code: 500,
+				message: "Internal server error"
 			},
-			"data": null
+			data: null
 		});
 	}
 };
