@@ -64,7 +64,7 @@ modifyMovieRouter.post("/api/movie/modify",
 							override_uid_check: movieData.override_uid_check,
 							_id: movieData._id,
 							title: movieData.title,
-							release_date: new Date(movieData.year, movieData.month, movieData.day, movieData.hour, movieData.minute).toLocaleString("en-US", {
+							release_date: new Date(movieData.year, movieData.month - 1, movieData.day, movieData.hour, movieData.minute).toLocaleString("en-US", {
 								timeZone: "Asia/Calcutta"
 							}),
 							uid: "",

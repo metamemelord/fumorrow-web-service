@@ -50,7 +50,7 @@ addBikeRouter.post("/api/bike/add", tokenVerifier, tokenAuthCheck, bikeRequestVe
 					var bikeObject = {
 						_id: bikeData.day.toString() + bikeData.month.toString() + bikeData.year.toString(),
 						bike_name: bikeData.bike_name,
-						release_date: new Date(bikeData.year, bikeData.month, bikeData.day, bikeData.hour, bikeData.minute).toLocaleString("en-US", {
+						release_date: new Date(bikeData.year, bikeData.month - 1, bikeData.day, bikeData.hour, bikeData.minute).toLocaleString("en-US", {
 							timeZone: "Asia/Calcutta"
 						}),
 						uid: "",

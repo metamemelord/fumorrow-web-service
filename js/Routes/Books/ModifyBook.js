@@ -62,7 +62,7 @@ modifyBookRouter.post("/api/book/modify",
 							override_uid_check: bookData.override_uid_check,
 							_id: bookData._id,
 							book_name: bookData.book_name,
-							release_date: new Date(bookData.year, bookData.month, bookData.day).toLocaleString("en-US", {
+							release_date: new Date(bookData.year, bookData.month - 1, bookData.day).toLocaleString("en-US", {
 								timeZone: "Asia/Calcutta"
 							}),
 							uid: "",

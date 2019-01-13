@@ -64,7 +64,7 @@ modifyWebSeriesRouter.post("/api/web-series/modify",
 							override_uid_check: webSeriesData.override_uid_check,
 							_id: webSeriesData._id,
 							title: webSeriesData.title,
-							release_date: new Date(webSeriesData.year, webSeriesData.month, webSeriesData.day, webSeriesData.hour, webSeriesData.minute).toLocaleString("en-US", {
+							release_date: new Date(webSeriesData.year, webSeriesData.month - 1, webSeriesData.day, webSeriesData.hour, webSeriesData.minute).toLocaleString("en-US", {
 								timeZone: "Asia/Calcutta"
 							}),
 							uid: "",

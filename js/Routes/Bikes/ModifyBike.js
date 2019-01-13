@@ -65,7 +65,7 @@ modifyBikeRouter.post("/api/bike/modify",
 							override_uid_check: bikeData.override_uid_check,
 							_id: bikeData._id,
 							bike_name: bikeData.bike_name,
-							release_date: new Date(bikeData.year, bikeData.month, bikeData.day, bikeData.hour, bikeData.minute).toLocaleString("en-US", {
+							release_date: new Date(bikeData.year, bikeData.month - 1, bikeData.day, bikeData.hour, bikeData.minute).toLocaleString("en-US", {
 								timeZone: "Asia/Calcutta"
 							}),
 							uid: "",
@@ -97,6 +97,7 @@ modifyBikeRouter.post("/api/bike/modify",
 							favorited_by: bikeData.favorited_by,
 							user_visit_info: bikeData.user_visit_info
 						};
+						logger.debug(bikeObject.release_date.toLocaleString());
 						var uniqueId = bikeObject.bike_name + bikeObject.release_date.toString() + bikeData.brand_name;
 						bikeObject.uid = md5(uniqueId.replace(/\s/g, ""));
 						bikeObject.is_released = helpers.checkDate(bikeObject.release_date);

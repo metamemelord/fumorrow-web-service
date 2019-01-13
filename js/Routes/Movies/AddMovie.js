@@ -49,7 +49,7 @@ addMovieRouter.post("/api/movie/add", tokenVerifier, tokenAuthCheck, movieReques
 					var movieObject = {
 						_id: movieData.day.toString() + movieData.month.toString() + movieData.year.toString(),
 						title: movieData.title,
-						release_date: new Date(movieData.year, movieData.month, movieData.day, movieData.hour, movieData.minute).toLocaleString("en-US", {
+						release_date: new Date(movieData.year, movieData.month - 1, movieData.day, movieData.hour, movieData.minute).toLocaleString("en-US", {
 							timeZone: "Asia/Calcutta"
 						}),
 						uid: "",
@@ -74,7 +74,8 @@ addMovieRouter.post("/api/movie/add", tokenVerifier, tokenAuthCheck, movieReques
 					movieObject._id += helpers.generateSalt(length);
 					var uniqueId = movieObject.title + movieObject.release_date.toString() + movieData.referrerName;
 					movieObject.uid = md5(uniqueId.replace(/\s/g, ""));
-					movieObject.genres.sort();
+					if (helpers.isNotEmpty(movieObject.genres))
+						movieObject.genres.sort();
 					movieObject.is_released = helpers.checkDate(movieObject.release_date);
 					movieDAO.addMovie(movieObject, function (status, message, data) {
 						return res.status(status).json({

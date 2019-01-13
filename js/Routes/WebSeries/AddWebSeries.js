@@ -49,7 +49,7 @@ addWebSeriesRouter.post("/api/web-series/add", tokenVerifier, tokenAuthCheck, we
 					var webSeriesObject = {
 						_id: webSeriesData.day.toString() + webSeriesData.month.toString() + webSeriesData.year.toString(),
 						title: webSeriesData.title,
-						release_date: new Date(webSeriesData.year, webSeriesData.month, webSeriesData.day, webSeriesData.hour, webSeriesData.minute).toLocaleString("en-US", {
+						release_date: new Date(webSeriesData.year, webSeriesData.month - 1, webSeriesData.day, webSeriesData.hour, webSeriesData.minute).toLocaleString("en-US", {
 							timeZone: "Asia/Calcutta"
 						}),
 						uid: "",
@@ -74,7 +74,8 @@ addWebSeriesRouter.post("/api/web-series/add", tokenVerifier, tokenAuthCheck, we
 					webSeriesObject._id += helpers.generateSalt(length);
 					var uniqueId = webSeriesObject.title + webSeriesObject.release_date.toString() + webSeriesData.referrerName;
 					webSeriesObject.uid = md5(uniqueId.replace(/\s/g, ""));
-					webSeriesObject.genres.sort();
+					if (helpers.isNotEmpty(webSeriesObject.genres))
+						webSeriesObject.genres.sort();
 					webSeriesObject.is_released = helpers.checkDate(webSeriesObject.release_date);
 					webSeriesDAO.addWebSeries(webSeriesObject, function (status, message, data) {
 						return res.status(status).json({

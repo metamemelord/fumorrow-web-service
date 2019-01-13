@@ -57,7 +57,7 @@ modifyVideoGameRouter.post("/api/videogame/modify", tokenVerifier, tokenAuthChec
 						override_uid_check: videoGameData.override_uid_check,
 						_id: videoGameData._id,
 						title: videoGameData.title,
-						release_date: new Date(videoGameData.year, videoGameData.month, videoGameData.day, videoGameData.hour, videoGameData.minute).toLocaleString("en-US", {
+						release_date: new Date(videoGameData.year, videoGameData.month - 1, videoGameData.day, videoGameData.hour, videoGameData.minute).toLocaleString("en-US", {
 							timeZone: "Asia/Calcutta"
 						}),
 						uid: "",

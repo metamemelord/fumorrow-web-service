@@ -49,7 +49,7 @@ addAnimeRouter.post("/api/anime/add", tokenVerifier, tokenAuthCheck, animeReques
 					var animeObject = {
 						_id: animeData.day.toString() + animeData.month.toString() + animeData.year.toString(),
 						title: animeData.title,
-						release_date: new Date(animeData.year, animeData.month, animeData.day, animeData.hour, animeData.minute).toLocaleString("en-US", {
+						release_date: new Date(animeData.year, animeData.month - 1, animeData.day, animeData.hour, animeData.minute).toLocaleString("en-US", {
 							timeZone: "Asia/Calcutta"
 						}),
 						anime_type: animeData.anime_type,

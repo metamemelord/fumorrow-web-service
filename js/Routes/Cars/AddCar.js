@@ -49,7 +49,7 @@ addCarRouter.post("/api/car/add", tokenVerifier, tokenAuthCheck, carRequestVerif
 					var carObject = {
 						_id: carData.day.toString() + carData.month.toString() + carData.year.toString(),
 						car_name: carData.car_name,
-						release_date: new Date(carData.year, carData.month, carData.day, carData.hour, carData.minute).toLocaleString("en-US", {
+						release_date: new Date(carData.year, carData.month - 1, carData.day, carData.hour, carData.minute).toLocaleString("en-US", {
 							timeZone: "Asia/Calcutta"
 						}),
 						uid: "",

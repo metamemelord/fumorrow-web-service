@@ -48,7 +48,7 @@ addVideoGameRouter.post("/api/videogame/add", tokenVerifier, tokenAuthCheck, vid
 					var videoGameObject = {
 						_id: videoGameData.day.toString() + videoGameData.month.toString() + videoGameData.year.toString(),
 						title: videoGameData.title,
-						release_date: new Date(videoGameData.year, videoGameData.month, videoGameData.day, videoGameData.hour, videoGameData.minute).toLocaleString("en-US", {
+						release_date: new Date(videoGameData.year, videoGameData.month - 1, videoGameData.day, videoGameData.hour, videoGameData.minute).toLocaleString("en-US", {
 							timeZone: "Asia/Calcutta"
 						}),
 						uid: "",
@@ -77,7 +77,8 @@ addVideoGameRouter.post("/api/videogame/add", tokenVerifier, tokenAuthCheck, vid
 					var uniqueId = videoGameObject.title + videoGameObject.release_date.toString() + videoGameData.referrerName;
 					uniqueId = uniqueId.replace(/\s/g, "");
 					videoGameObject.uid = md5(uniqueId);
-					videoGameObject.genres.sort();
+					if (helpers.isNotEmpty(videoGameObject.genres))
+						videoGameObject.genres.sort();
 					videoGameObject.is_released = helpers.checkDate(videoGameObject.release_date);
 					videoGameDAO.addVideoGame(videoGameObject, function (status, message, data) {
 						return res.status(status).json({

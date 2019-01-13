@@ -64,7 +64,7 @@ modifyAnimeRouter.post("/api/anime/modify",
 							override_uid_check: animeData.override_uid_check,
 							_id: animeData._id,
 							title: animeData.title,
-							release_date: new Date(animeData.year, animeData.month, animeData.day, animeData.hour, animeData.minute).toLocaleString("en-US", {
+							release_date: new Date(animeData.year, animeData.month - 1, animeData.day, animeData.hour, animeData.minute).toLocaleString("en-US", {
 								timeZone: "Asia/Calcutta"
 							}),
 							anime_type: animeData.anime_type,

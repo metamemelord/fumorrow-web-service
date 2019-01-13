@@ -3,3 +3,4 @@ node_modules/
 Passwords.txt
 Logs/
 external_utilities/
+package-lock.json
