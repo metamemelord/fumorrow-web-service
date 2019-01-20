@@ -4,7 +4,7 @@ const bookDAOForRetrieval = DAL.BookDAOForRetrieval;
 const bookByIdRouter = express.Router();
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers").LoggerFactory.getLogger(filename);
-const isNotEmpty = require("../../Utils/HelperFunctions").isNotEmpty;
+const isNotEmpty = require("../../lib/HelperFunctions").isNotEmpty;
 
 bookByIdRouter.post("/api/book/:id", function (req, res) {
 	try {

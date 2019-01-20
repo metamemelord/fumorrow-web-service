@@ -4,7 +4,7 @@ const webSeriesDAOForRetrieval = DAL.MovieDAOForRetrieval;
 const webSeriesByIdRouter = express.Router();
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
-const isNotEmpty = require("./../../Utils/HelperFunctions").isNotEmpty;
+const isNotEmpty = require("./../../lib/HelperFunctions").isNotEmpty;
 
 webSeriesByIdRouter.post("/api/web-series/:id", function (req, res) {
 	try {

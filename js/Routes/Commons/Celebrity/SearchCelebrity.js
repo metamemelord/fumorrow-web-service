@@ -1,7 +1,7 @@
 const express = require("express");
 const filename = require("path").basename(__filename);
 const logger = require("../../../Loggers/index").LoggerFactory.getLogger(filename);
-const helpers = require("../../../Utils/HelperFunctions");
+const helpers = require("../../../lib/HelperFunctions");
 const AbstractCelebritySearchStrategy = require("../../../lib/CelebritySearch/AbstractCelebritySearchStrategy");
 
 var searchCelebrityRoute = express.Router();

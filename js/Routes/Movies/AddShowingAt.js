@@ -7,7 +7,7 @@ const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
 const jwt = require("jsonwebtoken");
 const tokenVerifier = require("./../../Utils/Token/TokenVerifier");
 const tokenAuthCheck = require("./../../Utils/Token/TokenAuthCheck");
-const isEmpty = require("./../../Utils/HelperFunctions").isEmpty;
+const isEmpty = require("./../../lib/HelperFunctions").isEmpty;
 
 addShowingAtRouter.post("/api/movie/showingat", tokenVerifier, tokenAuthCheck, function (req, res) {
 	try {

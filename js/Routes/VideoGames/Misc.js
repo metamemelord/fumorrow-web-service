@@ -5,7 +5,7 @@ const videoGameDAOForRetrieval = DAL.VideoGameDAOForRetrieval;
 const videoGameMiscRouter = express.Router();
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
-const isNotEmpty = require("./../../Utils/HelperFunctions").isNotEmpty;
+const isNotEmpty = require("./../../lib/HelperFunctions").isNotEmpty;
 
 videoGameMiscRouter.post("/api/videogame/inc/:id", function (req, res) {
 	try {

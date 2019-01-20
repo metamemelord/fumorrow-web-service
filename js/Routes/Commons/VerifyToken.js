@@ -3,7 +3,7 @@ const DAL = require("../../DAL/index");
 const tokenVerifier = DAL.TokenVerification;
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
-const isEmpty = require("./../../Utils/HelperFunctions").isEmpty;
+const isEmpty = require("./../../lib/HelperFunctions").isEmpty;
 
 var tokenVerificationRouter = express.Router();
 

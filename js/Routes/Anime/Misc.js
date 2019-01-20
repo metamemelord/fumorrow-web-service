@@ -5,7 +5,7 @@ const animeDAOForRetrieval = DAL.AnimeDAOForRetrieval;
 const animeMiscRouter = express.Router();
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
-const isNotEmpty = require("./../../Utils/HelperFunctions").isNotEmpty;
+const isNotEmpty = require("./../../lib/HelperFunctions").isNotEmpty;
 
 animeMiscRouter.post("/api/anime/inc/:id", function (req, res) {
 	try {

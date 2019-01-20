@@ -3,47 +3,47 @@ const DAL = require("./../../DAL/index");
 const registrationDAO = DAL.RegistrationDAO;
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
-const isEmpty = require("./../../Utils/HelperFunctions").isEmpty;
+const isEmpty = require("../../lib/HelperFunctions").isEmpty;
 const registrationRouter = express.Router();
 
 registrationRouter.post("/api/admin/registration", function (req, res) {
 	try {
-		if(!(parseInt(process.env.REGISTRATION_SERVICE_ACTIVE))) {
+		if (!(parseInt(process.env.REGISTRATION_SERVICE_ACTIVE))) {
 			return res.status(503).json({
-				"status":{
-					"code":503,
-					"message":"Registration service has been disabled. Please contact the admin."
+				"status": {
+					"code": 503,
+					"message": "Registration service has been disabled. Please contact the admin."
 				},
-				"data":null
+				"data": null
 			});
 		}
-		if(isEmpty(req.body.name) || isEmpty(req.body.username) || isEmpty(req.body.email) || isEmpty(req.body.password)){
+		if (isEmpty(req.body.name) || isEmpty(req.body.username) || isEmpty(req.body.email) || isEmpty(req.body.password)) {
 			return res.status(400).json({
-				"status":{
-					"code":400,
-					"message":"Please check the details"
+				"status": {
+					"code": 400,
+					"message": "Please check the details"
 				},
-				"data":null
+				"data": null
 			});
 		} else if (req.body.username.split(" ").length > 1)
 			return res.status(400).json({
-				"status":{
-					"code":400,
-					"message":"Username cannot contain spaces"
+				"status": {
+					"code": 400,
+					"message": "Username cannot contain spaces"
 				},
-				"data":null
+				"data": null
 			});
-		else{
+		else {
 			var userDetails = req.body;
 			userDetails.name = userDetails.name.toLowerCase();
 			userDetails.username = userDetails.username.toLowerCase();
 			registrationDAO.performRegistration(userDetails, (status, message, data) => {
 				return res.status(status).json({
-					"status":{
-						"code":status,
-						"message":message
+					"status": {
+						"code": status,
+						"message": message
 					},
-					"data":data
+					"data": data
 				});
 			});
 		}
@@ -51,11 +51,11 @@ registrationRouter.post("/api/admin/registration", function (req, res) {
 	catch (error) {
 		logger.error(error);
 		return res.status(500).json({
-			"status":{
-				"code":500,
-				"message":"Internal server error"
+			"status": {
+				"code": 500,
+				"message": "Internal server error"
 			},
-			"data":null
+			"data": null
 		});
 	}
 });

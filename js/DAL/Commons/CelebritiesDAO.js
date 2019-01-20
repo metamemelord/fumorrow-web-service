@@ -1,5 +1,5 @@
 const mysql = require("mysql2");
-const helpers = require("./../../Utils/HelperFunctions");
+const helpers = require("../../lib/HelperFunctions");
 const isEmpty = helpers.isEmpty;
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
@@ -200,7 +200,7 @@ function updateCelebrity(celebrityDetails, callback) {
 				return callback(500, "Could not connect to database", null);
 			}
 			var sql = "update celebrities set first_name=?, middle_name=?, last_name=?, profession=?," +
-                "description=?, dob=?, gender=?, image_link=?, is_approved=? where pid=?;";
+				"description=?, dob=?, gender=?, image_link=?, is_approved=? where pid=?;";
 			var celebrityVariables = [celebrityDetails.first_name, celebrityDetails.middle_name,
 				celebrityDetails.last_name, celebrityDetails.profession,
 				celebrityDetails.description, celebrityDetails.dob, celebrityDetails.gender,
@@ -284,7 +284,7 @@ function searchCelebrityByPid(pid, callback) {
 				return callback(500, "Could not connect to database", null);
 			}
 			var sql = "select pid, first_name, middle_name, last_name, profession, dob, image_link from celebrities" +
-                " where pid like ? and is_approved=1;";
+				" where pid like ? and is_approved=1;";
 			con.query(sql, pid + "%", function (error, data) {
 				con.end();
 				if (error) {
@@ -312,8 +312,8 @@ function searchCelebrityByPid(pid, callback) {
 
 function composeFullName(first_name, middle_name, last_name) {
 	return helpers.toTitleCase(first_name) + " "
-        + (isEmpty(middle_name) ? "" : helpers.toTitleCase(middle_name) + " ")
-        + (isEmpty(last_name) ? "" : helpers.toTitleCase(last_name));
+		+ (isEmpty(middle_name) ? "" : helpers.toTitleCase(middle_name) + " ")
+		+ (isEmpty(last_name) ? "" : helpers.toTitleCase(last_name));
 }
 
 module.exports = {

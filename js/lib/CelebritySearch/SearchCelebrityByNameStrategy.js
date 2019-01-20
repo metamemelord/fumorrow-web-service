@@ -1,6 +1,6 @@
 const DAL = require("../../DAL/index");
 const celebritiesDAO = DAL.CelebritiesDAO;
-const isEmpty = require("../../Utils/HelperFunctions").isEmpty;
+const isEmpty = require("../../lib/HelperFunctions").isEmpty;
 
 module.exports.search = (parameter, callback) => {
 	if (isEmpty(parameter.trim())) {

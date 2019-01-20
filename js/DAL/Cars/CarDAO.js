@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 mongoose.set("useFindAndModify", false);
-const isEmpty = require("../../Utils/HelperFunctions").isEmpty;
+const isEmpty = require("../../lib/HelperFunctions").isEmpty;
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
 

@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 mongoose.set("useFindAndModify", false);
-const isEmpty = require("../../Utils/HelperFunctions").isEmpty;
+const isEmpty = require("../../lib/HelperFunctions").isEmpty;
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
 
@@ -12,11 +12,11 @@ try {
 	);
 	// Connection to DB
 
-	connection.on("error", function(error) {
+	connection.on("error", function (error) {
 		logger.error(error);
 	});
 
-	connection.once("open", function() {
+	connection.once("open", function () {
 		logger.info("Connection to RW user successful!");
 	});
 } catch (error) {
@@ -37,7 +37,7 @@ function addBook(object, callback) {
 		object._id = mongoose.Types.ObjectId(object._id);
 		bookDBService.findOne(
 			{ $or: [{ _id: object._id }, { uid: object.uid }] },
-			function(error, data) {
+			function (error, data) {
 				if (data) {
 					callback(409, "Entry already exists", null);
 				} else if (error) {
@@ -45,7 +45,7 @@ function addBook(object, callback) {
 					callback(500, "Internal server error", null);
 				} else {
 					var bookToAdd = new bookDBService(object);
-					bookToAdd.save(object, function(error) {
+					bookToAdd.save(object, function (error) {
 						if (error) {
 							logger.error(error);
 							if (error.name === "ValidationError") {
@@ -74,7 +74,7 @@ function removeById(id, callback) {
 			{
 				_id: id
 			},
-			function(error, data) {
+			function (error, data) {
 				if (error) {
 					logger.error(error);
 					callback(500, "Internal server error", null);
@@ -97,7 +97,7 @@ function modifyBook(object, callback) {
 	try {
 		object.recheck_needed = false;
 		object.is_approved = false;
-		bookDBService.findOne({ uid: object.uid }, function(error, data) {
+		bookDBService.findOne({ uid: object.uid }, function (error, data) {
 			if (error) {
 				logger.error(error);
 				return callback(500, "Internal server error", null);
@@ -108,7 +108,7 @@ function modifyBook(object, callback) {
 					{ _id: object._id },
 					object,
 					{ overwrite: true },
-					function(error, data) {
+					function (error, data) {
 						if (error) {
 							if (error.name === "ValidationError") {
 								callback(400, "Error while parsing values", null);
@@ -142,7 +142,7 @@ function incrementCounterById(id, callback) {
 				click_counter: 1
 			}
 		},
-		function(error, data) {
+		function (error, data) {
 			if (error instanceof mongoose.CastError) {
 				callback(412, "Invalid ID", null);
 			} else if (error) {
@@ -164,7 +164,7 @@ function approveById(id, callback) {
 			is_approved: true,
 			recheck_needed: false
 		},
-		function(error, data) {
+		function (error, data) {
 			if (error instanceof mongoose.CastError) {
 				callback(412, "Invalid ID", null);
 			} else if (error) {
@@ -188,7 +188,7 @@ function markForRecheckById(id, callback) {
 		{
 			recheck_needed: true
 		},
-		function(error, data) {
+		function (error, data) {
 			if (error instanceof mongoose.CastError) {
 				callback(412, "Invalid ID", null);
 			} else if (error) {

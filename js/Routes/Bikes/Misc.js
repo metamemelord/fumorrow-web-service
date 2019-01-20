@@ -5,7 +5,7 @@ const bikeDAOForRetrieval = DAL.BikeDAOForRetrieval;
 const bikeMiscRouter = express.Router();
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
-const isNotEmpty = require("./../../Utils/HelperFunctions").isNotEmpty;
+const isNotEmpty = require("./../../lib/HelperFunctions").isNotEmpty;
 
 bikeMiscRouter.post("/api/bike/inc", function (req, res) {
 	try {

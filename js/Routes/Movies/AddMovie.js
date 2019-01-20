@@ -2,14 +2,13 @@ const express = require("express");
 const DAL = require("../../DAL/index");
 const movieRequestVerifier = require("../Movies/AddToMovieRequestVerifier");
 const movieDAO = DAL.MovieDAO;
+const MovieBuilder = require("../../lib/Builders/Category/CategoryBuilderFactory").getBuilder("movie");
 const jwt = require("jsonwebtoken");
-const helpers = require("../../Utils/HelperFunctions");
 const tokenVerifier = require("./../../Utils/Token/TokenVerifier");
 const tokenAuthCheck = require("./../../Utils/Token/TokenAuthCheck");
-const md5 = require("md5");
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
-const isEmpty = require("./../../Utils/HelperFunctions").isEmpty;
+const isNotEmpty = require("../../lib/HelperFunctions").isNotEmpty;
 
 const addMovieRouter = express.Router();
 
@@ -44,39 +43,29 @@ addMovieRouter.post("/api/movie/add", tokenVerifier, tokenAuthCheck, movieReques
 					});
 				} else {
 					var movieData = req.body;
-					if (isEmpty(movieData.hour)) movieData.hour = 0;
-					if (isEmpty(movieData.minute)) movieData.minute = 0;
-					var movieObject = {
-						_id: movieData.day.toString() + movieData.month.toString() + movieData.year.toString(),
-						title: movieData.title,
-						release_date: new Date(movieData.year, movieData.month - 1, movieData.day, movieData.hour, movieData.minute).toLocaleString("en-US", {
-							timeZone: "Asia/Calcutta"
-						}),
-						uid: "",
-						cast: movieData.cast,
-						crew: movieData.crew,
-						language: movieData.language,
-						genres: movieData.genres,
-						runtime: movieData.runtime,
-						images: movieData.images,
-						videos: movieData.videos,
-						texts: movieData.texts,
-						partners: movieData.partners,
-						showing_at: movieData.showing_at,
-						is_sponsored: movieData.is_sponsored,
-						is_released: false,
-						is_live: movieData.is_live,
-						mpaa_rating: movieData.mpaa_rating,
-						budget: movieData.budget,
-						external_ratings: movieData.external_ratings,
-					};
-					var length = 12 - movieObject._id.length;
-					movieObject._id += helpers.generateSalt(length);
-					var uniqueId = movieObject.title + movieObject.release_date.toString() + movieData.referrerName;
-					movieObject.uid = md5(uniqueId.replace(/\s/g, ""));
-					if (helpers.isNotEmpty(movieObject.genres))
-						movieObject.genres.sort();
-					movieObject.is_released = helpers.checkDate(movieObject.release_date);
+					let movieObject = new MovieBuilder()
+						.setHour(isNotEmpty(movieData.hour) ? movieData.hour : 0)
+						.setMinute(isNotEmpty(movieData.minute) ? movieData.minute : 0)
+						.setDay(movieData.day)
+						.setMonth(movieData.month - 1)
+						.setYear(movieData.year)
+						.setTitle(movieData.title)
+						.setCast(movieData.cast)
+						.setCrew(movieData.crew)
+						.setLanguage(movieData.language)
+						.setGenres(movieData.genres)
+						.setRuntime(movieData.runtime)
+						.setImages(movieData.images)
+						.setVideos(movieData.videos)
+						.setTexts(movieData.texts)
+						.setPartners(movieData.partners)
+						.setShowingAt(movieData.showing_at)
+						.setIsSponsored(movieData.is_sponsored)
+						.setIsLive(movieData.is_live)
+						.setMpaaRating(movieData.mpaa_rating)
+						.setBudget(movieData.budget)
+						.setExternalRatings(movieData.external_ratings)
+						.build();
 					movieDAO.addMovie(movieObject, function (status, message, data) {
 						return res.status(status).json({
 							"status": {

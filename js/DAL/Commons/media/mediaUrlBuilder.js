@@ -1,4 +1,4 @@
-const helpers = require("../../../Utils/HelperFunctions");
+const helpers = require("../../../lib/HelperFunctions");
 const isEmpty = helpers.isEmpty;
 
 module.exports = (mediaDetails) => {
@@ -6,6 +6,6 @@ module.exports = (mediaDetails) => {
 		return "";
 	}
 	return mediaDetails.category + "/" +
-        (isEmpty(mediaDetails.sub_category) ? "" : (mediaDetails.sub_category + "/") + mediaDetails.title) + "-" +
-        helpers.generateSalt(15);
+		(isEmpty(mediaDetails.sub_category) ? "" : (mediaDetails.sub_category + "/") + mediaDetails.title) + "-" +
+		helpers.generateSalt(15);
 };

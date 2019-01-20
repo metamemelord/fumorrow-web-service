@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
-const isEmpty = require("../HelperFunctions").isEmpty;
+const isEmpty = require("../../lib/HelperFunctions").isEmpty;
 
-module.exports = function(req, res, next){
+module.exports = function (req, res, next) {
 	jwt.verify(req.token, process.env.key, function (error, authData) {
 		if (error) {
 			if (error["name"] == "TokenExpiredError") {

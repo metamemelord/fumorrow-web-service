@@ -3,7 +3,7 @@ const DAL = require("../../DAL/index");
 const bookDAOForRetrieval = DAL.BookDAOForRetrieval;
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
-const isEmpty = require("./../../Utils/HelperFunctions").isEmpty;
+const isEmpty = require("./../../lib/HelperFunctions").isEmpty;
 var returnBooksRouter = express.Router();
 
 returnBooksRouter.post("/api/books", function (req, res) {

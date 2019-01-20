@@ -6,7 +6,7 @@ const tokenVerifier = require("../../../../Utils/Token/TokenVerifier");
 const tokenAuthCheck = require("../../../../Utils/Token/TokenAuthCheck");
 const filename = require("path").basename(__filename);
 const logger = require("../../../../Loggers").LoggerFactory.getLogger(filename);
-const isEmpty = require("../../../../Utils/HelperFunctions").isEmpty;
+const isEmpty = require("../../../../lib/HelperFunctions").isEmpty;
 
 const imageUploadRouter = express.Router();
 

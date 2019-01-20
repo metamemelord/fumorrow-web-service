@@ -3,13 +3,13 @@ const DAL = require("../../DAL/index");
 const bikeRequestVerifier = require("../Bikes/AddToBikeRequestVerifier");
 const bikeDAO = DAL.BikeDAO;
 const jwt = require("jsonwebtoken");
-const helpers = require("../../Utils/HelperFunctions");
+const helpers = require("../../lib/HelperFunctions");
 const tokenVerifier = require("./../../Utils/Token/TokenVerifier");
 const tokenAuthCheck = require("./../../Utils/Token/TokenAuthCheck");
 const md5 = require("md5");
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
-const isEmpty = require("./../../Utils/HelperFunctions").isEmpty;
+const isEmpty = require("./../../lib/HelperFunctions").isEmpty;
 
 const addBikeRouter = express.Router();
 

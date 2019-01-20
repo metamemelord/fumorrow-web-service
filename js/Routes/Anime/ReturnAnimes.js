@@ -3,7 +3,7 @@ const DAL = require("../../DAL/index");
 const animeDAOForRetrieval = DAL.AnimeDAOForRetrieval;
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
-const isEmpty = require("../../Utils/HelperFunctions").isEmpty;
+const isEmpty = require("../../lib/HelperFunctions").isEmpty;
 var returnAnimesRouter = express.Router();
 
 returnAnimesRouter.post("/api/animes", function (req, res) {
