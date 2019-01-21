@@ -4,3 +4,4 @@ Passwords.txt
 Logs/
 external_utilities/
 tests/
+package-lock.json

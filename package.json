@@ -21,6 +21,7 @@
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "cloudinary": "^1.13.2",
+    "crypto": "^1.0.1",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",
