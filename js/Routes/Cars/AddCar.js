@@ -60,7 +60,7 @@ addCarRouter.post(
               car_name: carData.car_name,
               release_date: new Date(
                 carData.year,
-                carData.month,
+                carData.month - 1,
                 carData.day,
                 carData.hour,
                 carData.minute

@@ -59,7 +59,7 @@ addMovieRouter.post(
               title: movieData.title,
               release_date: new Date(
                 movieData.year,
-                movieData.month,
+                movieData.month - 1,
                 movieData.day,
                 movieData.hour,
                 movieData.minute

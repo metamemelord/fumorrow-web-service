@@ -59,7 +59,7 @@ addVideoGameRouter.post(
               title: videoGameData.title,
               release_date: new Date(
                 videoGameData.year,
-                videoGameData.month,
+                videoGameData.month - 1,
                 videoGameData.day,
                 videoGameData.hour,
                 videoGameData.minute

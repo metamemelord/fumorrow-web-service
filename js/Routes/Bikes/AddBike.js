@@ -60,7 +60,7 @@ addBikeRouter.post(
               bike_name: bikeData.bike_name,
               release_date: new Date(
                 bikeData.year,
-                bikeData.month,
+                bikeData.month - 1,
                 bikeData.day,
                 bikeData.hour,
                 bikeData.minute

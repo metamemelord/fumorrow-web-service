@@ -57,7 +57,7 @@ addBookRouter.post(
               book_name: bookData.book_name,
               release_date: new Date(
                 bookData.year,
-                bookData.month,
+                bookData.month - 1,
                 bookData.day
               ).toLocaleString("en-US", {
                 timeZone: "Asia/Calcutta"
