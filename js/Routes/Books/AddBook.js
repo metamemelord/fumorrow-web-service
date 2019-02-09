@@ -52,7 +52,7 @@ addBookRouter.post(
             var bookObject = {
               _id:
                 bookData.day.toString() +
-                bookData.month.toString() +
+                (bookData.month - 1).toString() +
                 bookData.year.toString(),
               book_name: bookData.book_name,
               release_date: new Date(
