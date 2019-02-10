@@ -5,6 +5,8 @@ const webSeriesIndexRouter = express.Router();
 
 const returnWebSeries = require("./ReturnWebSeries");
 const addWebSeries = require("./AddWebSeries");
+const addSeason = require("./AddSeason");
+const addSeasonEpisode = require("./AddEpisode");
 const deleteWebSeries = require("./DeleteWebSeries");
 const modifyWebSeries = require("./ModifyWebSeries");
 const miscRoutes = require("./Misc");
@@ -18,6 +20,8 @@ const returnWebSeriesById = require("./ReturnWebSeriesById");
 
 webSeriesIndexRouter.use(returnWebSeries);
 webSeriesIndexRouter.use(addWebSeries);
+webSeriesIndexRouter.use(addSeason);
+webSeriesIndexRouter.use(addSeasonEpisode);
 webSeriesIndexRouter.use(deleteWebSeries);
 webSeriesIndexRouter.use(modifyWebSeries);
 webSeriesIndexRouter.use(miscRoutes);

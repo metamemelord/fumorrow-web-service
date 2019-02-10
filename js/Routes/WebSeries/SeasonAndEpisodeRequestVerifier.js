@@ -1,17 +1,14 @@
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
-const isEmpty = require("./../../lib/HelperFunctions").isEmpty;
+const isEmpty = require("../../lib/HelperFunctions").isEmpty;
 
 module.exports = (req, res, next) => {
 	try {
 		if (
-			isEmpty(req.body.title) ||
-      isEmpty(req.body.day) ||
+			isEmpty(req.body.season_number) ||
+      isEmpty(req.body.series_id) ||
       isEmpty(req.body.month) ||
-      isEmpty(req.body.year) ||
-      isEmpty(req.body.cast) ||
-      isEmpty(req.body.languages) ||
-      isEmpty(req.body.genres)
+      isEmpty(req.body.year)
 		) {
 			return res.status(400).json({
 				status: {

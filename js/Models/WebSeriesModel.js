@@ -32,17 +32,17 @@ var webSeriesSchema = new mongoose.Schema({
 		type: Array,
 		required: true
 	},
-	language: {
-		type: Number,
-		required: true
-	},
-	season: {
-		type: Number,
-		required: true
-	},
-	episodes: {
+	languages: {
 		type: Array,
 		default: []
+	},
+	subtitles: {
+		type: Array,
+		default: []
+	},
+	seasons: {
+		type: Array,
+		required: true
 	},
 	images: {
 		type: Array,
@@ -79,6 +79,10 @@ var webSeriesSchema = new mongoose.Schema({
 	is_running_now: {
 		type: Boolean,
 		default: false
+	},
+	showing_at: {
+		type: Array,
+		default: []
 	},
 	click_counter: {
 		type: Number,
