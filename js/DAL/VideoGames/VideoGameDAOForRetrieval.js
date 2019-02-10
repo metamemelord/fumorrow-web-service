@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-mongoose.set('useFindAndModify', false);
-const filename = require('path').basename(__filename);
-const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
+var mongoose = require("mongoose");
+mongoose.set("useFindAndModify", false);
+const filename = require("path").basename(__filename);
+const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
 
 const privateVideoGameFields = {
 	is_approved: 0,
@@ -12,7 +12,7 @@ const privateVideoGameFields = {
 	user_visit_info: 0,
 	uid: 0,
 	__v: 0
-}
+};
 
 var connectionForRetrieval = null;
 try {
@@ -20,21 +20,21 @@ try {
 
 	// Connection to DB
 
-	connectionForRetrieval.on('error', function (error) {
+	connectionForRetrieval.on("error", function (error) {
 		logger.error(error);
 	});
 
-	connectionForRetrieval.once('open', function () {
+	connectionForRetrieval.once("open", function () {
 		logger.info("Connection to read-only user successful!");
 	});
 } catch (error) {
 	logger.error(error);
 }
 
-require('assert').notEqual(connectionForRetrieval, null);
+require("assert").notEqual(connectionForRetrieval, null);
 
-const videoGameSchema = require('../../Models/VideoGamesModel');
-let videoGameDBService = connectionForRetrieval.model('videogame', videoGameSchema);
+const videoGameSchema = require("../../Models/VideoGameModel");
+let videoGameDBService = connectionForRetrieval.model("videogame", videoGameSchema);
 
 
 function getAll(callback) {

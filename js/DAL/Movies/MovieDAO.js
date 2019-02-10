@@ -1,31 +1,31 @@
-var mongoose = require('mongoose');
-mongoose.set('useFindAndModify', false);
-const isEmpty = require('../../Utils/HelperFunctions').isEmpty;
-const filename = require('path').basename(__filename);
-const logger = require('../../Loggers/index').LoggerFactory.getLogger(filename);
+var mongoose = require("mongoose");
+mongoose.set("useFindAndModify", false);
+const isEmpty = require("../../lib/HelperFunctions").isEmpty;
+const filename = require("path").basename(__filename);
+const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
 
 var connection = null;
 try {
 	connection = mongoose.createConnection(process.env.DATABASE_CONNECTION_STRING_FOR_WRITING, { useNewUrlParser: true });
 	// Connection to DB
 
-	connection.on('error', function (error) {
+	connection.on("error", function (error) {
 		logger.error(error);
 	});
 
-	connection.once('open', function () {
+	connection.once("open", function () {
 		logger.info("Connection to RW user successful!");
 	});
 } catch (error) {
 	logger.error(error);
 }
 
-require('assert').notEqual(connection, null);
+require("assert").notEqual(connection, null);
 
 // Importing movie schema service
 
-const movieSchema = require('../../Models/MovieModel');
-let movieDBService = connection.model('movie', movieSchema);
+const movieSchema = require("../../Models/MovieModel");
+let movieDBService = connection.model("movie", movieSchema);
 
 // Service methods
 
@@ -42,7 +42,7 @@ function addMovie(object, callback) {
 				var movieToAdd = new movieDBService(object);
 				movieToAdd.save(object, function (error) {
 					if (error) {
-						if (error.name === 'ValidationError') {
+						if (error.name === "ValidationError") {
 							callback(400, "Error while parsing values", null);
 						} else {
 							logger.error(error);
@@ -77,7 +77,7 @@ function removeById(id, callback) {
 					"name": data.title
 				});
 			}
-		})
+		});
 	}
 	catch (error) {
 		logger.error(error);
@@ -101,7 +101,7 @@ function modifyMovie(object, callback) {
 					{ overwrite: true },
 					function (error, data) {
 						if (error) {
-							if (error.name === 'ValidationError') {
+							if (error.name === "ValidationError") {
 								callback(400, "Error while parsing values", null);
 							} else {
 								logger.error(error);
@@ -128,28 +128,28 @@ function incrementCounterById(id, callback) {
 	movieDBService.findOneAndUpdate({
 		$and: [{ "_id": id }, { "is_approved": true }]
 	}, {
-			$inc: {
-				'click_counter': 1
-			}
+		$inc: {
+			"click_counter": 1
 		}
-		, function (error, data) {
-			if (error instanceof mongoose.CastError) {
-				callback(412, "Invalid ID", null);
-			} else if (error) {
-				logger.error(error);
-				callback(500, "Internal error", null);
-			} else if (isEmpty(data)) {
-				callback(404, "Content not found on the server", null);
-			} else {
-				callback(200, "Increment successful", null);
-			}
-		});
+	}
+	, function (error, data) {
+		if (error instanceof mongoose.CastError) {
+			callback(412, "Invalid ID", null);
+		} else if (error) {
+			logger.error(error);
+			callback(500, "Internal error", null);
+		} else if (isEmpty(data)) {
+			callback(404, "Content not found on the server", null);
+		} else {
+			callback(200, "Increment successful", null);
+		}
+	});
 }
 
 function approveById(id, callback) {
 	movieDBService.findOneAndUpdate({ _id: id }, {
-		'is_approved': true,
-		'recheck_needed': false
+		"is_approved": true,
+		"recheck_needed": false
 	}, function (error, data) {
 		if (error instanceof mongoose.CastError) {
 			callback(412, "Invalid ID", null);
@@ -169,8 +169,8 @@ function approveById(id, callback) {
 
 function markForRecheckById(id, callback) {
 	movieDBService.findOneAndUpdate({ _id: id }, {
-		'recheck_needed': true,
-		'is_approved': false
+		"recheck_needed": true,
+		"is_approved": false
 	}, function (error, data) {
 		if (error instanceof mongoose.CastError) {
 			callback(412, "Invalid ID", null);
@@ -191,31 +191,31 @@ function markForRecheckById(id, callback) {
 function addShowingAt(id, showing_at, callback) {
 	movieDBService.findOneAndUpdate({ _id: id }, {
 		$push: {
-			'showing_at': showing_at
+			"showing_at": showing_at
 		}
 	},
-		function (error, data) {
-			if (error instanceof mongoose.CastError) {
-				callback(412, "Invalid ID", null);
-			} else if (error) {
-				logger.error(error);
-				callback(500, "Internal error", null);
-			} else if (isEmpty(data)) {
-				callback(404, "Content not found on the server", null);
-			} else {
-				callback(200, "Added theaters", {
-					"_id": id,
-					"name": data.title,
-					"showing_at": showing_at
-				});
-			}
+	function (error, data) {
+		if (error instanceof mongoose.CastError) {
+			callback(412, "Invalid ID", null);
+		} else if (error) {
+			logger.error(error);
+			callback(500, "Internal error", null);
+		} else if (isEmpty(data)) {
+			callback(404, "Content not found on the server", null);
+		} else {
+			callback(200, "Added theaters", {
+				"_id": id,
+				"name": data.title,
+				"showing_at": showing_at
+			});
 		}
+	}
 	);
 }
 
 function markReleasedById(id, callback) {
 	movieDBService.findOneAndUpdate({ _id: id }, {
-		'is_released': true
+		"is_released": true
 	}, function (error, data) {
 		if (error instanceof mongoose.CastError) {
 			callback(412, "Invalid ID", null);

@@ -1,11 +1,12 @@
 {
   "name": "fumorrow",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "Know about upcoming things.",
   "main": "index.js",
   "scripts": {
     "start": "node ./index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./index.js"
   },
   "keywords": [
     "Fumorrow",
@@ -27,6 +28,7 @@
     "jsonwebtoken": "^8.3.0",
     "log4js": "^3.0.5",
     "md5": "^2.2.1",
+    "moment": "^2.23.0",
     "mongoose": "^5.2.14",
     "mysql2": "^1.6.1"
   }

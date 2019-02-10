@@ -1,13 +1,13 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-require('dotenv').config();
-const logger = require('./js/Loggers/index').LoggerFactory.getLogger('Web-Service');
-const packageJson = require('./package.json');
+const express = require("express");
+const bodyParser = require("body-parser");
+require("dotenv").config();
+const logger = require("./js/Loggers/index").LoggerFactory.getLogger("Web-Service");
+const packageJson = require("./package.json");
 
 var fumorrow = express();
 
 fumorrow.use(bodyParser.json());
-fumorrow.set('env', process.env.ENVIRONMENT);
+fumorrow.set("env", process.env.ENVIRONMENT);
 
 /**
  * Initial filter to check issues in the request
@@ -29,23 +29,24 @@ fumorrow.use((error, req, res, next) => {
 /**
  *  API Routes
  */
-fumorrow.use(require('./js/Routes/Commons/index'));
-fumorrow.use(require('./js/Routes/Movies/index'));
-fumorrow.use(require('./js/Routes/Books/index'));
-fumorrow.use(require('./js/Routes/Cars/index'));
-fumorrow.use(require('./js/Routes/VideoGames/index'));
-fumorrow.use(require('./js/Routes/Bikes/index'));
-fumorrow.use(require('./js/Routes/404'));
+fumorrow.use(require("./js/Routes/Commons"));
+fumorrow.use(require("./js/Routes/Movies"));
+fumorrow.use(require("./js/Routes/Books"));
+fumorrow.use(require("./js/Routes/Cars"));
+fumorrow.use(require("./js/Routes/VideoGames"));
+fumorrow.use(require("./js/Routes/Bikes"));
+fumorrow.use(require("./js/Routes/WebSeries"));
+fumorrow.use(require("./js/Routes/404"));
 
 // Routes
 
 // Redirecting all the GET requests homepage
-
-fumorrow.get('*', function (req, res) {
+fumorrow.get("*", function (req, res) {
     try {
-        res.writeHead(301, {
-            Location: 'http://www.fumorrow.com'
+        res.writeHead(302, {
+            Location: "http://www.fumorrow.com"
         });
+        res.redirect("http://www.fumorrow.com");
     } catch (error) {
         logger.error(error);
     } finally {
@@ -54,7 +55,6 @@ fumorrow.get('*', function (req, res) {
 });
 
 // Server
-
 fumorrow.listen(3000, (error) => {
     if (error) {
         logger.fatal(error);
