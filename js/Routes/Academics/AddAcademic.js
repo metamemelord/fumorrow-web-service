@@ -2,7 +2,7 @@ const express = require("express");
 const DAL = require("../../DAL/index");
 const academicRequestVerifier = require("../Academics/AddToAcademicRequestVerifer");
 const academicDAO = DAL.AcademicDAO;
-const AcademicBuilder = require("../../lib/Builders/Category/CategoryBuilderFactory").getBuilder("academics");
+const AcademicBuilder = require("../../lib/Builders/Category/impl/Academics");
 const jwt = require("jsonwebtoken");
 const tokenVerifier = require("./../../Utils/Token/TokenVerifier");
 const tokenAuthCheck = require("./../../Utils/Token/TokenAuthCheck");
@@ -61,13 +61,20 @@ addAcademicRouter.post("/api/academic/add", tokenVerifier, tokenAuthCheck, acade
 						.setAddress(academicData.address)
 						.setIsSponsored(academicData.is_sponsored)
 						.setIsLive(academicData.is_live);
+
 					locationApi(req.body.address).then(
 						coordinates => {
-							console.log(coordinates);
-							console.log(academicObject);
 							academicObject
-								.setLongitude(coordinates.lon)
-								.setLatitutde(coordinates.lat);
+								.setCoordinates(coordinates);
+							academicDAO.addAcademic(academicObject.build(), function (status, message, data) {
+								return res.status(status).json({
+									"status": {
+										"code": status,
+										"message": message
+									},
+									"data": data
+								});
+							});
 						}
 					).catch(error => {
 						logger.error(error);
@@ -77,15 +84,6 @@ addAcademicRouter.post("/api/academic/add", tokenVerifier, tokenAuthCheck, acade
 								"message": "Could not find address"
 							},
 							"data": null
-						});
-					});
-					academicDAO.addAcademic(academicObject.build(), function (status, message, data) {
-						return res.status(status).json({
-							"status": {
-								"code": status,
-								"message": message
-							},
-							"data": data
 						});
 					});
 				}

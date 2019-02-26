@@ -1,16 +1,13 @@
 const helpers = require("../../../HelperFunctions");
 const isNotEmpty = helpers.isNotEmpty;
 const generateSalt = helpers.generateSalt;
-const checkDate = helpers.checkDate;
 const md5 = require("md5");
 const moment = require("moment");
-const GeolocationSchema = require("../../../../Models/GeolocationSchema");
 
 var AcademicBuilder = (function () {
 	function Academic(academicData) {
 		if (isNotEmpty(academicData)) this.academicData = academicData;
 		else this.academicData = {};
-		this.coordinates = {};
 	}
 
 
@@ -77,7 +74,7 @@ var AcademicBuilder = (function () {
 	};
 
 	Academic.prototype.setAddress = function (address) {
-		this.academicData.address= address;
+		this.academicData.address = address;
 		return this;
 	};
 
@@ -141,13 +138,11 @@ var AcademicBuilder = (function () {
 		return this;
 	};
 
-	Academic.prototype.setLatitude = function (latitude) {
-		this.coordinates.latitude = latitude;
-		return this;
-	};
-
-	Academic.prototype.setLongitude = function (longitude) {
-		this.coordinates.longitude = longitude;
+	Academic.prototype.setCoordinates = function (coordinates) {
+		this.academicData.geometery = {
+			type: "Point",
+			coordinates: [coordinates.lat, coordinates.lon]
+		};
 		return this;
 	};
 
@@ -171,8 +166,6 @@ var AcademicBuilder = (function () {
 			var uniqueId = this.academicData.title + this.academicData.release_date.toString();
 			this.setUid(md5(uniqueId.replace(/\s/g, "")));
 		}
-		this.academicData.geometery = GeolocationSchema;
-		//this.academicData.geometery.coordinates = [this.coordinates.latitude, this.coordinates.longitude]
 		return this.academicData;
 	};
 	return Academic;
