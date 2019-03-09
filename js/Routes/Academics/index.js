@@ -13,10 +13,12 @@ const returnAllRecheckNeeded = require("./ReturnAllAcademicsRecheckNeeded");
 const approveById = require("./ApproveAcademicById");
 const markForRecheckById = require("./MarkAcademicForRecheckById");
 const returnAcademicById = require("./ReturnAcademicById");
+const returnAcademicByLocation = require('./ReturnAcademicsByLocation');
 
 // CRUD OPERATIONS
 
 academicIndexRouter.use(returnAcademics);
+academicIndexRouter.use(returnAcademicByLocation);
 academicIndexRouter.use(addAcademic);
 academicIndexRouter.use(deleteAcademic);
 academicIndexRouter.use(modifyAcademic);

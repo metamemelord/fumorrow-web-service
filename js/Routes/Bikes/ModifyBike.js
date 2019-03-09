@@ -97,7 +97,6 @@ modifyBikeRouter.post("/api/bike/modify",
 							favorited_by: bikeData.favorited_by,
 							user_visit_info: bikeData.user_visit_info
 						};
-						logger.debug(bikeObject.release_date.toLocaleString());
 						var uniqueId = bikeObject.bike_name + bikeObject.release_date.toString() + bikeData.brand_name;
 						bikeObject.uid = md5(uniqueId.replace(/\s/g, ""));
 						bikeObject.is_released = helpers.checkDate(bikeObject.release_date);

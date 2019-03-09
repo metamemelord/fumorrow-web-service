@@ -91,20 +91,20 @@ function getById(id, callback) {
 	academicDBService.findOne({
 		$and: [{ "_id": id }, { "is_approved": true }]
 	}, privateAcademicFields,
-	function (error, data) {
-		if (error) {
-			logger.error(error);
-			if (error.name === "CastError") {
-				callback(400, "Invalid ID", null);
+		function (error, data) {
+			if (error) {
+				logger.error(error);
+				if (error.name === "CastError") {
+					callback(400, "Invalid ID", null);
+				} else {
+					callback(500, "Internal server error", null);
+				}
+			} else if (!data) {
+				callback(404, "Data not found on server", null);
 			} else {
-				callback(500, "Internal server error", null);
+				callback(200, "Success", data);
 			}
-		} else if (!data) {
-			callback(404, "Data not found on server", null);
-		} else {
-			callback(200, "Success", data);
-		}
-	});
+		});
 }
 
 function getAllForRechecking(callback) {
@@ -173,6 +173,26 @@ function getAllLanguages(callback) {
 	});
 }
 
+function getAllByLocation(coordinates, callback) {
+	academicDBService.aggregate([
+		{
+			$geoNear: {
+				near: coordinates,
+				distanceField: "dist.calculated",
+				maxDistance: 1000,
+				spherical: true,
+				query: { is_approved: true }
+			}
+		}
+	], function (error, data) {
+		if (error) {
+			logger.error(error);
+			callback(500, "Internal server error", null);
+		}
+		callback(200, "Success", data);
+	})
+}
+
 module.exports = {
 	getAll,
 	getById,
@@ -182,5 +202,6 @@ module.exports = {
 	getAllForRechecking,
 	getAllUnchecked,
 	getAllReferrers,
-	getAllLanguages
+	getAllLanguages,
+	getAllByLocation
 };

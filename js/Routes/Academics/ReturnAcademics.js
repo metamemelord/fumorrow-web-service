@@ -6,8 +6,12 @@ const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
 const isEmpty = require("./../../lib/HelperFunctions").isEmpty;
 var returnAcademicsRouter = express.Router();
 
-returnAcademicsRouter.post("/api/academics", function (req, res) {
+returnAcademicsRouter.post("/api/academics", function (req, res, next) {
 	try {
+		if (!(isEmpty(req.query.lat) || isEmpty(req.query.lon))) {
+			return next();
+		}
+		console.log(req.query, !(isEmpty(req.query.lat) || isEmpty(req.query.lon)))
 		if (isEmpty(req.body.begin) || isEmpty(req.body.limit)) {
 			if (isEmpty(req.body.filter)) {
 				academicDAOForRetrieval.getAll(function (status, message, data) {
