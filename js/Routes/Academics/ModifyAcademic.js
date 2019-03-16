@@ -3,14 +3,14 @@ const DAL = require("../../DAL/index");
 const academicIdVerifier = require("../RouteUtils").requestIdVerifier;
 const academicRequestVerifier = require("./AddToAcademicRequestVerifer");
 const academicDAO = DAL.AcademicDAO;
-const md5 = require("md5");
+const AcademicBuilder = require("../../lib/Builders/Category/impl/Academics");
 const jwt = require("jsonwebtoken");
-const helpers = require("../../lib/HelperFunctions");
 const tokenVerifier = require("../../Utils/Token/TokenVerifier");
 const tokenAuthCheck = require("../../Utils/Token/TokenAuthCheck");
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
 const isEmpty = require("../../lib/HelperFunctions").isEmpty;
+const locationApi = require('../../lib/LocationAPI');
 
 const modifyAcademicRouter = express.Router();
 
@@ -58,40 +58,50 @@ modifyAcademicRouter.post("/api/academic/modify",
 						});
 					} else {
 						var academicData = req.body;
-						if (isEmpty(academicData.hour)) academicData.hour = 0;
-						if (isEmpty(academicData.minute)) academicData.minute = 0;
-						var academicObject = {
-							override_uid_check: academicData.override_uid_check,
-							_id: academicData._id,
-							title: academicData.title,
-							release_date: new Date(academicData.year, academicData.month - 1, academicData.day, academicData.hour, academicData.minute).toLocaleString("en-US", {
-								timeZone: "Asia/Calcutta"
-							}),
-							uid: "",
-							category: academicData.category,
-							qualification: academicData.qualification,
-							funding_status: academicData.funding_status,
-							images: academicData.images,
-							texts: academicData.texts,
-							partners: academicData.partners,
-							is_sponsored: academicData.is_sponsored,
-							is_released: false,
-							is_live: academicData.is_live,
-							click_counter: academicData.click_counter,
-							favorited_by: academicData.favorited_by,
-							user_visit_info: academicData.user_visit_info
-						};
-						var uniqueId = academicObject.title + academicObject.release_date.toString() + academicData.referrerName;
-						academicObject.uid = md5(uniqueId.replace(/\s/g, ""));
-						academicObject.genres.sort();
-						academicObject.is_released = helpers.checkDate(academicObject.release_date);
-						academicDAO.modifyAcademic(academicObject, function (status, message, data) {
-							return res.status(status).json({
+						var academicObject = new AcademicBuilder()
+							.setId(academicData._id)
+							.setOverrideUidCheck(academicData.override_uid_check)
+							.setHour(isEmpty(academicData.hour) ? 0 : academicData.hour)
+							.setMinute(isEmpty(academicData.minute) ? 0 : academicData.minute)
+							.setDay(academicData.day)
+							.setMonth(academicData.month - 1)
+							.setYear(academicData.year)
+							.setTitle(academicData.title)
+							.setCategory(academicData.category)
+							.setQualification(academicData.qualification)
+							.setFundingStatus(academicData.funding_status)
+							.setImages(academicData.images)
+							.setTexts(academicData.texts)
+							.setPartners(academicData.partners)
+							.setAddresses(academicData.addresses)
+							.setIsSponsored(academicData.is_sponsored)
+							.setIsLive(academicData.is_live)
+							.setClickCounter(academicData.click_counter)
+							.setFavoritedBy(academicData.favorited_by)
+							.setUserVisitInfo(academicData.user_visit_info);
+
+						locationApi(req.body.addresses[0]).then(
+							coordinates => {
+								academicObject
+									.setCoordinates(coordinates);
+								academicDAO.modifyAcademic(academicObject.build(), function (status, message, data) {
+									return res.status(status).json({
+										"status": {
+											"code": status,
+											"message": message
+										},
+										"data": data
+									});
+								});
+							}
+						).catch(error => {
+							logger.error(error);
+							return res.status(404).json({
 								"status": {
-									"code": status,
-									"message": message
+									"code": 404,
+									"message": "Could not find address"
 								},
-								"data": data
+								"data": null
 							});
 						});
 					}
@@ -108,5 +118,4 @@ modifyAcademicRouter.post("/api/academic/modify",
 			});
 		}
 	});
-
 module.exports = modifyAcademicRouter;

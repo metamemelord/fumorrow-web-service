@@ -22,13 +22,17 @@ var academicSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	type:{
+	type: {
 		type: String,
 		default: "Offline"
 	},
-	address:{
-		type: String,
+	addresses: {
+		type: [String],
 		required: true
+	},
+	multiple_locations: {
+		type: Boolean,
+		default: false
 	},
 	qualification: {
 		type: Array,

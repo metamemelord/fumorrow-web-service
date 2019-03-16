@@ -89,7 +89,7 @@ function modifyAcademic(object, callback) {
 	try {
 		object.recheck_needed = false;
 		object.is_approved = false;
-		academicDBSerivce.findOne({ "uid": object.uid }, function (error, data) {
+		academicDBSerivce.findOne({ "_id": object._id }, function (error, data) {
 			if (error) {
 				logger.error(error);
 				return callback(500, "Internal server error", null);
@@ -128,22 +128,22 @@ function incrementCounterById(id, callback) {
 	academicDBSerivce.findOneAndUpdate({
 		$and: [{ "_id": id }, { "is_approved": true }]
 	}, {
-		$inc: {
-			"click_counter": 1
+			$inc: {
+				"click_counter": 1
+			}
 		}
-	}
-	, function (error, data) {
-		if (error instanceof mongoose.CastError) {
-			callback(412, "Invalid ID", null);
-		} else if (error) {
-			logger.error(error);
-			callback(500, "Internal error", null);
-		} else if (isEmpty(data)) {
-			callback(404, "Content not found on the server", null);
-		} else {
-			callback(200, "Increment successful", null);
-		}
-	});
+		, function (error, data) {
+			if (error instanceof mongoose.CastError) {
+				callback(412, "Invalid ID", null);
+			} else if (error) {
+				logger.error(error);
+				callback(500, "Internal error", null);
+			} else if (isEmpty(data)) {
+				callback(404, "Content not found on the server", null);
+			} else {
+				callback(200, "Increment successful", null);
+			}
+		});
 }
 
 function approveById(id, callback) {

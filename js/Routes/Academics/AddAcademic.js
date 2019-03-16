@@ -58,34 +58,45 @@ addAcademicRouter.post("/api/academic/add", tokenVerifier, tokenAuthCheck, acade
 						.setImages(academicData.images)
 						.setTexts(academicData.texts)
 						.setPartners(academicData.partners)
-						.setAddress(academicData.address)
+						.setAddresses(academicData.addresses)
 						.setIsSponsored(academicData.is_sponsored)
-						.setIsLive(academicData.is_live);
-
-					locationApi(req.body.address).then(
-						coordinates => {
-							academicObject
-								.setCoordinates(coordinates);
-							academicDAO.addAcademic(academicObject.build(), function (status, message, data) {
-								return res.status(status).json({
-									"status": {
-										"code": status,
-										"message": message
-									},
-									"data": data
-								});
+						.setIsLive(academicData.is_live)
+					if (academicData.type && academicData.type.toLowerCase() === "online") {
+						academicDAO.addAcademic(academicObject.build(), function (status, message, data) {
+							return res.status(status).json({
+								"status": {
+									"code": status,
+									"message": message
+								},
+								"data": data
 							});
-						}
-					).catch(error => {
-						logger.error(error);
-						return res.status(404).json({
-							"status": {
-								"code": 404,
-								"message": "Could not find address"
-							},
-							"data": null
 						});
-					});
+					} else {
+						locationApi(req.body.addresses[0]).then(
+							coordinates => {
+								academicObject
+									.setCoordinates(coordinates);
+								academicDAO.addAcademic(academicObject.build(), function (status, message, data) {
+									return res.status(status).json({
+										"status": {
+											"code": status,
+											"message": message
+										},
+										"data": data
+									});
+								});
+							}
+						).catch(error => {
+							logger.error(error);
+							return res.status(404).json({
+								"status": {
+									"code": 404,
+									"message": "Could not find address"
+								},
+								"data": null
+							});
+						});
+					}
 				}
 			}
 		});

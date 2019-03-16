@@ -5,7 +5,8 @@ const isEmpty = require("../../lib/HelperFunctions").isEmpty;
 module.exports = (req, res, next) => {
 	try {
 		if (isEmpty(req.body.title) || isEmpty(req.body.day) || isEmpty(req.body.month) ||
-			isEmpty(req.body.year) || isEmpty(req.body.category) || isEmpty(req.body.funding_status) || isEmpty(req.body.address)) {
+			isEmpty(req.body.year) || isEmpty(req.body.category) || isEmpty(req.body.funding_status) ||
+			(isEmpty(req.body.addresses) && req.body.type.toLowerCase() !== "online")) {
 			return res.status(400).json({
 				"status": {
 					"code": 400,

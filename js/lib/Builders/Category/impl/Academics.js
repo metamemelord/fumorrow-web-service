@@ -10,14 +10,13 @@ var AcademicBuilder = (function () {
 		else this.academicData = {};
 	}
 
-
 	Academic.prototype.setOverrideUidCheck = function (override_uid_check) {
 		this.academicData.override_uid_check = override_uid_check;
 		return this;
 	};
 
 	Academic.prototype.setId = function (_id) {
-		this.academicData._id = _id + generateSalt(12 - _id.length);
+		this.academicData._id = _id;
 		return this;
 	};
 
@@ -73,8 +72,8 @@ var AcademicBuilder = (function () {
 		return this;
 	};
 
-	Academic.prototype.setAddress = function (address) {
-		this.academicData.address = address;
+	Academic.prototype.setAddresses = function (addresses) {
+		this.academicData.addresses = addresses;
 		return this;
 	};
 
@@ -147,6 +146,10 @@ var AcademicBuilder = (function () {
 	};
 
 	Academic.prototype.build = function () {
+		if (this.academicData.addresses && this.academicData.addresses.hasOwnProperty("length"))
+			this.academicData.multiple_locations = this.academicData.addresses.length > 1;
+		else
+			this.academicData.multiple_locations = false;
 		if (isNotEmpty(this.release_date)) {
 			this.setReleaseDate(new Date(moment(this.academicData.release_date).format("MMM DD, YYYY HH:mm")));
 		} else {
@@ -159,7 +162,6 @@ var AcademicBuilder = (function () {
 				.format("MMM DD, YYYY HH:mm")
 			));
 		}
-
 		if (this.academicData.override_uid_check) {
 			this.setUid(this.academicData.uid);
 		} else {
