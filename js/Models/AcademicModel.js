@@ -50,6 +50,10 @@ var academicSchema = new mongoose.Schema({
 		type: Array,
 		default: []
 	},
+	videos: {
+		type: Array,
+		default: []
+	},
 	texts: {
 		type: Array,
 		default: []

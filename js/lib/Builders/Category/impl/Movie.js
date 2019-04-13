@@ -116,19 +116,14 @@ var MovieBuilder = (function () {
 		return this;
 	};
 
-	Movie.prototype.setVideos = function (videos) {
-		this.movieData.videos = videos;
-		return this;
-	};
-
 	Movie.prototype.setIsSponsored = function (is_sponsored) {
-		this.movieData.videos = is_sponsored;
+		this.movieData.is_sponsored = is_sponsored;
 		return this;
 	};
 
 	/* Direct calling is not recommended */
 	Movie.prototype.setIsReleased = function (is_released) {
-		this.movieData.videos = is_released;
+		this.movieData.is_released = is_released;
 		return this;
 	};
 

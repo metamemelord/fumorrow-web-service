@@ -2,7 +2,7 @@ const express = require("express");
 const DAL = require("../../DAL/index");
 const academicRequestVerifier = require("../Academics/AddToAcademicRequestVerifer");
 const academicDAO = DAL.AcademicDAO;
-const AcademicBuilder = require("../../lib/Builders/Category/impl/Academics");
+const AcademicBuilder = require("../../lib/Builders/Category/CategoryBuilderFactory").getBuilder("academics");
 const jwt = require("jsonwebtoken");
 const tokenVerifier = require("./../../Utils/Token/TokenVerifier");
 const tokenAuthCheck = require("./../../Utils/Token/TokenAuthCheck");
@@ -56,6 +56,7 @@ addAcademicRouter.post("/api/academic/add", tokenVerifier, tokenAuthCheck, acade
 						.setQualification(academicData.qualification)
 						.setFundingStatus(academicData.funding_status)
 						.setImages(academicData.images)
+						.setVideos(academicData.videos)
 						.setTexts(academicData.texts)
 						.setPartners(academicData.partners)
 						.setAddresses(academicData.addresses)

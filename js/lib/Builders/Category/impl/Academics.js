@@ -1,6 +1,5 @@
 const helpers = require("../../../HelperFunctions");
 const isNotEmpty = helpers.isNotEmpty;
-const generateSalt = helpers.generateSalt;
 const md5 = require("md5");
 const moment = require("moment");
 
@@ -92,6 +91,11 @@ var AcademicBuilder = (function () {
 		return this;
 	};
 
+	Academic.prototype.setVideos = function (videos) {
+		this.academicData.videos = videos;
+		return this;
+	};
+
 	Academic.prototype.setTexts = function (texts) {
 		this.academicData.texts = texts;
 		return this;
@@ -103,7 +107,7 @@ var AcademicBuilder = (function () {
 	};
 
 	Academic.prototype.setIsSponsored = function (is_sponsored) {
-		this.academicData.videos = is_sponsored;
+		this.academicData.is_sponsored = is_sponsored;
 		return this;
 	};
 
