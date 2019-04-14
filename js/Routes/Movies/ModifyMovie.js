@@ -91,7 +91,9 @@ modifyMovieRouter.post("/api/movie/modify",
 						};
 						var uniqueId = movieObject.title + movieObject.release_date.toString() + movieData.referrerName;
 						movieObject.uid = md5(uniqueId.replace(/\s/g, ""));
-						movieObject.genres.sort();
+						if (helpers.isNotEmpty(movieObject.genres) && 
+							movieObject.genres.constructor === Array)
+							movieObject.genres.sort();
 						movieObject.is_released = helpers.checkDate(movieObject.release_date);
 						movieDAO.modifyMovie(movieObject, function (status, message, data) {
 							return res.status(status).json({

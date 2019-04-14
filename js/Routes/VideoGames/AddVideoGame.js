@@ -77,7 +77,8 @@ addVideoGameRouter.post("/api/videogame/add", tokenVerifier, tokenAuthCheck, vid
 					var uniqueId = videoGameObject.title + videoGameObject.release_date.toString() + videoGameData.referrerName;
 					uniqueId = uniqueId.replace(/\s/g, "");
 					videoGameObject.uid = md5(uniqueId);
-					if (helpers.isNotEmpty(videoGameObject.genres))
+					if (helpers.isNotEmpty(videoGameObject.genres) &&
+						videoGameObject.genres.constructor === Array)
 						videoGameObject.genres.sort();
 					videoGameObject.is_released = helpers.checkDate(videoGameObject.release_date);
 					videoGameDAO.addVideoGame(videoGameObject, function (status, message, data) {

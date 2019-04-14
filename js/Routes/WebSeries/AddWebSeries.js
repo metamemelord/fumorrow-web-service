@@ -88,11 +88,13 @@ addWebSeriesRouter.post(
 						var length = 12 - webSeriesObject._id.length;
 						webSeriesObject._id += helpers.generateSalt(length);
 						var uniqueId =
-              webSeriesObject.title +
-              webSeriesObject.release_date.toString() +
-              webSeriesData.referrerName;
+							webSeriesObject.title +
+							webSeriesObject.release_date.toString() +
+							webSeriesData.referrerName;
 						webSeriesObject.uid = md5(uniqueId.replace(/\s/g, ""));
-						webSeriesObject.genres.sort();
+						if (helpers.isNotEmpty(webSeriesObject.genres) &&
+							webSeriesObject.genres.constructor === Array)
+							webSeriesObject.genres.sort();
 						webSeriesObject.is_released = helpers.checkDate(
 							webSeriesObject.release_date
 						);

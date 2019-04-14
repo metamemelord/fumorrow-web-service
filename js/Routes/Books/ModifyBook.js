@@ -93,7 +93,9 @@ modifyBookRouter.post("/api/book/modify",
 						};
 						var uniqueId = bookObject.book_name + bookObject.release_date.toString() + bookData.referrerName;
 						bookObject.uid = md5(uniqueId.replace(/\s/g, ""));
-						bookObject.genres.sort();
+						if (helpers.isNotEmpty(bookObject.genres) && 
+						    bookObject.genres.constructor === Array)
+							bookObject.genres.sort();
 						bookObject.is_released = helpers.checkDate(bookObject.release_date);
 						bookDAO.modifyBook(bookObject, function (status, message, data) {
 							return res.status(status).json({

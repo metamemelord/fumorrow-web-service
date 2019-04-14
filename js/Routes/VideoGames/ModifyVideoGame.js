@@ -87,7 +87,9 @@ modifyVideoGameRouter.post("/api/videogame/modify", tokenVerifier, tokenAuthChec
 					};
 					var uniqueId = videoGameObject.title + videoGameObject.release_date.toString() + videoGameData.referrerName;
 					videoGameObject.uid = md5(uniqueId.replace(/\s/g, ""));
-					videoGameObject.genres.sort();
+					if (helpers.isNotEmpty(videoGameObject.genres) &&
+						videoGameObject.genres.constructor === Array)
+						videoGameObject.genres.sort();
 					videoGameObject.is_released = helpers.checkDate(videoGameObject.release_date);
 					videoGameDAO.modifyVideoGame(videoGameObject, function (status, message, data) {
 						return res.status(status).json({

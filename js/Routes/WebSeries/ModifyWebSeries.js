@@ -91,7 +91,9 @@ modifyWebSeriesRouter.post("/api/web-series/modify",
 						};
 						var uniqueId = webSeriesObject.title + webSeriesObject.release_date.toString() + webSeriesData.referrerName;
 						webSeriesObject.uid = md5(uniqueId.replace(/\s/g, ""));
-						webSeriesObject.genres.sort();
+						if (helpers.isNotEmpty(webSeriesObject.genres) &&
+							webSeriesObject.genres.constructor === Array)
+							webSeriesObject.genres.sort();
 						webSeriesObject.is_released = helpers.checkDate(webSeriesObject.release_date);
 						webSeriesDAO.modifyWebSeries(webSeriesObject, function (status, message, data) {
 							return res.status(status).json({

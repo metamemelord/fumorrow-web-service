@@ -75,7 +75,7 @@ var MovieBuilder = (function () {
 	};
 
 	Movie.prototype.setGenres = function (genres) {
-		if (isNotEmpty(genres))
+		if (isNotEmpty(genres) && genres.constructor === Array)
 			genres.sort();
 		this.movieData.genres = genres;
 		return this;

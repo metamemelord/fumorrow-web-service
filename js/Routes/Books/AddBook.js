@@ -90,7 +90,8 @@ addBookRouter.post(
 							bookObject.release_date.toString() +
 							bookData.referrerName;
 						bookObject.uid = md5(uniqueId.replace(/\s/g, ""));
-						if (helpers.isNotEmpty(bookObject.genres))
+						if (helpers.isNotEmpty(bookObject.genres) && 
+						    bookObject.genres.constructor === Array)
 							bookObject.genres.sort();
 						bookObject.is_released = helpers.checkDate(bookObject.release_date);
 						bookDAO.addBook(bookObject, function (status, message, data) {
