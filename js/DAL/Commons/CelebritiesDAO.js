@@ -20,7 +20,7 @@ function addCelebrity(celebrityDetails, callback) {
 				return callback(500, "Could not connect to database", null);
 			}
 			var sql = "insert into celebrities (first_name, middle_name, last_name, profession, description, dob, gender, image_link, is_approved) values (?, ?, ?, ?, ?, ?, ?, ?, ?);";
-			var celebrityVariables = [celebrityDetails.first_name, celebrityDetails.middle_name, celebrityDetails.last_name, celebrityDetails.profession, celebrityDetails.description, celebrityDetails.dob, celebrityDetails.gender, celebrityDetails.image_link, 0];
+			var celebrityVariables = [celebrityDetails.first_name, celebrityDetails.middle_name, celebrityDetails.last_name, celebrityDetails.profession, celebrityDetails.description, celebrityDetails.dob, celebrityDetails.gender, celebrityDetails.image_link, 1];
 			con.query(sql, celebrityVariables, function (error, celebrityDataFromDb) {
 				if (error) {
 					if (error.code === "ER_DUP_ENTRY") {
