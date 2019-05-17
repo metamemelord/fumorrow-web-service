@@ -64,6 +64,11 @@ var MovieBuilder = (function () {
 		return this;
 	};
 
+	Movie.prototype.setIsReleaseDateTentative = function(is_release_date_tentative) {
+		this.movieData.is_release_date_tentative = is_release_date_tentative;
+		return this;
+	};
+
 	Movie.prototype.setCast = function (cast) {
 		this.movieData.cast = cast;
 		return this;
@@ -97,7 +102,12 @@ var MovieBuilder = (function () {
 	};
 
 	Movie.prototype.setVideos = function (videos) {
-		this.movieData.videos = videos;
+		this.movieData.videos = videos.map(video => {
+			if(/^.*youtube.*$/.test(video.url.toLowerCase())) {
+				video.url = helpers.retainSelectivePathParams(video.url, ["v"]);
+			}
+			return video;
+		});
 		return this;
 	};
 

@@ -20,6 +20,10 @@ var movieSchema = new mongoose.Schema({
 		type: Date,
 		required: true
 	},
+	is_release_date_tentative: {
+		type: Boolean,
+		default: false
+	},
 	cast: {
 		type: Array,
 		required: true

@@ -67,6 +67,7 @@ modifyMovieRouter.post("/api/movie/modify",
 							release_date: new Date(movieData.year, movieData.month - 1, movieData.day, movieData.hour, movieData.minute).toLocaleString("en-US", {
 								timeZone: "Asia/Calcutta"
 							}),
+							is_release_date_tentative: movieData.is_release_date_tentative,
 							uid: "",
 							cast: movieData.cast,
 							crew: movieData.crew,

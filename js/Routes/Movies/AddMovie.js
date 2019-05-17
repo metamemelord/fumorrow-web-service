@@ -49,6 +49,7 @@ addMovieRouter.post("/api/movie/add", tokenVerifier, tokenAuthCheck, movieReques
 						.setDay(movieData.day)
 						.setMonth(movieData.month - 1)
 						.setYear(movieData.year)
+						.setIsReleaseDateTentative(movieData.is_release_date_tentative)
 						.setTitle(movieData.title)
 						.setCast(movieData.cast)
 						.setCrew(movieData.crew)

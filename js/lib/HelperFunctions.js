@@ -90,6 +90,25 @@ function isString(variable) {
 	return _result;
 }
 
+function retainSelectivePathParams(path, paramsToRetain) {
+	let result = "";
+	let pathElements = path.split("?");
+	if(pathElements.length != 2) {
+		result = path;
+	} else {
+		const baseUrl = pathElements[0];
+		const pathParams = pathElements[1].split("&");
+        const filteredParams = [];
+		for(let pathParam of pathParams) {
+			const pathParamKey = pathParam.split("=")[0];
+			if(paramsToRetain.includes(pathParamKey.trim()))
+				filteredParams.push(pathParam);
+		}
+		result = [baseUrl, filteredParams.join("&")].join("?");
+	}
+	return result;
+}
+
 module.exports = {
 	generateSalt,
 	checkDate,
@@ -99,5 +118,6 @@ module.exports = {
 	toTitleCase,
 	isNumber,
 	isInteger,
-	isString
+	isString,
+	retainSelectivePathParams
 };

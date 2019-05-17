@@ -63,9 +63,7 @@ addWebSeriesRouter.post(
 								webSeriesData.day,
 								webSeriesData.hour,
 								webSeriesData.minute
-							).toLocaleString("en-US", {
-								timeZone: "Asia/Calcutta"
-							}),
+							),
 							uid: "",
 							cast: webSeriesData.cast,
 							crew: webSeriesData.crew,

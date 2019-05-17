@@ -67,9 +67,7 @@ addSeasonRouter.post(
 								seriesEpisodeData.day,
 								seriesEpisodeData.hour,
 								seriesEpisodeData.minute
-							).toLocaleString("en-US", {
-								timeZone: "Asia/Calcutta"
-							}),
+							),
 							episode_number: seriesEpisodeData.episode_number,
 							cast: seriesEpisodeData.cast,
 							crew: seriesEpisodeData.crew,
