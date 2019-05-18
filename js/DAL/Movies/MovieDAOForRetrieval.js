@@ -42,7 +42,7 @@ let movieDBService = connectionForRetrieval.model("movie", movieSchema);
 function getAll(callback) {
   movieDBService
     .find({ is_approved: true }, privateMovieFields)
-    .sort({ _id: 1 })
+    .sort({ release_date: 1 })
     .exec(function(error, data) {
       if (error) {
         logger.error(error);
@@ -55,7 +55,7 @@ function getAll(callback) {
 function getInRange(begin, limit, callback) {
   movieDBService
     .find({ is_approved: true }, privateMovieFields)
-    .sort({ _id: 1 })
+    .sort({ release_date: 1 })
     .skip(begin)
     .limit(limit)
     .exec(function(error, data) {
@@ -78,7 +78,7 @@ function getAllByFilter(filter, callback) {
       },
       privateMovieFields
     )
-    .sort({ _id: 1 })
+    .sort({ release_date: 1 })
     .exec(function(error, data) {
       if (error) {
         logger.error(error);
@@ -98,7 +98,7 @@ function getInRangeByFilter(filter, begin, limit, callback) {
       },
       privateMovieFields
     )
-    .sort({ _id: 1 })
+    .sort({ release_date: 1 })
     .skip(begin)
     .limit(limit)
     .exec(function(error, data) {
