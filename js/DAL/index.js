@@ -12,6 +12,8 @@ const WebSeriesDAO = require("./WebSeries/WebSeriesDAO");
 const WebSeriesDAOForRetrieval = require("./WebSeries/WebSeriesDAOForRetrieval");
 const AcademicDAO = require("./Academics/AcademicDAO");
 const AcademicDAOForRetrieval = require("./Academics/AcademicDAOForRetrieval");
+const FrontendDAO = require("./Frontend/FrontendDAO");
+const FrontendDAOForRetrieval = require("./Frontend/FrontendDAOForRetrieval");
 
 // Common routes
 
@@ -36,6 +38,8 @@ module.exports = {
 	WebSeriesDAOForRetrieval,
 	AcademicDAO,
 	AcademicDAOForRetrieval,
+	FrontendDAO,
+	FrontendDAOForRetrieval,
 	LoginDAO,
 	RegistrationDAO,
 	CelebritiesDAO,

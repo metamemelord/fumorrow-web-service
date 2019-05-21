@@ -37,6 +37,7 @@ fumorrow.use(require("./js/Routes/VideoGames"));
 fumorrow.use(require("./js/Routes/Bikes"));
 fumorrow.use(require("./js/Routes/WebSeries"));
 fumorrow.use(require("./js/Routes/Academics"))
+fumorrow.use(require("./js/Routes/Frontend"));
 fumorrow.use(require("./js/Routes/404"));
 
 // Routes
