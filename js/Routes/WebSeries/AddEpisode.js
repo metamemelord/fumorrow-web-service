@@ -71,7 +71,7 @@ addSeasonRouter.post(
 							episode_number: seriesEpisodeData.episode_number,
 							cast: seriesEpisodeData.cast,
 							crew: seriesEpisodeData.crew,
-							languages: seriesEpisodeData.languages,
+							language: seriesEpisodeData.language,
 							runtime: seriesEpisodeData.runtime
 								? seriesEpisodeData.runtime
 								: 0,

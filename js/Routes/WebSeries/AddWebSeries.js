@@ -67,7 +67,7 @@ addWebSeriesRouter.post(
 							uid: "",
 							cast: webSeriesData.cast,
 							crew: webSeriesData.crew,
-							languages: webSeriesData.languages,
+							language: webSeriesData.language,
 							subtitles: webSeriesData.subtitles,
 							genres: webSeriesData.genres,
 							season: webSeriesData.season,

@@ -32,9 +32,9 @@ var webSeriesSchema = new mongoose.Schema({
 		type: Array,
 		required: true
 	},
-	languages: {
-		type: Array,
-		default: []
+	language: {
+		type: Number,
+		required: true
 	},
 	subtitles: {
 		type: Array,
