@@ -3,7 +3,7 @@ const DAL = require("../../DAL/index");
 const webSeriesDAO = DAL.WebSeriesDAO;
 const jwt = require("jsonwebtoken");
 const helpers = require("../../lib/HelperFunctions");
-const seasonRequestVerifier = require("./SeasonAndEpisodeRequestVerifier");
+const seasonRequestVerifier = require("./SeasonRequestVerifier");
 const tokenVerifier = require("./../../Utils/Token/TokenVerifier");
 const tokenAuthCheck = require("./../../Utils/Token/TokenAuthCheck");
 const filename = require("path").basename(__filename);
@@ -48,48 +48,29 @@ addSeasonRouter.post(
 						});
 					} else {
 						var seriesSeasonData = req.body;
-						if (isEmpty(seriesSeasonData.hour)) seriesSeasonData.hour = 0;
-						if (isEmpty(seriesSeasonData.minute)) seriesSeasonData.minute = 0;
 						var seasonObject = {
-							title: seriesSeasonData.title,
-							release_date: new Date(
-								seriesSeasonData.year,
-								seriesSeasonData.month - 1,
-								seriesSeasonData.day,
-								seriesSeasonData.hour,
-								seriesSeasonData.minute
-							),
+							start_date: new Date(seriesSeasonData.start_date),
 							end_date: seriesSeasonData.end_date,
+							subtitles: seriesSeasonData.subtitles,
+							series_id: seriesSeasonData.series_id,
 							season_number: seriesSeasonData.season_number,
+							snapshot: seriesSeasonData.snapshot,
 							cast: seriesSeasonData.cast,
 							crew: seriesSeasonData.crew,
 							language: seriesSeasonData.language,
-							episodes: seriesSeasonData.episodes
-								? seriesSeasonData.episodes
-								: [],
-							subtitles: seriesSeasonData.subtitles,
-							runtime: 0,
-							seasons: seriesSeasonData.seasons,
 							images: seriesSeasonData.images,
 							videos: seriesSeasonData.videos,
 							texts: seriesSeasonData.texts,
 							partners: seriesSeasonData.partners,
 							showing_at: seriesSeasonData.showing_at,
-							is_sponsored: seriesSeasonData.is_sponsored,
-							is_released: false,
-							is_live: seriesSeasonData.is_live,
-							is_running_now: seriesSeasonData.is_running_now,
 							tv_pg_rating: seriesSeasonData.tv_pg_rating,
-							external_ratings: seriesSeasonData.external_ratings
+							external_ratings: seriesSeasonData.external_ratings,
+							is_sponsored: seriesSeasonData.is_sponsored
 						};
 						seasonObject.is_released = helpers.checkDate(
 							seasonObject.release_date
 						);
-						let seasonData = {
-							_id: seriesSeasonData.series_id,
-							data: seasonObject
-						};
-						webSeriesDAO.addSeason(seasonData, function(status, message, data) {
+						webSeriesDAO.addSeason(seasonObject, function(status, message, data) {
 							return res.status(status).json({
 								status: {
 									code: status,

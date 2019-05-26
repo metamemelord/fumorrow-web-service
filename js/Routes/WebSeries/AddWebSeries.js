@@ -70,7 +70,6 @@ addWebSeriesRouter.post(
 							language: webSeriesData.language,
 							subtitles: webSeriesData.subtitles,
 							genres: webSeriesData.genres,
-							season: webSeriesData.season,
 							images: webSeriesData.images,
 							videos: webSeriesData.videos,
 							texts: webSeriesData.texts,

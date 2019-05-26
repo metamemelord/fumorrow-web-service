@@ -3,6 +3,7 @@ const webSeriesIndexRouter = express.Router();
 
 // Getting routes
 
+const returnExtendedWebSeries = require("./ReturnWebSeriesExtended");
 const returnWebSeries = require("./ReturnWebSeries");
 const addWebSeries = require("./AddWebSeries");
 const addSeason = require("./AddSeason");
@@ -18,6 +19,7 @@ const returnWebSeriesById = require("./ReturnWebSeriesById");
 
 // CRUD OPERATIONS
 
+webSeriesIndexRouter.use(returnExtendedWebSeries);
 webSeriesIndexRouter.use(returnWebSeries);
 webSeriesIndexRouter.use(addWebSeries);
 webSeriesIndexRouter.use(addSeason);

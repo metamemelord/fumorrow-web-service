@@ -36,13 +36,9 @@ var webSeriesSchema = new mongoose.Schema({
 		type: Number,
 		required: true
 	},
-	subtitles: {
-		type: Array,
-		default: []
-	},
 	seasons: {
-		type: Array,
-		required: true
+		type: [{ type: Schema.Types.ObjectId, ref: 'Season' }],
+		default: []
 	},
 	images: {
 		type: Array,
@@ -65,10 +61,6 @@ var webSeriesSchema = new mongoose.Schema({
 		default: "TV-Y"
 	},
 	is_sponsored: {
-		type: Boolean,
-		default: false
-	},
-	is_released: {
 		type: Boolean,
 		default: false
 	},

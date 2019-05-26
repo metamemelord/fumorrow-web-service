@@ -5,10 +5,9 @@ const isEmpty = require("../../lib/HelperFunctions").isEmpty;
 module.exports = (req, res, next) => {
 	try {
 		if (
-			isEmpty(req.body.season_number) ||
-      isEmpty(req.body.series_id) ||
-      isEmpty(req.body.month) ||
-      isEmpty(req.body.year)
+			isEmpty(req.body.episode_number) ||
+			isEmpty(req.body.season_id) ||
+			isEmpty(req.body.date)
 		) {
 			return res.status(400).json({
 				status: {

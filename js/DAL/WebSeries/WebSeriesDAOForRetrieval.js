@@ -37,15 +37,51 @@ try {
 require("assert").notEqual(connectionForRetrieval, null);
 
 const webSeriesSchema = require("../../Models/WebSeriesModel");
-let webSeriesDBService = connectionForRetrieval.model(
-  "webseries",
-  webSeriesSchema
-);
+const seasonSchema = require("../../Models/SeasonModel");
+const episodeSchema = require("../../Models/EpisodeModel");
+let webSeriesDBService = connectionForRetrieval.model("Serie", webSeriesSchema);
+let seasonDBService = connectionForRetrieval.model("Season", seasonSchema);
+let episodeDBService = connectionForRetrieval.model("Episode", episodeSchema);
 
 function getAll(callback) {
   webSeriesDBService
     .find({ is_approved: true }, privateWebSeriesFields)
-    .sort({ _id: 1 })
+    .sort({ release_date: 1 })
+    .exec(function(error, data) {
+      if (error) {
+        logger.error(error);
+        callback(500, "Internal server error", null);
+      }
+      callback(200, "Success", data);
+    });
+}
+
+function getAllWithSeasons(callback) {
+  webSeriesDBService
+    .find({ is_approved: true }, privateWebSeriesFields)
+    .populate("seasons")
+    .sort({ release_date: 1 })
+    .exec(function(error, data) {
+      if (error) {
+        logger.error(error);
+        callback(500, "Internal server error", null);
+      }
+      callback(200, "Success", data);
+    });
+}
+
+function getAllWithEpisodes(callback) {
+  webSeriesDBService
+    .find({ is_approved: true }, privateWebSeriesFields)
+    .populate("seasons")
+    .populate({
+      path: "seasons",
+      populate: {
+        model: "Episode",
+        path: "episodes"
+      }
+    })
+    .sort({ release_date: 1 })
     .exec(function(error, data) {
       if (error) {
         logger.error(error);
@@ -153,16 +189,17 @@ function getAllForRechecking(callback) {
 
 function getAllUnchecked(callback) {
   webSeriesDBService
-    .find({
-      $and: [{ recheck_needed: false }, { is_approved: false }]
-    })
-    .sort({ _id: 1 })
-    .exec(function(error, data) {
-      if (error) {
-        logger.error(error);
-        callback(500, "Internal server error", null);
-      }
+    .find()
+    // .find({
+    //   $and: [{ recheck_needed: false }, { is_approved: false }]
+    // })
+    .exec()
+    .then(data => {
       callback(200, "Success", data);
+    })
+    .catch(error => {
+      logger.error(error);
+      callback(500, "Internal server error", null);
     });
 }
 
@@ -221,6 +258,8 @@ function getAllLanguages(callback) {
 
 module.exports = {
   getAll,
+  getAllWithSeasons,
+  getAllWithEpisodes,
   getById,
   getInRange,
   getAllByFilter,
