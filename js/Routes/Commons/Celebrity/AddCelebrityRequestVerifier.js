@@ -4,7 +4,7 @@ const isEmpty = require("../../../lib/HelperFunctions").isEmpty;
 
 module.exports = (req, res, next) => {
 	try {
-		if (isEmpty(req.body.first_name) || isEmpty(req.body.dob) || isEmpty(req.body.profession) || isEmpty(req.body.gender)) {
+		if (isEmpty(req.body.first_name) || isEmpty(req.body.dob) || isEmpty(req.body.profession)) {
 			return res.status(400).json({
 				"status": {
 					"code": 400,
