@@ -30,11 +30,11 @@ deleteBikeRouter.post("/api/bike/delete", tokenVerifier, tokenAuthCheck, bikeReq
 					"data": null
 				});
 			} else {
-				if (!authData["privilages"].includes("bikes")) {
+				if (!authData["privileges"].includes("bikes")) {
 					return res.status(403).json({
 						"status": {
 							"code": 403,
-							"message": "Insufficient privilages"
+							"message": "Insufficient privileges"
 						},
 						"data": null
 					});

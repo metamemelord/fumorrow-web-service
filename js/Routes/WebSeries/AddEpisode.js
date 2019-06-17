@@ -38,11 +38,11 @@ addSeasonRouter.post(
             data: null
           });
         } else {
-          if (!authData["privilages"].includes("web-series")) {
+          if (!authData["privileges"].includes("web-series")) {
             return res.status(403).json({
               status: {
                 code: 403,
-                message: "Insufficient privilages"
+                message: "Insufficient privileges"
               },
               data: null
             });
@@ -73,7 +73,8 @@ addSeasonRouter.post(
               texts: seriesEpisodeData.texts,
               partners: seriesEpisodeData.partners,
               is_sponsored: seriesEpisodeData.is_sponsored,
-              external_ratings: seriesEpisodeData.external_ratings
+              external_ratings: seriesEpisodeData.external_ratings,
+              is_approved: true
             };
             webSeriesDAO.addEpisode(episodeObject, function(
               status,

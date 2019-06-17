@@ -28,11 +28,11 @@ recheckNeededVideoGameRouter.post("/api/videogames/recheck", tokenVerifier, toke
 					"data": null
 				});
 			} else {
-				if (!authData["privilages"].includes("video_games")) {
+				if (!authData["privileges"].includes("video_games")) {
 					return res.status(403).json({
 						"status": {
 							"code": 403,
-							"message": "Insufficient privilages"
+							"message": "Insufficient privileges"
 						},
 						"data": null
 					});

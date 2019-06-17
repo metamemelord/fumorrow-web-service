@@ -38,11 +38,11 @@ addSeasonRouter.post(
 						data: null
 					});
 				} else {
-					if (!authData["privilages"].includes("web-series")) {
+					if (!authData["privileges"].includes("web-series")) {
 						return res.status(403).json({
 							status: {
 								code: 403,
-								message: "Insufficient privilages"
+								message: "Insufficient privileges"
 							},
 							data: null
 						});
@@ -65,7 +65,8 @@ addSeasonRouter.post(
 							showing_at: seriesSeasonData.showing_at,
 							tv_pg_rating: seriesSeasonData.tv_pg_rating,
 							external_ratings: seriesSeasonData.external_ratings,
-							is_sponsored: seriesSeasonData.is_sponsored
+							is_sponsored: seriesSeasonData.is_sponsored,
+							is_approved: true
 						};
 						seasonObject.is_released = helpers.checkDate(
 							seasonObject.release_date

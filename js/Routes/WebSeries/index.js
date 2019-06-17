@@ -15,6 +15,8 @@ const returnAllUnchecked = require("./ReturnAllUncheckedWebSeries");
 const returnAllRecheckNeeded = require("./ReturnAllWebSeriesRecheckNeeded");
 const approveById = require("./ApproveWebSeriesById");
 const markForRecheckById = require("./MarkWebSeriesForRecheckById");
+const returnSeasonById = require("./ReturnSeasonById");
+const returnEpisodeById = require("./ReturnEpisodeById");
 const returnWebSeriesById = require("./ReturnWebSeriesById");
 
 // CRUD OPERATIONS
@@ -31,6 +33,8 @@ webSeriesIndexRouter.use(returnAllUnchecked);
 webSeriesIndexRouter.use(returnAllRecheckNeeded);
 webSeriesIndexRouter.use(approveById);
 webSeriesIndexRouter.use(markForRecheckById);
+webSeriesIndexRouter.use(returnEpisodeById);
+webSeriesIndexRouter.use(returnSeasonById);
 webSeriesIndexRouter.use(returnWebSeriesById);
 
 module.exports = webSeriesIndexRouter;

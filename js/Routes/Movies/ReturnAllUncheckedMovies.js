@@ -29,11 +29,11 @@ uncheckedMoviesRouter.post("/api/movies/unchecked", tokenVerifier, tokenAuthChec
 					"data": null
 				});
 			} else {
-				if (!authData["privilages"].includes("movies")) {
+				if (!authData["privileges"].includes("movies")) {
 					return res.status(403).json({
 						"status": {
 							"code": 403,
-							"message": "Insufficient privilages"
+							"message": "Insufficient privileges"
 						},
 						"data": null
 					});

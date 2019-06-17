@@ -8,7 +8,6 @@ var webSeriesMoviesRouter = express.Router();
 
 webSeriesMoviesRouter.post("/api/web-series", function (req, res, next) {
     try {
-        logger.debug(req.query)
         const extended = req.query.extended
         const seasons = req.query.seasons
         if(extended === "true") {

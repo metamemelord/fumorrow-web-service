@@ -44,16 +44,7 @@ fumorrow.use(require("./js/Routes/404"));
 
 // Redirecting all the GET requests homepage
 fumorrow.get("*", function (req, res) {
-    try {
-        res.writeHead(302, {
-            Location: "http://www.fumorrow.com"
-        });
-        res.redirect("http://www.fumorrow.com");
-    } catch (error) {
-        logger.error(error);
-    } finally {
-        res.end();
-    }
+    res.redirect("http://www.fumorrow.com");
 });
 
 // Server

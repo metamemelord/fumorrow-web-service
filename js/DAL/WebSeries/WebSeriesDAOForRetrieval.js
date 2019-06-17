@@ -70,6 +70,52 @@ function getAllWithSeasons(callback) {
     });
 }
 
+function getSeasonById(id, callback) {
+  seasonDBService.findOne(
+    {
+      $and: [{ _id: id }, { is_approved: true }]
+    },
+    privateWebSeriesFields,
+    function(error, data) {
+      if (error) {
+        logger.error(error);
+        if (error.name === "CastError") {
+          callback(400, "Invalid ID", null);
+        } else {
+          callback(500, "Internal server error", null);
+        }
+      } else if (!data) {
+        callback(404, "Data not found on server", null);
+      } else {
+        callback(200, "Success", data);
+      }
+    }
+  );
+}
+
+function getSeasonWithEpisodesById(id, callback) {
+  seasonDBService.findOne(
+    {
+      $and: [{ _id: id }, { is_approved: true }]
+    },
+    privateWebSeriesFields)
+    .populate("episodes")
+    .then(function(data, error) {
+      if (error) {
+        logger.error(error);
+        if (error.name === "CastError") {
+          callback(400, "Invalid ID", null);
+        } else {
+          callback(500, "Internal server error", null);
+        }
+      } else if (!data) {
+        callback(404, "Data not found on server", null);
+      } else {
+        callback(200, "Success", data);
+      }
+    });
+}
+
 function getAllWithEpisodes(callback) {
   webSeriesDBService
     .find({ is_approved: true }, privateWebSeriesFields)
@@ -91,6 +137,29 @@ function getAllWithEpisodes(callback) {
     });
 }
 
+function getEpisodeById(id, callback) {
+  episodeDBService.findOne(
+    {
+      $and: [{ _id: id }, { is_approved: true }]
+    },
+    privateWebSeriesFields,
+    function(error, data) {
+      if (error) {
+        logger.error(error);
+        if (error.name === "CastError") {
+          callback(400, "Invalid ID", null);
+        } else {
+          callback(500, "Internal server error", null);
+        }
+      } else if (!data) {
+        callback(404, "Data not found on server", null);
+      } else {
+        callback(200, "Success", data);
+      }
+    }
+  );
+}
+
 function getInRange(begin, limit, callback) {
   webSeriesDBService
     .find({ is_approved: true }, privateWebSeriesFields)
@@ -103,7 +172,28 @@ function getInRange(begin, limit, callback) {
         callback(500, "Internal server error", null);
       }
       callback(200, "Success", data);
-    });
+    });function getById(id, callback) {
+      webSeriesDBService.findOne(
+        {
+          $and: [{ _id: id }, { is_approved: true }]
+        },
+        privateWebSeriesFields,
+        function(error, data) {
+          if (error) {
+            logger.error(error);
+            if (error.name === "CastError") {
+              callback(400, "Invalid ID", null);
+            } else {
+              callback(500, "Internal server error", null);
+            }
+          } else if (!data) {
+            callback(404, "Data not found on server", null);
+          } else {
+            callback(200, "Success", data);
+          }
+        }
+      );
+    }
 }
 
 function getAllByFilter(filter, callback) {
@@ -259,7 +349,10 @@ function getAllLanguages(callback) {
 module.exports = {
   getAll,
   getAllWithSeasons,
+  getSeasonById,
+  getSeasonWithEpisodesById,
   getAllWithEpisodes,
+  getEpisodeById,
   getById,
   getInRange,
   getAllByFilter,

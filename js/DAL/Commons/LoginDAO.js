@@ -32,8 +32,8 @@ function performLogin(userDetails, callback) {
 					return callback(401, "User does not exist", null);
 				} else if (userDataFromDB[0].is_approved === 0) {
 					return callback(401, "Not approved by admin", null);
-				} else if (userDataFromDB[0].privilages === 0) {
-					return callback(503, "No privilages", null);
+				} else if (userDataFromDB[0].privileges === 0) {
+					return callback(503, "No privileges", null);
 				} else {
 					if (
 						bcrypt.compareSync(
@@ -43,8 +43,8 @@ function performLogin(userDetails, callback) {
 					) {
 						var userObject = {
 							username: userDataFromDB[0].username,
-							privilages: helpers.resolvePrivilages(
-								userDataFromDB[0].privilages
+							privileges: helpers.resolvePrivileges(
+								userDataFromDB[0].privileges
 							)
 						};
 

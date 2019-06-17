@@ -1,6 +1,6 @@
 const express = require("express");
 const DAL = require("../../DAL/index");
-const webSeriesDAOForRetrieval = DAL.MovieDAOForRetrieval;
+const webSeriesDAOForRetrieval = DAL.WebSeriesDAOForRetrieval;
 const webSeriesByIdRouter = express.Router();
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);

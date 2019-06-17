@@ -36,11 +36,11 @@ deleteFrontendRouter.post(
                         "data": null
                     });
                 } else {
-                    if (!authData["privilages"].includes("frontend")) {
+                    if (!authData["privileges"].includes("frontend")) {
                         return res.status(403).json({
                             "status": {
                                 "code": 403,
-                                "message": "Insufficient privilages"
+                                "message": "Insufficient privileges"
                             },
                             "data": null
                         });

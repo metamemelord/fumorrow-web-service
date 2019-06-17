@@ -29,11 +29,11 @@ uncheckedWebSeriesRouter.post("/api/web-series/unchecked", tokenVerifier, tokenA
 					"data": null
 				});
 			} else {
-				if (!authData["privilages"].includes("web-series")) {
+				if (!authData["privileges"].includes("web-series")) {
 					return res.status(403).json({
 						"status": {
 							"code": 403,
-							"message": "Insufficient privilages"
+							"message": "Insufficient privileges"
 						},
 						"data": null
 					});

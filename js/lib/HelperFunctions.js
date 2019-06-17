@@ -15,24 +15,24 @@ function checkDate(date) {
 	return checkDate < currentDate;
 }
 
-function resolvePrivilages(privilageBitMask) {
-	var availablePrivilages = [];
-	var grantedPrivilages = [];
+function resolvePrivileges(privilegeBitMask) {
+	var availablePrivileges = [];
+	var grantedPrivileges = [];
 	try {
-		availablePrivilages = process.env.AVAILABLE_PRIVILAGES.split(",");
+		availablePrivileges = process.env.AVAILABLE_PRIVILEGES.split(",");
 	} catch (error) {
-		logger.error("Could not find available privilages in environment");
-		return grantedPrivilages;
+		logger.error("Could not find available privileges in environment");
+		return grantedPrivileges;
 	}
 	var i = 0;
-	while (privilageBitMask > 0 && i < availablePrivilages.length) {
-		if (privilageBitMask % 2) {
-			grantedPrivilages.push(availablePrivilages[i]);
+	while (privilegeBitMask > 0 && i < availablePrivileges.length) {
+		if (privilegeBitMask % 2) {
+			grantedPrivileges.push(availablePrivileges[i]);
 		}
 		i++;
-		privilageBitMask = Math.floor(privilageBitMask / 2);
+		privilegeBitMask = Math.floor(privilegeBitMask / 2);
 	}
-	return grantedPrivilages;
+	return grantedPrivileges;
 }
 
 function isEmpty(variable) {
@@ -112,7 +112,7 @@ function retainSelectivePathParams(path, paramsToRetain) {
 module.exports = {
 	generateSalt,
 	checkDate,
-	resolvePrivilages,
+	resolvePrivileges,
 	isEmpty,
 	isNotEmpty,
 	toTitleCase,

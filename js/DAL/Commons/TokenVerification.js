@@ -14,9 +14,9 @@ function verifyToken(userObject, callback) {
         }
       } else {
         var result = undefined;
-        var privilages = process.env.AVAILABLE_PRIVILAGES;
+        var privileges = process.env.AVAILABLE_PRIVileges;
         if (userObject.domain) {
-          if (!privilages.split(",").includes(userObject.domain)) {
+          if (!privileges.split(",").includes(userObject.domain)) {
             return callback(
               403,
               "Invalid domain, multiple attemps will lead to account suspension",
@@ -25,7 +25,7 @@ function verifyToken(userObject, callback) {
           }
           result =
             userObject.domain &&
-            data.privilages.includes(userObject.domain) &&
+            data.privileges.includes(userObject.domain) &&
             userObject.username === data.username;
         } else {
           result = userObject.username === data.username;

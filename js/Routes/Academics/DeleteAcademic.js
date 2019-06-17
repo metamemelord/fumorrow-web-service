@@ -30,11 +30,11 @@ deleteAcademicRouter.post("/api/academic/delete", tokenVerifier, tokenAuthCheck,
 					"data": null
 				});
 			} else {
-				if (!authData["privilages"].includes("academics")) {
+				if (!authData["privileges"].includes("academics")) {
 					return res.status(403).json({
 						"status": {
 							"code": 403,
-							"message": "Insufficient privilages"
+							"message": "Insufficient privileges"
 						},
 						"data": null
 					});

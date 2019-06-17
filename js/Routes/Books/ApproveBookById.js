@@ -30,11 +30,11 @@ ApproveBookRouter.post("/api/book/approve", tokenVerifier, tokenAuthCheck, bookI
 					"data": null
 				});
 			} else {
-				if (!authData["privilages"].includes("books")) {
+				if (!authData["privileges"].includes("books")) {
 					return res.status(403).json({
 						"status": {
 							"code": 403,
-							"message": "Insufficient privilages"
+							"message": "Insufficient privileges"
 						},
 						"data": null
 					});

@@ -33,11 +33,11 @@ addCarRouter.post("/api/car/add", tokenVerifier, tokenAuthCheck, carRequestVerif
 					"data": null
 				});
 			} else {
-				if (!authData["privilages"].includes("cars")) {
+				if (!authData["privileges"].includes("cars")) {
 					return res.status(403).json({
 						"status": {
 							"code": 403,
-							"message": "Insufficient privilages"
+							"message": "Insufficient privileges"
 						},
 						"data": null
 					});
