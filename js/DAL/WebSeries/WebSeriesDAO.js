@@ -75,13 +75,12 @@ function addWebSeries(object, callback) {
 function addSeason(object, callback) {
   webSeriesDBService
     .findOne({ _id: object.series_id })
-    .populate("seasons")
+    .populate("seasons.season")
     .exec()
     .then(series => {
       if (isEmpty(series)) {
         callback(404, "Could not find web-series", null);
       } else {
-        logger.debug(series);
         let alreadyExists = false;
         for (let season of series.seasons) {
           alreadyExists =
@@ -97,7 +96,21 @@ function addSeason(object, callback) {
               logger.error(error);
               callback(500, "Error while saving season", null);
             } else {
-              series.seasons.push(result._id);
+              let imageLinkToSet = "";
+              for(const image of newSeason.images) {
+                if (type === "cover") {
+                  imageLinkToSet = image.url
+                  break;
+                }
+              }
+              if (isEmpty(imageLinkToSet) && newSeason.images.length) {
+                imageLinkToSet = newSeason.images[0].url
+              }
+              series.seasons.push({
+                season: result._id,
+                season_number: result.season_number,
+                image_link: imageLinkToSet
+              });
               series.save((error, result) => {
                 if (error) {
                   seasonDBService.findByIdAndDelete(newSeason._id);

@@ -10,8 +10,8 @@ webEpisodeByIdRouter.post("/api/web-series/season/:id", function (req, res) {
 	try {
 		if (isNotEmpty(req.body._id) || isNotEmpty(req.params.id)) {
             var id = isNotEmpty(req.params.id) ? req.params.id : req.body._id;
-            const episodes = req.query.episodes;
-            if (episodes === 'true') {
+            const extended = req.query.extended;
+            if (extended === 'true') {
                 webSeriesDAOForRetrieval.getSeasonWithEpisodesById(id, function (status, message, data) {
                     return res.status(status).json({
                         "status": {

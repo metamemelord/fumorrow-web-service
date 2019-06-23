@@ -59,7 +59,7 @@ function getAll(callback) {
 function getAllWithSeasons(callback) {
   webSeriesDBService
     .find({ is_approved: true }, privateWebSeriesFields)
-    .populate("seasons")
+    .populate("seasons.season")
     .sort({ release_date: 1 })
     .exec(function(error, data) {
       if (error) {
@@ -119,9 +119,9 @@ function getSeasonWithEpisodesById(id, callback) {
 function getAllWithEpisodes(callback) {
   webSeriesDBService
     .find({ is_approved: true }, privateWebSeriesFields)
-    .populate("seasons")
+    .populate("seasons.season")
     .populate({
-      path: "seasons",
+      path: "seasons.season",
       populate: {
         model: "Episode",
         path: "episodes"
@@ -279,10 +279,9 @@ function getAllForRechecking(callback) {
 
 function getAllUnchecked(callback) {
   webSeriesDBService
-    .find()
-    // .find({
-    //   $and: [{ recheck_needed: false }, { is_approved: false }]
-    // })
+    .find({
+      $and: [{ recheck_needed: false }, { is_approved: false }]
+    })
     .exec()
     .then(data => {
       callback(200, "Success", data);
