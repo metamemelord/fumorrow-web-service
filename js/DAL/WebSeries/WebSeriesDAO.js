@@ -98,7 +98,7 @@ function addSeason(object, callback) {
             } else {
               let imageLinkToSet = "";
               for(const image of newSeason.images) {
-                if (type === "cover") {
+                if (image.type && image.type === "cover") {
                   imageLinkToSet = image.url
                   break;
                 }
