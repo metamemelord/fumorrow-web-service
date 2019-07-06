@@ -99,7 +99,7 @@ function getSeasonWithEpisodesById(id, callback) {
       $and: [{ _id: id }, { is_approved: true }]
     },
     privateWebSeriesFields)
-    .populate("episodes")
+    .populate("episodes.episode")
     .then(function(data, error) {
       if (error) {
         logger.error(error);
@@ -124,7 +124,7 @@ function getAllWithEpisodes(callback) {
       path: "seasons.season",
       populate: {
         model: "Episode",
-        path: "episodes"
+        path: "episodes.episode"
       }
     })
     .sort({ release_date: 1 })
@@ -216,6 +216,7 @@ function getAllByFilter(filter, callback) {
       callback(200, "Success", data);
     });
 }
+
 function getInRangeByFilter(filter, begin, limit, callback) {
   webSeriesDBService
     .find(

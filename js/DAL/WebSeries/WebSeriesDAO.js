@@ -141,7 +141,7 @@ function addSeason(object, callback) {
 function addEpisode(object, callback) {
   seasonDBService
     .findOne({ _id: object.season_id })
-    .populate("episodes")
+    .populate("episodes.episode")
     .exec()
     .then(season => {
       if (isEmpty(season)) {
@@ -153,7 +153,7 @@ function addEpisode(object, callback) {
             episode.episode_number === object.episode_number;
         }
         if (episodeAlreadyExists) {
-          callback(409, "Episode already exists", null);
+          return callback(409, "Episode already exists", null);
         } else {
           const newEpisode = new episodeDBService(object);
           newEpisode.save((error, result) => {
@@ -161,7 +161,12 @@ function addEpisode(object, callback) {
               logger.error(error);
               callback(500, "Error while saving episode", null);
             } else {
-              season.episodes.push(result._id);
+              let episodeSnapshot = {
+                date: object.date,
+                episode: result._id,
+                episode_number: object.episode_number
+              }
+              season.episodes.push(episodeSnapshot);
               season.save((error, result) => {
                 if (error) {
                   logger.error(error);

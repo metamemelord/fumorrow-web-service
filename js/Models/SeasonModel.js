@@ -34,7 +34,14 @@ var seasonSchema = new mongoose.Schema({
     },
     language: Number,
 	episodes: {
-        type: [{ type: Schema.Types.ObjectId, ref: 'Episode' }],
+        type: [
+            {
+              _id: false,
+              date: Date,
+              episode: { type: Schema.Types.ObjectId, ref: "Episode" },
+              episode_number: Number
+            }
+          ],
         default: []
     },
     images: {
