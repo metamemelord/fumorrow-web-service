@@ -206,7 +206,18 @@ function getAllReferrers(callback) {
 }
 
 function getAllLanguages(callback) {
-  movieDBService.distinct("language", function(error, data) {
+  movieDBService.distinct("language", { is_approved: true }, function(error, data) {
+    if (error) {
+      logger.error(error);
+      callback(500, "Internal server error", null);
+    } else {
+      callback(200, "Success", data);
+    }
+  });
+}
+
+function getAllGenres(callback) {
+  movieDBService.distinct("genres", { is_approved: true }, function(error, data) {
     if (error) {
       logger.error(error);
       callback(500, "Internal server error", null);
@@ -225,5 +236,6 @@ module.exports = {
   getAllForRechecking,
   getAllUnchecked,
   getAllReferrers,
-  getAllLanguages
+  getAllLanguages,
+  getAllGenres
 };

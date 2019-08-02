@@ -80,9 +80,9 @@ var MovieBuilder = (function () {
 	};
 
 	Movie.prototype.setGenres = function (genres) {
-		if (isNotEmpty(genres) && genres.constructor === Array)
-			genres.sort();
-		this.movieData.genres = genres;
+		if (isNotEmpty(genres) && genres.constructor === Array) {
+			this.movieData.genres = genres.filter(el => el.constructor === String).map(el => el.toLowerCase()).sort();
+		}
 		return this;
 	};
 
@@ -102,12 +102,14 @@ var MovieBuilder = (function () {
 	};
 
 	Movie.prototype.setVideos = function (videos) {
-		this.movieData.videos = videos.map(video => {
-			if(/^.*youtube.*$/.test(video.url.toLowerCase())) {
-				video.url = helpers.retainSelectivePathParams(video.url, ["v"]);
-			}
-			return video;
-		});
+		if (isNotEmpty(videos) && videos.constructor === Array) {
+			this.movieData.videos = videos.map(video => {
+				if(/^.*youtube.*$/.test(video.url.toLowerCase())) {
+					video.url = helpers.retainSelectivePathParams(video.url, ["v"]);
+				}
+				return video;
+			});
+		}
 		return this;
 	};
 

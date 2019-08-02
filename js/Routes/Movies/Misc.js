@@ -83,4 +83,27 @@ movieMiscRouter.post("/api/movies/languages", function (req, res) {
 	}
 });
 
+movieMiscRouter.post("/api/movies/genres", function (req, res) {
+	try {
+		movieDAOForRetrieval.getAllGenres(function (status, message, data) {
+			return res.status(status).json({
+				"status":{
+					"code":status,
+					"message":message
+				},
+				"data":data
+			});
+		});
+	} catch (error) {
+		logger.error(error);
+		return res.status(500).json({
+			"status":{
+				"code":500,
+				"message":"Internal server error"
+			},
+			"data":null
+		});
+	}
+});
+
 module.exports = movieMiscRouter;
