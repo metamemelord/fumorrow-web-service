@@ -34,7 +34,7 @@ var academicSchema = new mongoose.Schema({
 		type: Boolean,
 		default: false
 	},
-	qualification: {
+	eligibilities: {
 		type: Array,
 		default: []
 	},
@@ -42,9 +42,17 @@ var academicSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	release_date: {
+	deadline: {
 		type: Date,
 		required: true
+	},
+	benefits: {
+		type: Array,
+		default: []
+	},
+	additional_info: {
+		type: Array,
+		default: []
 	},
 	images: {
 		type: Array,

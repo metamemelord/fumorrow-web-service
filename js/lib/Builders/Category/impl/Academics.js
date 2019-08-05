@@ -1,7 +1,6 @@
 const helpers = require("../../../HelperFunctions");
 const isNotEmpty = helpers.isNotEmpty;
 const md5 = require("md5");
-const moment = require("moment");
 
 var AcademicBuilder = (function () {
 	function Academic(academicData) {
@@ -30,34 +29,8 @@ var AcademicBuilder = (function () {
 		return this;
 	};
 
-	Academic.prototype.setDay = function (day) {
-		this.academicData.day = day;
-		return this;
-	};
-
-	Academic.prototype.setMonth = function (month) {
-		this.academicData.month = month;
-		return this;
-	};
-
-	Academic.prototype.setYear = function (year) {
-		this.academicData.year = year;
-		return this;
-	};
-
-	Academic.prototype.setHour = function (hour) {
-		this.academicData.hour = hour;
-		return this;
-	};
-
-	Academic.prototype.setMinute = function (minute) {
-		this.academicData.minute = minute;
-		return this;
-	};
-
-	/* Direct calling is not recommended */
-	Academic.prototype.setReleaseDate = function (release_date) {
-		this.academicData.release_date = release_date;
+	Academic.prototype.setDeadline = function (deadline) {
+		this.academicData.deadline = new Date(deadline);
 		return this;
 	};
 
@@ -76,8 +49,18 @@ var AcademicBuilder = (function () {
 		return this;
 	};
 
-	Academic.prototype.setQualification = function (qualification) {
-		this.academicData.qualification = qualification;
+	Academic.prototype.setEligibilities = function (eligibilities) {
+		this.academicData.eligibilities = eligibilities;
+		return this;
+	};
+
+	Academic.prototype.setBenefits = function (benefits) {
+		this.academicData.benefits = benefits;
+		return this;
+	};
+
+	Academic.prototype.setAdditionalInfo = function (additional_info) {
+		this.academicData.additional_info = additional_info;
 		return this;
 	};
 
@@ -154,22 +137,10 @@ var AcademicBuilder = (function () {
 			this.academicData.multiple_locations = this.academicData.addresses.length > 1;
 		else
 			this.academicData.multiple_locations = false;
-		if (isNotEmpty(this.release_date)) {
-			this.setReleaseDate(new Date(moment(this.academicData.release_date).format("MMM DD, YYYY HH:mm")));
-		} else {
-			this.setReleaseDate(new Date(moment()
-				.hour(this.academicData.hour)
-				.minute(this.academicData.minute)
-				.date(this.academicData.day)
-				.month(this.academicData.month)
-				.year(this.academicData.year)
-				.format("MMM DD, YYYY HH:mm")
-			));
-		}
 		if (this.academicData.override_uid_check) {
 			this.setUid(this.academicData.uid);
 		} else {
-			var uniqueId = this.academicData.title + this.academicData.release_date.toString();
+			var uniqueId = this.academicData.title + this.academicData.deadline.toString();
 			this.setUid(md5(uniqueId.replace(/\s/g, "")));
 		}
 		return this.academicData;

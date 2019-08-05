@@ -61,49 +61,60 @@ modifyAcademicRouter.post("/api/academic/modify",
 						var academicObject = new AcademicBuilder()
 							.setId(academicData._id)
 							.setOverrideUidCheck(academicData.override_uid_check)
-							.setHour(isEmpty(academicData.hour) ? 0 : academicData.hour)
-							.setMinute(isEmpty(academicData.minute) ? 0 : academicData.minute)
-							.setDay(academicData.day)
-							.setMonth(academicData.month - 1)
-							.setYear(academicData.year)
+							.setDeadline(academicData.deadline)
 							.setTitle(academicData.title)
 							.setCategory(academicData.category)
-							.setQualification(academicData.qualification)
+							.setEligibilities(academicData.eligibilities)
+							.setBenefits(academicData.benefits)
+							.setAdditionalInfo(academicData.additional_info)
 							.setFundingStatus(academicData.funding_status)
 							.setImages(academicData.images)
 							.setTexts(academicData.texts)
 							.setPartners(academicData.partners)
 							.setAddresses(academicData.addresses)
+							.setType(academicData.type)
 							.setIsSponsored(academicData.is_sponsored)
 							.setIsLive(academicData.is_live)
 							.setClickCounter(academicData.click_counter)
 							.setFavoritedBy(academicData.favorited_by)
 							.setUserVisitInfo(academicData.user_visit_info);
-
-						locationApi(req.body.addresses[0]).then(
-							coordinates => {
-								academicObject
-									.setCoordinates(coordinates);
-								academicDAO.modifyAcademic(academicObject.build(), function (status, message, data) {
-									return res.status(status).json({
-										"status": {
-											"code": status,
-											"message": message
-										},
-										"data": data
-									});
+							
+						if (academicData.type && academicData.type.toLowerCase() === "online") {
+							academicDAO.addAcademic(academicObject.build(), function (status, message, data) {
+								return res.status(status).json({
+									"status": {
+										"code": status,
+										"message": message
+									},
+									"data": data
 								});
-							}
-						).catch(error => {
-							logger.error(error);
-							return res.status(404).json({
-								"status": {
-									"code": 404,
-									"message": "Could not find address"
-								},
-								"data": null
 							});
-						});
+						} else {
+							locationApi(req.body.addresses[0]).then(
+								coordinates => {
+									academicObject
+										.setCoordinates(coordinates);
+									academicDAO.modifyAcademic(academicObject.build(), function (status, message, data) {
+										return res.status(status).json({
+											"status": {
+												"code": status,
+												"message": message
+											},
+											"data": data
+										});
+									});
+								}
+							).catch(error => {
+								logger.error(error);
+								return res.status(404).json({
+									"status": {
+										"code": 404,
+										"message": "Could not find address"
+									},
+									"data": null
+								});
+							});
+						}
 					}
 				}
 			});
