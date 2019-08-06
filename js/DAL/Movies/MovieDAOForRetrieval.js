@@ -47,8 +47,9 @@ function getAll(callback) {
       if (error) {
         logger.error(error);
         callback(500, "Internal server error", null);
+      } else {
+        callback(200, "Success", data);
       }
-      callback(200, "Success", data);
     });
 }
 
@@ -62,8 +63,9 @@ function getInRange(begin, limit, callback) {
       if (error) {
         logger.error(error);
         callback(500, "Internal server error", null);
+      } else {
+        callback(200, "Success", data);
       }
-      callback(200, "Success", data);
     });
 }
 
@@ -83,10 +85,12 @@ function getAllByFilter(filter, callback) {
       if (error) {
         logger.error(error);
         callback(500, "Internal server error", null);
+      } else {
+        callback(200, "Success", data);
       }
-      callback(200, "Success", data);
     });
 }
+
 function getInRangeByFilter(filter, begin, limit, callback) {
   movieDBService
     .find(
@@ -105,8 +109,9 @@ function getInRangeByFilter(filter, begin, limit, callback) {
       if (error) {
         logger.error(error);
         callback(500, "Internal server error", null);
+      } else {
+        callback(200, "Success", data);
       }
-      callback(200, "Success", data);
     });
 }
 
@@ -143,8 +148,9 @@ function getAllForRechecking(callback) {
       if (error) {
         logger.error(error);
         callback(500, "Internal server error", null);
+      } else {
+        callback(200, "Success", data);
       }
-      callback(200, "Success", data);
     });
 }
 
@@ -158,8 +164,9 @@ function getAllUnchecked(callback) {
       if (error) {
         logger.error(error);
         callback(500, "Internal server error", null);
+      } else {
+        callback(200, "Success", data);
       }
-      callback(200, "Success", data);
     });
 }
 

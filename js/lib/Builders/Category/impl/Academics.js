@@ -127,7 +127,7 @@ var AcademicBuilder = (function () {
 	Academic.prototype.setCoordinates = function (coordinates) {
 		this.academicData.geometery = {
 			type: "Point",
-			coordinates: [coordinates.lat, coordinates.lon]
+			coordinates: [coordinates.lon, coordinates.lat]
 		};
 		return this;
 	};
