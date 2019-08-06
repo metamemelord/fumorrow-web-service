@@ -65,7 +65,7 @@ var AcademicBuilder = (function () {
 	};
 
 	Academic.prototype.setFundingStatus = function (funding_status) {
-		this.academicData.funding_status = funding_status;
+		this.academicData.funding_status = isNotEmpty(funding_status) ? funding_status : "Unknown";
 		return this;
 	};
 

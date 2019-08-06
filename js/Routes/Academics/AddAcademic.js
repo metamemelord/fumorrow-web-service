@@ -9,7 +9,7 @@ const tokenAuthCheck = require("./../../Utils/Token/TokenAuthCheck");
 const filename = require("path").basename(__filename);
 const logger = require("../../Loggers/index").LoggerFactory.getLogger(filename);
 const helpers = require("../../lib/HelperFunctions");
-const isNotEmpty = helpers.isNotEmpty;
+const isEmpty = helpers.isEmpty;
 const locationApi = require("../../lib/LocationAPI");
 
 const addAcademicRouter = express.Router();
@@ -61,7 +61,8 @@ addAcademicRouter.post("/api/academic/add", tokenVerifier, tokenAuthCheck, acade
 						.setType(academicData.type)
 						.setIsSponsored(academicData.is_sponsored)
 						.setIsLive(academicData.is_live)
-					if (academicData.type && academicData.type.toLowerCase() === "online") {
+					if (academicData.type && academicData.type.toLowerCase() === "online" ||
+						isEmpty(academicData.addresses)) {
 						academicDAO.addAcademic(academicObject.build(), function (status, message, data) {
 							return res.status(status).json({
 								"status": {
