@@ -13,7 +13,7 @@ returnMoviesRouter.post("/api/movies", function (req, res) {
 		const limit = isEmpty(limitQuery) || parseInt(limitQuery) === 'NaN' ? 0 : Math.abs(parseInt(limitQuery));
 		const begin = isEmpty(beginQuery) || parseInt(beginQuery) === 'NaN' ? 0 : Math.abs(parseInt(beginQuery));
 
-		if (isEmpty(req.body.filter)) {
+		if (isEmpty(req.body.filter) || !Array.isArray(req.body.filter)) {
 			movieDAOForRetrieval.getInRange(begin, limit, function (status, message, data) {
 				return res.status(status).json({
 					"status": {
