@@ -8,8 +8,10 @@ var returnMoviesRouter = express.Router();
 
 returnMoviesRouter.post("/api/movies", function (req, res) {
 	try {
-		const limit = isEmpty(req.query.li) || parseInt(req.query.li) === 'NaN' ? 0 : Math.abs(parseInt(req.query.li));
-		const begin = isEmpty(req.query.bg) || parseInt(req.query.bg) === 'NaN' ? 0 : Math.abs(parseInt(req.query.bg));
+		const limitQuery = req.query.lt;
+		const beginQuery = req.query.bg;
+		const limit = isEmpty(limitQuery) || parseInt(limitQuery) === 'NaN' ? 0 : Math.abs(parseInt(limitQuery));
+		const begin = isEmpty(beginQuery) || parseInt(beginQuery) === 'NaN' ? 0 : Math.abs(parseInt(beginQuery));
 
 		if (isEmpty(req.body.filter)) {
 			movieDAOForRetrieval.getInRange(begin, limit, function (status, message, data) {
