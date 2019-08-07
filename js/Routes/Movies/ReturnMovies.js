@@ -8,52 +8,35 @@ var returnMoviesRouter = express.Router();
 
 returnMoviesRouter.post("/api/movies", function (req, res) {
 	try {
-		if (isEmpty(req.body.begin) || isEmpty(req.body.limit)) {
-			if (isEmpty(req.body.filter)) {
-				movieDAOForRetrieval.getAll(function (status, message, data) {
-					return res.status(status).json({
-						"status": {
-							"code": status,
-							"message": message
-						},
-						"data": data
-					});
+		const limit = isEmpty(req.query.li) || parseInt(req.query.li) === 'NaN' ? 0 : Math.abs(parseInt(req.query.li));
+		const begin = isEmpty(req.query.bg) || parseInt(req.query.bg) === 'NaN' ? 0 : Math.abs(parseInt(req.query.bg));
+
+		if (isEmpty(req.body.filter)) {
+			movieDAOForRetrieval.getInRange(begin, limit, function (status, message, data) {
+				return res.status(status).json({
+					"status": {
+						"code": status,
+						"message": message
+					},
+					"data": data
 				});
-			} else {
-				var filter = req.body.filter;
-				movieDAOForRetrieval.getAllByFilter(filter, function (status, message, data) {
-					return res.status(status).json({
-						"status": {
-							"code": status,
-							"message": message
-						},
-						"data": data
-					});
-				});
-			}
+			});
 		} else {
-			if (isEmpty(req.body.filter)) {
-				movieDAOForRetrieval.getInRange(req.body.begin, req.body.limit, function (status, message, data) {
-					return res.status(status).json({
-						"status": {
-							"code": status,
-							"message": message
-						},
-						"data": data
-					});
+			var filter = req.body.filter.map(el => {
+				if (typeof el === 'string') {
+					el.toLowerCase();
+				}
+				return el;
+			});
+			movieDAOForRetrieval.getInRangeByFilter(filter, begin, limit, function (status, message, data) {
+				return res.status(status).json({
+					"status": {
+						"code": status,
+						"message": message
+					},
+					"data": data
 				});
-			} else {
-				var filterWithRange = req.body.filter;
-				movieDAOForRetrieval.getInRangeByFilter(filterWithRange, req.body.begin, req.body.limit, function (status, message, data) {
-					return res.status(status).json({
-						"status": {
-							"code": status,
-							"message": message
-						},
-						"data": data
-					});
-				});
-			}
+			});
 		}
 	} catch (error) {
 		logger.error(error);

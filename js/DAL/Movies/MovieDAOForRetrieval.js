@@ -74,7 +74,12 @@ function getAllByFilter(filter, callback) {
     .find(
       {
         $and: [
-          { $or: [{ language: { $in: filter } }, { genres: { $in: filter } }] },
+          {
+            $or: [
+              { genres: { $in: filter.filter(el => typeof el === 'string') } },
+              { language: { $in: filter.filter(el => typeof el === 'number')} }
+            ]
+          },
           { is_approved: true }
         ]
       },
@@ -96,7 +101,12 @@ function getInRangeByFilter(filter, begin, limit, callback) {
     .find(
       {
         $and: [
-          { $or: [{ language: { $in: filter } }, { genres: { $in: filter } }] },
+          {
+            $or: [
+              { genres: { $in: filter.filter(el => typeof el === 'string') } },
+              { language: { $in: filter.filter(el => typeof el === 'number')} }
+            ]
+          },
           { is_approved: true }
         ]
       },
